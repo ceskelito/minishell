@@ -1,0 +1,3 @@
+[submodule "ezalloc"]
+	path = ezalloc
+	url = git@github.com:ceskelito/ezalloc.git
