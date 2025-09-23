@@ -15,7 +15,7 @@ static char	*append_char(char *str, char c)
 char	*extract_word(char *input, int *i)
 {
 	char	*result;
-	char	quote;
+	//char	quote;
 
 	result = ft_strdup("");
 	while (input[*i] && !ft_isspace(input[*i]) &&

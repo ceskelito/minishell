@@ -17,6 +17,7 @@ SRCS_DIR = srcs
 OBJS_DIR = objs
 
 FILES = main 				\
+		ft_strjoin_char		\
 		tokenizer			\
 		tokenizer_dollar	\
 		tokenizer_quotes	\
