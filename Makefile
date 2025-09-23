@@ -16,13 +16,15 @@ LIB_FLAGS	= -Llibft -lft -lreadline -lhistory
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-FILES = main 				\
-		ft_strjoin_char		\
-		tokenizer			\
-		tokenizer_dollar	\
-		tokenizer_quotes	\
-		tokenizer_word		\
-		tokenizer_utils
+echo "isadniafinfas"
+
+FILES = main 						\
+		tokenizer/ft_strjoin_char	\
+		tokenizer/tokenizer			\
+		tokenizer/tokenizer_dollar	\
+		tokenizer/tokenizer_quotes	\
+		tokenizer/tokenizer_word	\
+		tokenizer/tokenizer_utils
 
 SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
