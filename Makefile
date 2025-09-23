@@ -7,9 +7,11 @@ include libft/mk.var.export/Makefile
 NAME 		= minishell
 CC 			= gcc
 CFLAGS 		= -Wall -Wextra -Werror
-INC_FLAGS 	= -Iincludes -Ilibft/headers
 RM 			= rm -f
 MKDIR		= mkdir -p
+
+INC_FLAGS 	= -Iincludes -Ilibft/headers
+LIB_FLAGS	= -Llibft -lft
 
 SRCS_DIR = srcs
 OBJS_DIR = objs
@@ -20,7 +22,7 @@ FILES = tokenizer \
 SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
 
-LIBFT = libft.a
+LIBFT = $(LIBFT_ROOT)/$(LIBFT_NAME)
 
 #--------------#
 ## MAIN RULES ##
@@ -28,7 +30,7 @@ LIBFT = libft.a
 
 all: $(NAME)
 
-$(OBJS_DIR)%.o: $(SRCS_DIR)%.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
@@ -42,7 +44,7 @@ $(OBJS_DIR):
 #----------------------#
 
 $(LIBFT): $(LIBFT_OBJS)
-	MAKE -c $(LIBFT_ROOT)
+	$(MAKE) -C $(LIBFT_ROOT)
 
 $(LIBFT_OBJS): $(LIBFT_SRCS)
 

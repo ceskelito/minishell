@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//# include "libft.h"
+# include "libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -46,3 +46,9 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
+
+/* Token Utils */
+t_token_type	identify_token_type(char *input, int *i);
+char			*extract_word(char *input, int *i);
+
+#endif
