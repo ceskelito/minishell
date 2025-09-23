@@ -106,3 +106,5 @@ int		is_special_in_word(char c);
 char	*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
 int		ft_isalnum(int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+
+#endif
