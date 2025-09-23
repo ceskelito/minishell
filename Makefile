@@ -16,9 +16,7 @@ LIB_FLAGS	= -Llibft -lft -lreadline -lhistory
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-echo "isadniafinfas"
-
-FILES = main 						\
+FILES = main/main 						\
 		tokenizer/ft_strjoin_char	\
 		tokenizer/tokenizer			\
 		tokenizer/tokenizer_dollar	\
