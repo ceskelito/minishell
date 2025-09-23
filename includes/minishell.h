@@ -47,18 +47,14 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-<<<<<<< HEAD
 /* Tokenizer */
 t_token	*tokenize_input(char *input);
 /* Token Utils */
 t_token_type	identify_token_type(char *input, int *i);
+char			*process_quotes(char *input, int *i, char *result)
 char			*extract_word(char *input, int *i);
-
+int				is_special_in_word(char c);
+void			handle_dollar_sign(char *input, int *i, char **result);
+char			*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
+char			*ft_substr(char const *s, unsigned int start, size_t len);
 #endif
-=======
-int		handle_dollar_sign(char *input, int *i, char **result, int *result_len);
-int		is_special_in_word(char c);
-char	*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
-int		ft_isalnum(int c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
->>>>>>> origin/tokenizer

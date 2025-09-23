@@ -16,8 +16,11 @@ LIB_FLAGS	= -Llibft -lft -lreadline -lhistory
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-FILES = main \
-		tokenizer \
+FILES = main 				\
+		tokenizer			\
+		tokenizer_dollar	\
+		tokenizer_quotes	\
+		tokenizer_word		\
 		tokenizer_utils
 
 SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))

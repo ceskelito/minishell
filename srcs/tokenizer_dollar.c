@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 static char	*expand_exit_status(char *result, int *i)
 {
