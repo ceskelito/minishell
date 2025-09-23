@@ -39,6 +39,11 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
+int	is_special_in_word(char c)
+{
+	return (c == '$' || c == '\'' || c == '\"');
+}
+
 /**
  * Main tokenization function
  * Converts input string into a linked list of tokens
