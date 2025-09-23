@@ -46,3 +46,9 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
+
+int		handle_dollar_sign(char *input, int *i, char **result, int *result_len);
+int		is_special_in_word(char c);
+char	*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
+int		ft_isalnum(int c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);

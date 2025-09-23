@@ -44,44 +44,6 @@ t_token_type	identify_token_type(char *input, int *i)
 	return (TOKEN_WORD);
 }
 
-/**
- * Extracts a word token (handles quotes)
- */
-char	*extract_word(char *input, int *i)
-{
-	int		start;
-	int		len;
-	char	quote;
-
-	start = *i;
-	len = 0;
-	while (input[*i + len] && !ft_isspace(input[*i + len]))
-	{
-		if (input[*i + len] == '\'' || input[*i + len] == '\"')
-		{
-			quote = input[*i + len];
-			len++;
-			while (input[*i + len] && input[*i + len] != quote)
-				len++;
-			if (input[*i + len])
-				len++;
-		}
-		else if (ft_strchr("|<>&()", input[*i + len]))
-		{
-			if (len == 0)
-				len = 1;
-			break ;
-		}
-		else
-			len++;
-	}
-	*i += len;
-	return (ft_substr(input, start, len));
-}
-
-/**
- * Frees the token linked list
- */
 void	free_tokens(t_token *tokens)
 {
 	t_token	*tmp;
