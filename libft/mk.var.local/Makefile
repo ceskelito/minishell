@@ -4,7 +4,7 @@ CC 			= cc
 AR 			= ar -rcs
 RM 			= rm -f
 MKDIR 		= mkdir -p
-CFLAGS 		= -Wall -Werror -Wextra
+CFLAGS 		= -Wall -Werror -Wextra -fPIC
 INCLUDES	= -I$(ROOT)/headers
 
 # ──────────────────────── #

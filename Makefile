@@ -11,12 +11,13 @@ RM 			= rm -f
 MKDIR		= mkdir -p
 
 INC_FLAGS 	= -Iincludes -Ilibft/headers
-LIB_FLAGS	= -Llibft -lft
+LIB_FLAGS	= -Llibft -lft -lreadline -lhistory
 
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-FILES = tokenizer \
+FILES = main \
+		tokenizer \
 		tokenizer_utils
 
 SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
@@ -34,7 +35,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $^ -o $@
+	$(CC) $^ -o $@ $(LIB_FLAGS)
 
 $(OBJS_DIR):
 	$(MKDIR) $(OBJS_DIR)

@@ -12,6 +12,7 @@
 
 #ifndef FT_LIB_H
 # define FT_LIB_H
+
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>

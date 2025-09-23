@@ -47,6 +47,8 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+/* Tokenizer */
+t_token	*tokenize_input(char *input);
 /* Token Utils */
 t_token_type	identify_token_type(char *input, int *i);
 char			*extract_word(char *input, int *i);
