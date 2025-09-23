@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
+# include "../libft/headers/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -46,6 +46,60 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_redir
+{
+	int				type;
+	char			*file;
+	struct s_redir	*next;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	char			**args;
+	t_redir			*redirs;
+	struct s_cmd	*next;
+	int				pipe_output;
+}	t_cmd;
+
+/* Shell environment structure */
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_shell
+{
+	t_env			*env_list;
+	t_cmd			*cmd_list;
+	t_token			*tokens;
+	char			**env_array;
+	char			*line;
+	int				exit_status;
+	int				interactive;
+}	t_shell;
+
+/* Function prototypes needed for main.c */
+void	init_shell(t_shell *shell, char **envp);
+void	setup_interactive_signals(void);
+int		process_line(t_shell *shell, char *line);
+void	shell_loop(t_shell *shell);
+void	cleanup_shell(t_shell *shell);
+
+/* Functions that main.c expects to exist */
+t_env	*init_env(char **envp);
+void	env_to_array(t_shell *shell);
+void	ft_free_array(char **array);
+void	free_env(t_env *env);
+void	handle_sigint(int sig);
+int		check_syntax(t_token *tokens);
+void	expand_tokens(t_token *tokens, t_shell *shell);
+t_cmd	*parse_tokens(t_token *tokens, t_shell *shell);
+int		execute_cmds(t_cmd *cmds, t_shell *shell);
+void	free_cmds(t_cmd *cmds);
+void	ft_putendl_fd(char *s, int fd);
 
 int		handle_dollar_sign(char *input, int *i, char **result, int *result_len);
 int		is_special_in_word(char c);
