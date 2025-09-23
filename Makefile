@@ -1,7 +1,13 @@
+include libft/mk.var.export/Makefile
+
+#-------------------#
+## BASIC VARIABLES ##
+#-------------------#
+
 NAME 		= minishell
 CC 			= gcc
 CFLAGS 		= -Wall -Wextra -Werror
-INC_FLAGS 	= -Iincludes
+INC_FLAGS 	= -Iincludes -Ilibft/headers
 RM 			= rm -f
 MKDIR		= mkdir -p
 
@@ -14,16 +20,35 @@ FILES = tokenizer \
 SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
 
+LIBFT = libft.a
+
+#--------------#
+## MAIN RULES ##
+#--------------#
+
 all: $(NAME)
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
-$(NAME): $(OBJS) 
+$(NAME): $(OBJS) $(LIBFT)
 	$(CC) $^ -o $@
 
 $(OBJS_DIR):
 	$(MKDIR) $(OBJS_DIR)
+
+#----------------------#
+## EXTERNAL LIBRARIES ##
+#----------------------#
+
+$(LIBFT): $(LIBFT_OBJS)
+	MAKE -c $(LIBFT_ROOT)
+
+$(LIBFT_OBJS): $(LIBFT_SRCS)
+
+#---------------#
+## CLEAN RULES ##
+#---------------#
 
 clean:
 	$(RM) $(OBJS)
