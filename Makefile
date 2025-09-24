@@ -1,22 +1,23 @@
 include libft/mk.var.export/Makefile
 
-#-------------------#
-## BASIC VARIABLES ##
-#-------------------#
+#-------------------------#
+## COMMAND & COMPILATION ##
+#-------------------------#
 
-NAME 		= minishell
-CC 			= gcc
-CFLAGS 		= -Wall -Wextra -Werror
-RM 			= rm -f
-MKDIR		= mkdir -p
+NAME 		:= minishell
+CC 			:= gcc
+CFLAGS 		:= -Wall -Wextra -Werror
+RM 			:= rm -f
+MKDIR		:= mkdir -p
 
-INC_FLAGS 	= -Iincludes -Ilibft/headers
-LIB_FLAGS	= -Llibft -lft -lreadline -lhistory
+INC_FLAGS 	:= -Iincludes -Ilibft/headers
+LIB_FLAGS	:= -Llibft -lft -lreadline -lhistory
 
-SRCS_DIR = srcs
-OBJS_DIR = objs
+#------------------------#
+## PROJECT FILES & DIRS ##
+#------------------------#
 
-FILES = main/main 						\
+FILES := main/main 					\
 		tokenizer/ft_strjoin_char	\
 		tokenizer/tokenizer			\
 		tokenizer/tokenizer_dollar	\
@@ -24,25 +25,41 @@ FILES = main/main 						\
 		tokenizer/tokenizer_word	\
 		tokenizer/tokenizer_utils
 
-SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
-OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
+SRCS_DIR := srcs
+OBJS_DIR := objs
 
-LIBFT = $(LIBFT_ROOT)/$(LIBFT_NAME)
+OBJS_SUB := $(addprefix objs/, $(sort $(dir $(FILES))))
+
+SRCS := $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
+OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
+
+#----------------------#
+## EXTERNAL LIBRARIES ##
+#----------------------#
+
+LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
 
 #--------------#
 ## MAIN RULES ##
 #--------------#
 
+#DEBUG:
+#	@echo $(OBJS_SUB)
+
 all: $(NAME)
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR) $(OBJS_SUB)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
-
 $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $^ -o $@ $(LIB_FLAGS)
 
+#---------------#
+## DIRECTORIES ##
+#---------------#
+
 $(OBJS_DIR):
-	$(MKDIR) $(OBJS_DIR)
+$(OBJS_SUB): $(OBJS_DIR)
+	$(MKDIR) $@
 
 #----------------------#
 ## EXTERNAL LIBRARIES ##
@@ -58,7 +75,7 @@ $(LIBFT_OBJS): $(LIBFT_SRCS)
 #---------------#
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) -r $(OBJS_DIR)
 
 fclean: clean
 	$(RM) $(NAME)

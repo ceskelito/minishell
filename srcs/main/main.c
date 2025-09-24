@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "minishell.h"
 
 /* Global variable for signal handling */
 int	g_sig_status;
