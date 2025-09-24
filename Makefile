@@ -50,6 +50,7 @@ all: $(NAME)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR) $(OBJS_SUB)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
+
 $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $^ -o $@ $(LIB_FLAGS)
 
