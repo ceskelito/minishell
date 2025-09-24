@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /* Global variable for signal handling */
-int	g_sig_status;
+extern int	g_sig_status;
 
 /**
  * Initializes the shell structure
