@@ -27,17 +27,39 @@ extern int	g_sig_status;
 /* Token types */
 typedef enum e_token_type
 {
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_REDIR_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_AND,
-	TOKEN_OR,
-	TOKEN_PAREN_OPEN,
-	TOKEN_PAREN_CLOSE
+	WORD = 0,
+	PIPE = 1 << 1,
+	IN = 1 << 2,
+	OUT = 1 << 3,
+	APPEND = 1 << 4,
+	HEREDOC = 1 << 5,
+	AND = 1 << 6,
+	OR = 1 << 7,
+	P_OPEN = 1 << 8,
+	P_CLOSE = 1 << 9,
+	BUILT = 1 << 10
 }	t_token_type;
+
+//typedef enum e_type
+//{
+//	NONE = 0,
+//	CMD = 1 << 1,
+//	LIMITER = 1 << 2,
+//	DELIMETER = 1 << 3,
+//	REDIRECT = 1 << 4,
+//	FILENAME = 1 << 5,
+//	AND = 1 << 6,
+//	OR = 1 << 7,
+//	IN = 1 << 8,
+//	OUT = 1 << 9,
+//	HEREDOC = 1 << 10,
+//	APPEND = 1 << 11,
+//	PIPE = 1 << 12,
+//	OPEN = 1 << 13,
+//	CLOSE = 1 << 14,
+//	NEW_LINE = 1 << 15,
+//	END = 1 << 16,
+//}	t_type;
 
 /* Token structure */
 typedef struct s_token

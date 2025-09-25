@@ -10,38 +10,38 @@ t_token_type	identify_token_type(char *input, int *i)
 		if (input[*i + 1] == '|')
 		{
 			(*i)++;
-			return (TOKEN_OR);
+			return (OR);
 		}
-		return (TOKEN_PIPE);
+		return (PIPE);
 	}
 	else if (input[*i] == '<')
 	{
 		if (input[*i + 1] == '<')
 		{
 			(*i)++;
-			return (TOKEN_HEREDOC);
+			return (HEREDOC);
 		}
-		return (TOKEN_REDIR_IN);
+		return (IN);
 	}
 	else if (input[*i] == '>')
 	{
 		if (input[*i + 1] == '>')
 		{
 			(*i)++;
-			return (TOKEN_REDIR_APPEND);
+			return (APPEND);
 		}
-		return (TOKEN_REDIR_OUT);
+		return (OUT);
 	}
 	else if (input[*i] == '&' && input[*i + 1] == '&')
 	{
 		(*i)++;
-		return (TOKEN_AND);
+		return (AND);
 	}
 	else if (input[*i] == '(')
-		return (TOKEN_PAREN_OPEN);
+		return (P_OPEN);
 	else if (input[*i] == ')')
-		return (TOKEN_PAREN_CLOSE);
-	return (TOKEN_WORD);
+		return (P_CLOSE);
+	return (WORD);
 }
 
 void	free_tokens(t_token *tokens)
