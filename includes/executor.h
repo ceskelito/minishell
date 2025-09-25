@@ -1,0 +1,17 @@
+#ifndef EXECUTOR_H
+# define EXECUTOR_H
+
+# include "minishell.h"
+
+# define T_ECHO "echo"
+# define T_FLAG_N "-n"
+# define T_CD "cd"
+# define T_PWD "pwd"
+# define T_EXPORT "export"
+# define T_UNSET "unset"
+# define T_ENV "env"
+# define T_EXIT "exit"
+
+t_token 	*create_test_tokens(t_token *token);
+
+#endif

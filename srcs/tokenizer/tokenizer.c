@@ -72,7 +72,7 @@ t_token	*tokenize_input(char *input)
 		}
 		else
 		{
-			type = TOKEN_WORD;
+			type = WORD;
 			value = extract_word(input, &i);
 		}
 		new_token = create_token(value, type);
