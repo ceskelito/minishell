@@ -49,11 +49,10 @@ LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
 all: $(NAME)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR) $(OBJS_SUB)
-	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $^ -o $@ $(LIB_FLAGS)
-
+	$(CC) $^ $(LIB_FLAGS) -o $@ 
 #---------------#
 ## DIRECTORIES ##
 #---------------#
