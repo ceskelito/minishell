@@ -27,17 +27,17 @@ extern int	g_sig_status;
 /* Token types */
 typedef enum e_token_type
 {
-	WORD = 0,
-	PIPE = 1 << 1,
-	IN = 1 << 2,
-	OUT = 1 << 3,
-	APPEND = 1 << 4,
+	WORD		= 0,
+	PIPE		= 1 << 1,
+	IN			= 1 << 2,
+	OUT			= 1 << 3,
+	APPEND	= 1 << 4,
 	HEREDOC = 1 << 5,
-	AND = 1 << 6,
-	OR = 1 << 7,
-	P_OPEN = 1 << 8,
-	P_CLOSE = 1 << 9,
-	BUILT = 1 << 10
+	AND			= 1 << 6,
+	OR			= 1 << 7,
+	OPEN		= 1 << 8,
+	CLOSE		= 1 << 9,
+	BUILT		= 1 << 10
 }	t_token_type;
 
 //typedef enum e_type
@@ -72,16 +72,16 @@ typedef struct s_token
 /* Tokenizer */
  t_token	*tokenize_input(char *input);
  t_token_type	identify_token_type(char *input, int *i);
- char			*process_quotes(char *input, int *i, char *result);
- char			*extract_word(char *input, int *i);
+ char					*process_quotes(char *input, int *i, char *result);
+ char					*extract_word(char *input, int *i);
  int				is_special_in_word(char c);
  void			handle_dollar_sign(char *input, int *i, char **result);
  char			*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
  char			*ft_substr(char const *s, unsigned int start, size_t len);
- void		free_tokens(t_token *tokens);
- void		setup_signals(int n);
- void		ft_error(char *str, int n);
- void		free_shell(void	 *shell);	
+ void					free_tokens(t_token *tokens);
+ void					setup_signals(int n);
+ void					ft_error(char *str, int n);
+ void					free_shell(void	 *shell);	
 
 typedef struct s_redir
 {
