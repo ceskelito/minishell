@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/headers/libft.h"
+# include "libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -27,17 +27,39 @@ extern int	g_sig_status;
 /* Token types */
 typedef enum e_token_type
 {
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_REDIR_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_AND,
-	TOKEN_OR,
-	TOKEN_PAREN_OPEN,
-	TOKEN_PAREN_CLOSE
+	WORD = 0,
+	PIPE = 1 << 1,
+	IN = 1 << 2,
+	OUT = 1 << 3,
+	APPEND = 1 << 4,
+	HEREDOC = 1 << 5,
+	AND = 1 << 6,
+	OR = 1 << 7,
+	P_OPEN = 1 << 8,
+	P_CLOSE = 1 << 9,
+	BUILT = 1 << 10
 }	t_token_type;
+
+//typedef enum e_type
+//{
+//	NONE = 0,
+//	CMD = 1 << 1,
+//	LIMITER = 1 << 2,
+//	DELIMETER = 1 << 3,
+//	REDIRECT = 1 << 4,
+//	FILENAME = 1 << 5,
+//	AND = 1 << 6,
+//	OR = 1 << 7,
+//	IN = 1 << 8,
+//	OUT = 1 << 9,
+//	HEREDOC = 1 << 10,
+//	APPEND = 1 << 11,
+//	PIPE = 1 << 12,
+//	OPEN = 1 << 13,
+//	CLOSE = 1 << 14,
+//	NEW_LINE = 1 << 15,
+//	END = 1 << 16,
+//}	t_type;
 
 /* Token structure */
 typedef struct s_token
@@ -46,6 +68,20 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
+
+/* Tokenizer */
+ t_token	*tokenize_input(char *input);
+ t_token_type	identify_token_type(char *input, int *i);
+ char			*process_quotes(char *input, int *i, char *result);
+ char			*extract_word(char *input, int *i);
+ int				is_special_in_word(char c);
+ void			handle_dollar_sign(char *input, int *i, char **result);
+ char			*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
+ char			*ft_substr(char const *s, unsigned int start, size_t len);
+ void		free_tokens(t_token *tokens);
+ void		setup_signals(int n);
+ void		ft_error(char *str, int n);
+ void		free_shell(void	 *shell);	
 
 typedef struct s_redir
 {
@@ -84,7 +120,7 @@ typedef struct s_shell
 /* Function prototypes needed for main.c */
 void	init_shell(t_shell *shell, char **envp);
 void	setup_interactive_signals(void);
-int		process_line(t_shell *shell, char *line);
+int		process_line(t_shell *shell);
 void	shell_loop(t_shell *shell);
 void	cleanup_shell(t_shell *shell);
 
@@ -101,9 +137,9 @@ int		execute_cmds(t_cmd *cmds, t_shell *shell);
 void	free_cmds(t_cmd *cmds);
 void	ft_putendl_fd(char *s, int fd);
 
-int		handle_dollar_sign(char *input, int *i, char **result, int *result_len);
+//int		handle_dollar_sign(char *input, int *i, char **result, int *result_len);
 int		is_special_in_word(char c);
-char	*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
+char	*ft_strjoin_char(char *s1, char c);  
 int		ft_isalnum(int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 
