@@ -1,0 +1,85 @@
+include libft/mk.var.export/Makefile
+
+#-------------------------#
+## COMMAND & COMPILATION ##
+#-------------------------#
+
+NAME 		:= minishell
+CC 			:= gcc
+CFLAGS 		:= -Wall -Wextra -Werror
+RM 			:= rm -f
+MKDIR		:= mkdir -p
+
+INC_FLAGS 	:= -Iincludes -Ilibft/headers
+LIB_FLAGS	:= -Llibft -lft -lreadline -lhistory
+
+#------------------------#
+## PROJECT FILES & DIRS ##
+#------------------------#
+
+FILES := main/main 					\
+		tokenizer/ft_strjoin_char	\
+		tokenizer/tokenizer			\
+		tokenizer/tokenizer_dollar	\
+		tokenizer/tokenizer_quotes	\
+		tokenizer/tokenizer_word	\
+		tokenizer/tokenizer_utils
+
+SRCS_DIR := srcs
+OBJS_DIR := objs
+
+OBJS_SUB := $(addprefix objs/, $(sort $(dir $(FILES))))
+
+SRCS := $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
+OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
+
+#----------------------#
+## EXTERNAL LIBRARIES ##
+#----------------------#
+
+LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
+
+#--------------#
+## MAIN RULES ##
+#--------------#
+
+#DEBUG:
+#	@echo $(OBJS_SUB)
+
+all: $(NAME)
+
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR) $(OBJS_SUB)
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
+
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $^ $(LIB_FLAGS) -o $@ 
+#---------------#
+## DIRECTORIES ##
+#---------------#
+
+$(OBJS_DIR):
+$(OBJS_SUB): $(OBJS_DIR)
+	$(MKDIR) $@
+
+#----------------------#
+## EXTERNAL LIBRARIES ##
+#----------------------#
+
+$(LIBFT): $(LIBFT_OBJS)
+	$(MAKE) -C $(LIBFT_ROOT)
+
+$(LIBFT_OBJS): $(LIBFT_SRCS)
+
+#---------------#
+## CLEAN RULES ##
+#---------------#
+
+clean:
+	$(RM) -r $(OBJS_DIR)
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
