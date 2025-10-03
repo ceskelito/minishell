@@ -12,3 +12,6 @@ minishell
 
 # Config files
 *.json
+
+# Cache files
+.cache/
