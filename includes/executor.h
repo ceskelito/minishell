@@ -2,9 +2,10 @@
 # define EXECUTOR_H
 
 # include "minishell.h"
-#include <sys/types.h>
-#include <dirent.h>
-#include <unistd.h>
+# include <sys/types.h>
+# include <dirent.h>
+# include <unistd.h>
+# include <stdbool.h>
 
 # define T_ECHO "echo"
 # define T_FLAG_N "-n"
@@ -17,5 +18,11 @@
 
 t_token 	*create_test_tokens(t_token *token);
 int			executor(t_token *tokens);
+
+/* Builtins */
+void	env(void);
+void	echo(char *str, bool flag_n);
+void	change_directory(char *dirname);
+void	print_workig_directory(void);
 
 #endif

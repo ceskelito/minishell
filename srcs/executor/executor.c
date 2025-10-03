@@ -2,12 +2,12 @@
 
 
 /* BUILTIN's TO INCLUDE
- ◦ echo - with option -n
- ◦ cd - with only a relative or absolute path
- ◦ pwd - with no options
+ ◦ |DID| echo - with option -n
+ ◦ |DID| cd - with only a relative or absolute path
+ ◦ |DID| pwd - with no options
  ◦ export - with no options
  ◦ unset - with no options
- ◦ env - with no options or arguments
+ ◦ |DID| env - with no options or arguments
  ◦ exit - with no options
 */
 
@@ -30,24 +30,24 @@ int execute_builtin(t_token *token)
 	if (!token || token->type !=  WORD)
 		return (0);
 
-//printf("bella chico .%s.\n", token->value);
 	if (ft_strcmp(T_ECHO, token->value) == 0)
 	{
 		if(ft_strcmp(T_FLAG_N, token->next->value) == 0)
-		{
-
-			printf("\n%s\n", token->next->next->value);
-		}
+			echo(token->next->next->value, true);
 		else
-			printf("%s", token->next->value);
+			echo(token->next->value, false);
 	}
 	else if (strcmp(T_CD, token->value) == 0)
 	{
-		if (chdir(token->next->value) != 0)
-		{
-			perror("cd");
-		}
+		if (!token->next)
+			change_directory(NULL);
+		else
+			change_directory(token->next->value);
 	}
+	else if (strcmp(T_PWD, token->value) == 0)
+		print_workig_directory();
+	else if (strcmp(T_ENV, token->value) == 0)
+		env();
 	else
 	{
 		// is not a recognized built in
