@@ -4,6 +4,10 @@
 #include "executor.h"
 #include <unistd.h>
 
+#define GREEN "\33[32m"
+#define BLUE "\33[34m"
+#define DEFAULT "\33[39m"
+
 char    *get_prompt()
 {
     char    *working_directory;
@@ -13,9 +17,13 @@ char    *get_prompt()
 
     user = getenv("USER");
     working_directory = getcwd(NULL, 0);
-    prompt_len = ft_strlen(user) + ft_strlen(working_directory) + 4;
+    prompt_len = ft_strlen(user) + ft_strlen(working_directory) + (ft_strlen(GREEN) * 4) + 3 + 1;
     prompt = malloc(sizeof(char) * prompt_len);
-    ft_sprintf(prompt, "%s:%s> ", user, working_directory);
+    ft_sprintf(prompt, "%s%s%s%c%s%s%s%c%c",
+                GREEN, user, 
+                DEFAULT, ':',
+                BLUE, working_directory,
+                DEFAULT, '$', ' ');
     free(working_directory);
     // free(user); -- invalid free (idk why!)
     return (prompt);
