@@ -17,7 +17,10 @@ char    *get_prompt()
 
     user = getenv("USER");
     working_directory = getcwd(NULL, 0);
-    prompt_len = ft_strlen(user) + ft_strlen(working_directory) + (ft_strlen(GREEN) * 4) + 3 + 1;
+    prompt_len = ft_strlen(user) +
+                 ft_strlen(working_directory) + 
+                 (ft_strlen(GREEN) * 4) + 
+                 3 + 1;
     prompt = malloc(sizeof(char) * prompt_len);
     ft_sprintf(prompt, "%s%s%s%c%s%s%s%c%c",
                 GREEN, user, 
@@ -25,7 +28,6 @@ char    *get_prompt()
                 BLUE, working_directory,
                 DEFAULT, '$', ' ');
     free(working_directory);
-    // free(user); -- invalid free (idk why!)
     return (prompt);
 }
 
