@@ -27,6 +27,7 @@ FILES := main/main 					\
 									\
 		executor/executor			\
 		executor/builtin			
+
 SRCS_DIR := srcs
 OBJS_DIR := objs
 
@@ -44,9 +45,6 @@ LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
 #--------------#
 ## MAIN RULES ##
 #--------------#
-
-#DEBUG:
-#	@echo $(OBJS_SUB)
 
 all: $(NAME)
 

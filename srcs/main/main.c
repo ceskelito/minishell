@@ -1,3 +1,5 @@
+#include "ft_lib.h"
+#include "ft_sprintf.h"
 #include "minishell.h"
 #include "executor.h"
 #include <unistd.h>
@@ -7,12 +9,15 @@ char    *get_prompt()
     char    *working_directory;
     char    *user;
     char    *prompt;
+    size_t  prompt_len;
 
     user = getenv("USER");
     working_directory = getcwd(NULL, 0);
-    prompt = ft_strdup(ft_strjoin_multi(4 ,user, ":\0", working_directory, "> \0"));
+    prompt_len = ft_strlen(user) + ft_strlen(working_directory) + 4;
+    prompt = malloc(sizeof(char) * prompt_len);
+    ft_sprintf(prompt, "%s:%s> ", user, working_directory);
     free(working_directory);
-    // free(user);
+    // free(user); -- invalid free (idk why!)
     return (prompt);
 }
 
