@@ -23,8 +23,10 @@ FILES := main/main 					\
 		tokenizer/tokenizer_dollar	\
 		tokenizer/tokenizer_quotes	\
 		tokenizer/tokenizer_word	\
-		tokenizer/tokenizer_utils
-
+		tokenizer/tokenizer_utils	\
+									\
+		executor/executor			\
+		executor/builtin			
 SRCS_DIR := srcs
 OBJS_DIR := objs
 

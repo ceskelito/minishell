@@ -59,14 +59,14 @@ int execute_builtin(t_token *token)
 
 int executor(t_token *token)
 {
-	token = create_test_tokens(token);
+	//token = create_test_tokens(token);
 	execute_builtin(token);
 	return 0;
 }
 
-int main(void)
-{
-	t_token	token;
-	executor(&token);
-	return (0);
-}
+//int main(void)
+//{
+//	t_token	token;
+//	executor(&token);
+//	return (0);
+//}

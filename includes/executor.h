@@ -16,5 +16,6 @@
 # define T_EXIT "exit"
 
 t_token 	*create_test_tokens(t_token *token);
+int			executor(t_token *tokens);
 
 #endif
