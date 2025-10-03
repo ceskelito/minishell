@@ -2,6 +2,9 @@
 # define EXECUTOR_H
 
 # include "minishell.h"
+#include <sys/types.h>
+#include <dirent.h>
+#include <unistd.h>
 
 # define T_ECHO "echo"
 # define T_FLAG_N "-n"
