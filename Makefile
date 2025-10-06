@@ -1,5 +1,13 @@
 include libft/mk.var.export/Makefile
 
+
+#-------------#
+## FUNCTIONS ##
+#-------------#
+define write_flags
+	echo "$1" | tr ' ' '\n' | sed -E 's/^(-[A-Za-z])/\1\n/' >> $2
+endef
+	
 #-------------------------#
 ## COMMAND & COMPILATION ##
 #-------------------------#
@@ -41,6 +49,16 @@ OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
 #----------------------#
 
 LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
+
+
+#---------#
+## TOOLS ##
+#---------#
+
+compile_flags.txt: Makefile
+	$(RM) $@
+	$(call write_flags,$(INC_FLAGS),$@)
+	$(call write_flags,$(LIB_FLAGS),$@)
 
 #--------------#
 ## MAIN RULES ##
