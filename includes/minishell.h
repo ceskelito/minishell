@@ -40,27 +40,6 @@ typedef enum e_token_type
 	BUILT = 1 << 10
 }	t_token_type;
 
-//typedef enum e_type
-//{
-//	NONE = 0,
-//	CMD = 1 << 1,
-//	LIMITER = 1 << 2,
-//	DELIMETER = 1 << 3,
-//	REDIRECT = 1 << 4,
-//	FILENAME = 1 << 5,
-//	AND = 1 << 6,
-//	OR = 1 << 7,
-//	IN = 1 << 8,
-//	OUT = 1 << 9,
-//	HEREDOC = 1 << 10,
-//	APPEND = 1 << 11,
-//	PIPE = 1 << 12,
-//	OPEN = 1 << 13,
-//	CLOSE = 1 << 14,
-//	NEW_LINE = 1 << 15,
-//	END = 1 << 16,
-//}	t_type;
-
 /* Token structure */
 typedef struct s_token
 {
@@ -69,20 +48,7 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-/* Tokenizer */
- t_token	*tokenize_input(char *input);
- t_token_type	identify_token_type(char *input, int *i);
- char			*process_quotes(char *input, int *i, char *result);
- char			*extract_word(char *input, int *i);
- int				is_special_in_word(char c);
- void			handle_dollar_sign(char *input, int *i, char **result);
- char			*ft_strjoin_char(char *s1, char c);  // Нужна эта утилита
- char			*ft_substr(char const *s, unsigned int start, size_t len);
- void		free_tokens(t_token *tokens);
- void		setup_signals(int n);
- void		ft_error(char *str, int n);
- void		free_shell(void	 *shell);	
-
+/* Redirection structure */
 typedef struct s_redir
 {
 	int				type;
@@ -90,6 +56,7 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
+/* Command structure */
 typedef struct s_cmd
 {
 	char			**args;
@@ -106,6 +73,7 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+/* Main shell structure */
 typedef struct s_shell
 {
 	t_env			*env_list;
@@ -117,30 +85,67 @@ typedef struct s_shell
 	int				interactive;
 }	t_shell;
 
-/* Function prototypes needed for main.c */
-void	init_shell(t_shell *shell, char **envp);
-void	setup_interactive_signals(void);
-int		process_line(t_shell *shell);
-void	shell_loop(t_shell *shell);
-void	cleanup_shell(t_shell *shell);
+/* ========================================================================== */
+/*                              TOKENIZER                                     */
+/* ========================================================================== */
 
-/* Functions that main.c expects to exist */
-t_env	*init_env(char **envp);
-void	env_to_array(t_shell *shell);
-void	ft_free_array(char **array);
-void	free_env(t_env *env);
-void	handle_sigint(int sig);
-int		check_syntax(t_token *tokens);
-void	expand_tokens(t_token *tokens, t_shell *shell);
-t_cmd	*parse_tokens(t_token *tokens, t_shell *shell);
-int		execute_cmds(t_cmd *cmds, t_shell *shell);
-void	free_cmds(t_cmd *cmds);
-void	ft_putendl_fd(char *s, int fd);
+t_token			*create_token(char *value, t_token_type type);
+void			add_token(t_token **head, t_token *new_token);
+t_token			*tokenize_input(char *input);
+t_token_type	identify_token_type(char *input, int *i);
+char			*extract_word(char *input, int *i);
+void			free_tokens(t_token *tokens);
 
-//int		handle_dollar_sign(char *input, int *i, char **result, int *result_len);
-int		is_special_in_word(char c);
-char	*ft_strjoin_char(char *s1, char c);  
-int		ft_isalnum(int c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+/* Tokenizer utilities */
+int				is_special_in_word(char c);
+void			handle_dollar_sign(char *input, int *i, char **result);
+char			*process_quotes(char *input, int *i, char *result);
+char			*ft_strjoin_char(char *s1, char c);
+
+/* ========================================================================== */
+/*                                PARSER                                      */
+/* ========================================================================== */
+
+t_cmd			*parse_tokens(t_token *tokens, t_shell *shell);
+t_cmd			*create_cmd(void);
+t_redir			*create_redir(int type, char *file);
+void			add_redir(t_cmd *cmd, t_redir *redir);
+int				add_arg(t_cmd *cmd, char *arg);
+
+/* Parser utilities */
+int				is_redir_token(t_token_type type);
+int				parse_redirection(t_cmd *cmd, t_token **token);
+int				count_args(char **args);
+
+/* Parser cleanup */
+void			free_cmds(t_cmd *cmds);
+void			free_cmd_args(char **args);
+void			free_redirs(t_redir *redirs);
+void			free_single_cmd(t_cmd *cmd);
+
+
+/* ========================================================================== */
+/*                              MAIN & UTILS                                  */
+/* ========================================================================== */
+
+void			init_shell(t_shell *shell, char **envp);
+int				process_line(t_shell *shell);
+void			shell_loop(t_shell *shell);
+void			cleanup_shell(t_shell *shell);
+
+/* Error handling */
+void			ft_error(char *str, int n);
+int				syntax_error(char *token);
+void			print_error(char *cmd, char *msg);
+
+/* Memory utilities */
+void			ft_free_array(char **array);
+void			free_shell(void *shell);
+char			*ft_strjoin_three(char *s1, char *s2, char *s3);
+
+/* String utilities (if not in libft) */
+int				ft_isalnum(int c);
+char			*ft_substr(char const *s, unsigned int start, size_t len);
+void			ft_putendl_fd(char *s, int fd);
 
 #endif
