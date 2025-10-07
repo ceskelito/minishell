@@ -99,4 +99,13 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+deepclean: clean
+	$(MAKE) clean -C $(LIBFT_ROOT)
+
+deepfclean: fclean
+	$(MAKE) fclean -C $(LIBFT_ROOT)
+
+deepre: re
+	$(MAKE) re -C $(LIBFT_ROOT)
+
+.PHONY: all clean fclean re deepclean deepfclean deepre
