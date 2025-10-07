@@ -1,7 +1,6 @@
 #include "ft_lib.h"
 #include "ft_sprintf.h"
 #include "minishell.h"
-#include "executor.h"
 #include <unistd.h>
 
 #define GREEN "\33[32m"
@@ -55,7 +54,6 @@ int main(void)
         //     printf("TOKEN: %-15s | TYPE: %d\n", tmp->value, tmp->type);
         //     tmp = tmp->next;
         // }
-        executor(tokens);
         free_tokens(tokens);
         free(input);
     }

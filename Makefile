@@ -33,8 +33,9 @@ FILES := main/main 					\
 		tokenizer/tokenizer_word	\
 		tokenizer/tokenizer_utils	\
 									\
-		executor/executor			\
-		executor/builtin			
+		parser/parser				\
+		parser/parser_utils			\
+		parser/parser_cleanup				
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
