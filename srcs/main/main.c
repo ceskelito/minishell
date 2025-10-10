@@ -32,10 +32,10 @@ char    *get_prompt()
 
 int main(void)
 {
-    // extern char    **environ;
+    extern char    **environ;
     char           *input;
     t_token        *tokens;
-    // t_token        *tmp;
+    t_token        *tmp;
 
     while (1)
     {
@@ -48,12 +48,12 @@ int main(void)
         tokens = tokenize_input(input);
 
         // выводим токены для отладки
-        // tmp = tokens;
-        // while (tmp)
-        // {
-        //     printf("TOKEN: %-15s | TYPE: %d\n", tmp->value, tmp->type);
-        //     tmp = tmp->next;
-        // }
+        tmp = tokens;
+        while (tmp)
+            {
+                printf("TOKEN: %-15s | TYPE: %d\n", tmp->value, tmp->type);
+                tmp = tmp->next;
+         }
         free_tokens(tokens);
         free(input);
     }

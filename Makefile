@@ -1,4 +1,5 @@
-include libft/mk.var.export/Makefile
+include libft/mk.var.local/Makefile
+
 
 
 #-------------#
@@ -19,7 +20,7 @@ RM 			:= rm -f
 MKDIR		:= mkdir -p
 
 INC_FLAGS 	:= -Iincludes -Ilibft/headers
-LIB_FLAGS	:= -Llibft -lft -lreadline -lhistory
+LIB_FLAGS	:= -Llibft -lft -lreadline
 
 #------------------------#
 ## PROJECT FILES & DIRS ##
@@ -49,17 +50,10 @@ OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
 ## EXTERNAL LIBRARIES ##
 #----------------------#
 
+LIBFT_ROOT := libft
+LIBFT_NAME := libft.a
+
 LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
-
-
-#---------#
-## TOOLS ##
-#---------#
-
-compile_flags.txt: Makefile
-	$(RM) $@
-	$(call write_flags,$(INC_FLAGS),$@)
-	$(call write_flags,$(LIB_FLAGS),$@)
 
 #--------------#
 ## MAIN RULES ##
@@ -89,6 +83,15 @@ $(LIBFT): $(LIBFT_OBJS)
 
 $(LIBFT_OBJS): $(LIBFT_SRCS)
 
+#---------#
+## TOOLS ##
+#---------#
+
+compile_flags.txt: Makefile
+	$(RM) $@
+	$(call write_flags,$(INC_FLAGS),$@)
+	$(call write_flags,$(LIB_FLAGS),$@)
+
 #---------------#
 ## CLEAN RULES ##
 #---------------#
@@ -101,4 +104,13 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+deepclean: clean
+	$(MAKE) clean -C $(LIBFT_ROOT)
+
+deepfclean: fclean
+	$(MAKE) fclean -C $(LIBFT_ROOT)
+
+deepre: re
+	$(MAKE) re -C $(LIBFT_ROOT)
+
+.PHONY: all clean fclean re deepclean deepfclean deepre

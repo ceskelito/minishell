@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rdollar <rdollar@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-01-07 10:00:00 by rdollar           #+#    #+#             */
-/*   Updated: 2025-01-07 10:00:00 by rdollar          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 /**
@@ -25,16 +13,15 @@ t_cmd	*create_cmd(void)
 	cmd->args = NULL;
 	cmd->redirs = NULL;
 	cmd->next = NULL;
-	cmd->has_pipe = 0;
-	cmd->pipe_fd[0] = -1;
-	cmd->pipe_fd[1] = -1;
+	cmd->pipe_output = 0;
 	return (cmd);
 }
 
 /**
  * Creates a new redirection structure
+ * type uses your enum values: IN, OUT, APPEND, HEREDOC
  */
-t_redir	*create_redir(t_redir_type type, char *file)
+t_redir	*create_redir(int type, char *file)
 {
 	t_redir	*redir;
 
@@ -71,42 +58,34 @@ void	add_redir(t_cmd *cmd, t_redir *redir)
 }
 
 /**
- * Converts token type to redirection type
- */
-t_redir_type	get_redir_type(t_token_type type)
-{
-	if (type == REDIR_IN_TOKEN)
-		return (REDIR_IN);
-	else if (type == REDIR_OUT_TOKEN)
-		return (REDIR_OUT);
-	else if (type == REDIR_APPEND_TOKEN)
-		return (REDIR_APPEND);
-	else if (type == HEREDOC_TOKEN)
-		return (REDIR_HEREDOC);
-	return (REDIR_IN);
-}
-
-/**
  * Main parser function
  * Converts token list into command list
  */
-t_cmd	*parse_tokens(t_token *tokens)
+t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_cmd	*cmd_list;
 	t_cmd	*current_cmd;
 	t_token	*current_token;
 
+	(void)shell;
 	if (!tokens)
 		return (NULL);
 	cmd_list = create_cmd();
+	if (!cmd_list)
+		return (NULL);
 	current_cmd = cmd_list;
 	current_token = tokens;
 	while (current_token)
 	{
-		if (current_token->type == PIPE_TOKEN)
+		if (current_token->type & PIPE)
 		{
-			current_cmd->has_pipe = 1;
+			current_cmd->pipe_output = 1;
 			current_cmd->next = create_cmd();
+			if (!current_cmd->next)
+			{
+				free_cmds(cmd_list);
+				return (NULL);
+			}
 			current_cmd = current_cmd->next;
 		}
 		else if (is_redir_token(current_token->type))

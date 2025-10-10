@@ -2,11 +2,11 @@
 
 /**
  * Checks if token is a redirection token
+ * Uses your enum: IN, OUT, APPEND, HEREDOC
  */
 int	is_redir_token(t_token_type type)
 {
-	return (type == REDIR_IN_TOKEN || type == REDIR_OUT_TOKEN ||
-			type == REDIR_APPEND_TOKEN || type == HEREDOC_TOKEN);
+	return (type & IN || type & OUT || type & APPEND || type & HEREDOC);
 }
 
 /**
@@ -14,12 +14,12 @@ int	is_redir_token(t_token_type type)
  */
 int	parse_redirection(t_cmd *cmd, t_token **token)
 {
-	t_redir_type	type;
-	t_redir			*redir;
+	int		type;
+	t_redir	*redir;
 
 	if (!*token || !(*token)->next)
 		return (0);
-	type = get_redir_type((*token)->type);
+	type = (*token)->type;
 	*token = (*token)->next;
 	if ((*token)->type != WORD)
 		return (0);
