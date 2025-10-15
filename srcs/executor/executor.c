@@ -1,5 +1,6 @@
 #include "executor.h"
 #include "ft_lib.h"
+#include "minishell.h"
 
 
 /* BUILTIN's TO INCLUDE
@@ -84,6 +85,7 @@ char **create_args(t_token *token)
 		string = ft_strjoin_multi(3, string, " ", token->value);
 		free(tmp);
 		tmp = NULL;
+		token = token->next;
 	}
 	return (ft_split(string, ' '));
 }
@@ -102,8 +104,10 @@ int executor(t_token *token)
 		return (0);
 	cmd = create_args(token);
 	location = get_location(cmd[0]);
+	printf("location: %s\n", location);
 	if (!location)	
 		return (1);
+	printf("command: %s\n", ft_strjoin(location, cmd[0]));
 	execve(ft_strjoin(location, cmd[0]), cmd, environ);
 	//token = create_test_tokens(token);
 	return (0);
