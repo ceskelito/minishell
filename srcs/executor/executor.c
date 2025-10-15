@@ -1,4 +1,5 @@
 #include "executor.h"
+#include "ft_lib.h"
 
 
 /* BUILTIN's TO INCLUDE
@@ -11,6 +12,19 @@
  ◦ exit - with no options
 */
 
+// static void p_free_arr(char ***p) {
+//     if (*p != NULL) {
+//         for (int i = 0; *p[i] != NULL; i++) {
+//             free(*p[i]);
+//         }
+//         free(*p);
+//     }
+// }
+
+// static void	p_free(char **p)
+// {
+// 	free(*p);
+// }
 
 int ft_strcmp(const char *s1, const char *s2)
 {
@@ -57,11 +71,42 @@ int execute_builtin(t_token *token)
 	return (1);
 }
 
+char **create_args(t_token *token)
+{
+	char *string;
+	char *tmp;
+	
+	string = NULL;
+	tmp = NULL;
+	while(token && token->type == WORD)
+	{
+		tmp = string;
+		string = ft_strjoin_multi(3, string, " ", token->value);
+		free(tmp);
+		tmp = NULL;
+	}
+	return (ft_split(string, ' '));
+}
+
+char	*get_location(char *cmd);
+
 int executor(t_token *token)
 {
+	extern char									**environ;
+	//char __attribute__ ((cleanup (p_free_arr)))	**cmd;
+	//char __attribute__ ((cleanup (p_free)))		*location;
+	char	**cmd;
+	char	*location;
+	
+	if (execute_builtin(token))
+		return (0);
+	cmd = create_args(token);
+	location = get_location(cmd[0]);
+	if (!location)	
+		return (1);
+	execve(ft_strjoin(location, cmd[0]), cmd, environ);
 	//token = create_test_tokens(token);
-	execute_builtin(token);
-	return 0;
+	return (0);
 }
 
 //int main(void)

@@ -25,16 +25,17 @@ LIB_FLAGS	:= -Llibft -lft -lreadline -lhistory
 ## PROJECT FILES & DIRS ##
 #------------------------#
 
-FILES := main/main 					\
-		tokenizer/ft_strjoin_char	\
-		tokenizer/tokenizer			\
-		tokenizer/tokenizer_dollar	\
-		tokenizer/tokenizer_quotes	\
-		tokenizer/tokenizer_word	\
-		tokenizer/tokenizer_utils	\
-									\
-		executor/executor			\
-		executor/builtin			
+FILES := main 				\
+		ft_strjoin_char		\
+		tokenizer			\
+		tokenizer_dollar	\
+		tokenizer_quotes	\
+		tokenizer_word		\
+		tokenizer_utils		\
+		executor			\
+		builtin				\
+		get_location		\
+		
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -43,6 +44,8 @@ OBJS_SUB := $(addprefix objs/, $(sort $(dir $(FILES))))
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
+
+vpath %.c $(SRC_DIR):$(SRCS_DIR)/executor:$(SRCS_DIR)/parser:$(SRCS_DIR)/tokenizer:$(SRCS_DIR)/main
 
 #----------------------#
 ## EXTERNAL LIBRARIES ##
@@ -56,7 +59,7 @@ LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
 
 all: $(NAME)
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR) $(OBJS_SUB)
+$(OBJS_DIR)/%.o: %.c | $(OBJS_DIR) $(OBJS_SUB)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
