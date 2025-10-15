@@ -1,6 +1,4 @@
-include libft/mk.var.local/Makefile
-
-
+# Убрал проблемную строку: include libft/mk.var.local/Makefile
 
 #-------------#
 ## FUNCTIONS ##
@@ -33,10 +31,13 @@ FILES := main/main 					\
 		tokenizer/tokenizer_quotes	\
 		tokenizer/tokenizer_word	\
 		tokenizer/tokenizer_utils	\
+		tokenizer/tokenizer_debug	\
 									\
 		parser/parser				\
 		parser/parser_utils			\
-		parser/parser_cleanup				
+		parser/parser_cleanup		\
+		parser/parser_debug			\
+		parser/shell_init
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -66,6 +67,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR) $(OBJS_SUB)
 
 $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $^ $(LIB_FLAGS) -o $@ 
+
 #---------------#
 ## DIRECTORIES ##
 #---------------#
@@ -78,10 +80,8 @@ $(OBJS_SUB): $(OBJS_DIR)
 ## EXTERNAL LIBRARIES ##
 #----------------------#
 
-$(LIBFT): $(LIBFT_OBJS)
+$(LIBFT):
 	$(MAKE) -C $(LIBFT_ROOT)
-
-$(LIBFT_OBJS): $(LIBFT_SRCS)
 
 #---------#
 ## TOOLS ##
@@ -110,7 +110,6 @@ deepclean: clean
 deepfclean: fclean
 	$(MAKE) fclean -C $(LIBFT_ROOT)
 
-deepre: re
-	$(MAKE) re -C $(LIBFT_ROOT)
+deepre: deepfclean all
 
 .PHONY: all clean fclean re deepclean deepfclean deepre

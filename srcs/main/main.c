@@ -7,55 +7,69 @@
 #define BLUE "\33[34m"
 #define DEFAULT "\33[39m"
 
-char    *get_prompt()
-{
-    char    *working_directory;
-    char    *user;
-    char    *prompt;
-    size_t  prompt_len;
+int	g_sig_status = 0;
 
-    user = getenv("USER");
-    working_directory = getcwd(NULL, 0);
-    prompt_len = ft_strlen(user) +
-                 ft_strlen(working_directory) + 
-                 (ft_strlen(GREEN) * 4) + 
-                 3 + 1;
-    prompt = malloc(sizeof(char) * prompt_len);
-    ft_sprintf(prompt, "%s%s%s%c%s%s%s%c%c",
-                GREEN, user, 
-                DEFAULT, ':',
-                BLUE, working_directory,
-                DEFAULT, '$', ' ');
-    free(working_directory);
-    return (prompt);
+static int	is_debug_command(char *input)
+{
+	return (ft_strncmp(input, "DEBUG:", 6) == 0);
 }
 
-int main(void)
+static char	*extract_command(char *input)
 {
-    extern char    **environ;
-    char           *input;
-    t_token        *tokens;
-    t_token        *tmp;
+	if (is_debug_command(input))
+		return (input + 6);
+	return (input);
+}
 
-    while (1)
-    {
-        input = readline(get_prompt());
-        if (!input)
-            break ;
-        if (*input)
-            add_history(input);
+static void	print_debug_info(t_shell *shell)
+{
+	printf("\n=== DEBUGGING INFO ===\n");
+	print_tokens(shell->tokens);
+	print_cmd_list(shell->cmd_list);
+	printf("======================\n\n");
+}
 
-        tokens = tokenize_input(input);
+static void	process_command(char *input, t_shell *shell)
+{
+	char	*cmd;
+	int		debug_mode;
 
-        // выводим токены для отладки
-        tmp = tokens;
-        while (tmp)
-            {
-                printf("TOKEN: %-15s | TYPE: %d\n", tmp->value, tmp->type);
-                tmp = tmp->next;
-         }
-        free_tokens(tokens);
-        free(input);
-    }
-    return (0);
+	debug_mode = is_debug_command(input);
+	cmd = extract_command(input);
+	shell->tokens = tokenize_input(cmd);
+	shell->cmd_list = parse_tokens(shell->tokens, shell);
+	if (debug_mode)
+		print_debug_info(shell);
+	else
+	{
+		/* TODO: executor будет здесь */
+		printf("Command ready for execution\n");
+	}
+	cleanup_parsing(shell);
+}
+
+int	main(void)
+{
+	extern char	**environ;
+	t_shell		shell;
+	char		*input;
+
+	init_shell(&shell, environ);
+	printf("Welcome to minishell!\n");
+	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
+	while (1)
+	{
+		input = readline("minishell$ ");
+		if (!input)
+			break ;
+		if (*input)
+		{
+			add_history(input);
+			process_command(input, &shell);
+		}
+		free(input);
+	}
+	cleanup_shell(&shell);
+	printf("\nGoodbye!\n");
+	return (0);
 }

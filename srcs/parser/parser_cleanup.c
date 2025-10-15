@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-/**
- * Frees command arguments array
- */
 void	free_cmd_args(char **args)
 {
 	int	i;
@@ -18,9 +15,6 @@ void	free_cmd_args(char **args)
 	free(args);
 }
 
-/**
- * Frees redirection linked list
- */
 void	free_redirs(t_redir *redirs)
 {
 	t_redir	*temp;
@@ -36,9 +30,6 @@ void	free_redirs(t_redir *redirs)
 	}
 }
 
-/**
- * Frees a single command
- */
 void	free_single_cmd(t_cmd *cmd)
 {
 	if (!cmd)
@@ -48,9 +39,6 @@ void	free_single_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
-/**
- * Frees entire command list
- */
 void	free_cmds(t_cmd *cmds)
 {
 	t_cmd	*temp;
@@ -62,5 +50,19 @@ void	free_cmds(t_cmd *cmds)
 		next = temp->next;
 		free_single_cmd(temp);
 		temp = next;
+	}
+}
+
+void	cleanup_parsing(t_shell *shell)
+{
+	if (shell->tokens)
+	{
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+	}
+	if (shell->cmd_list)
+	{
+		free_cmds(shell->cmd_list);
+		shell->cmd_list = NULL;
 	}
 }

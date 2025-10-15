@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-/**
- * Creates a new command structure
- */
 t_cmd	*create_cmd(void)
 {
 	t_cmd	*cmd;
@@ -17,10 +14,6 @@ t_cmd	*create_cmd(void)
 	return (cmd);
 }
 
-/**
- * Creates a new redirection structure
- * type uses your enum values: IN, OUT, APPEND, HEREDOC
- */
 t_redir	*create_redir(int type, char *file)
 {
 	t_redir	*redir;
@@ -39,9 +32,6 @@ t_redir	*create_redir(int type, char *file)
 	return (redir);
 }
 
-/**
- * Adds a redirection to a command
- */
 void	add_redir(t_cmd *cmd, t_redir *redir)
 {
 	t_redir	*temp;
@@ -57,10 +47,18 @@ void	add_redir(t_cmd *cmd, t_redir *redir)
 	}
 }
 
-/**
- * Main parser function
- * Converts token list into command list
- */
+static t_cmd	*handle_pipe_token(t_cmd *current_cmd)
+{
+	t_cmd	*new_cmd;
+
+	current_cmd->pipe_output = 1;
+	new_cmd = create_cmd();
+	if (!new_cmd)
+		return (NULL);
+	current_cmd->next = new_cmd;
+	return (new_cmd);
+}
+
 t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 {
 	t_cmd	*cmd_list;
@@ -79,14 +77,12 @@ t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 	{
 		if (current_token->type & PIPE)
 		{
-			current_cmd->pipe_output = 1;
-			current_cmd->next = create_cmd();
-			if (!current_cmd->next)
+			current_cmd = handle_pipe_token(current_cmd);
+			if (!current_cmd)
 			{
 				free_cmds(cmd_list);
 				return (NULL);
 			}
-			current_cmd = current_cmd->next;
 		}
 		else if (is_redir_token(current_token->type))
 		{

@@ -1,17 +1,10 @@
 #include "minishell.h"
 
-/**
- * Checks if token is a redirection token
- * Uses your enum: IN, OUT, APPEND, HEREDOC
- */
 int	is_redir_token(t_token_type type)
 {
 	return (type & IN || type & OUT || type & APPEND || type & HEREDOC);
 }
 
-/**
- * Parses a redirection and adds it to command
- */
 int	parse_redirection(t_cmd *cmd, t_token **token)
 {
 	int		type;
@@ -30,9 +23,6 @@ int	parse_redirection(t_cmd *cmd, t_token **token)
 	return (1);
 }
 
-/**
- * Counts arguments in current command
- */
 int	count_args(char **args)
 {
 	int	count;
@@ -45,9 +35,14 @@ int	count_args(char **args)
 	return (count);
 }
 
-/**
- * Adds an argument to command's argument list
- */
+static char	**allocate_new_args(int count)
+{
+	char	**new_args;
+
+	new_args = (char **)malloc(sizeof(char *) * (count + 2));
+	return (new_args);
+}
+
 int	add_arg(t_cmd *cmd, char *arg)
 {
 	int		count;
@@ -55,7 +50,7 @@ int	add_arg(t_cmd *cmd, char *arg)
 	int		i;
 
 	count = count_args(cmd->args);
-	new_args = (char **)malloc(sizeof(char *) * (count + 2));
+	new_args = allocate_new_args(count);
 	if (!new_args)
 		return (0);
 	i = 0;

@@ -1,46 +1,70 @@
 #include "minishell.h"
 
-static char	*expand_exit_status(char *result, int *i)
+static char	*get_exit_status_value(void)
 {
+	extern int	g_sig_status;
+
+	return (ft_itoa(g_sig_status));
+}
+
+static char	*get_variable_name(char *input, int start, int end)
+{
+	return (ft_substr(input, start, end - start));
+}
+
+static char	*expand_exit_status(char *result)
+{
+	char	*exit_val;
 	char	*temp;
 
-	(*i)++;
-	temp = ft_strjoin(result, "$?");
+	exit_val = get_exit_status_value();
+	if (!exit_val)
+		return (result);
+	temp = ft_strjoin(result, exit_val);
 	free(result);
+	free(exit_val);
 	return (temp);
 }
 
-static char	*expand_variable(char *input, int *i, char *result, int start)
+static char	*expand_variable(char *input, int start, int end, char *result)
 {
-	int		var_len;
-	char	*var_part;
+	char	*var_name;
+	char	*var_value;
 	char	*temp;
 
-	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-		(*i)++;
-	var_len = *i - start;
-	var_part = ft_substr(input, start, var_len);
-	temp = ft_strjoin(result, var_part);
+	var_name = get_variable_name(input, start, end);
+	if (!var_name)
+		return (result);
+	var_value = getenv(var_name);
+	if (!var_value)
+		var_value = "";
+	temp = ft_strjoin(result, var_value);
 	free(result);
-	free(var_part);
+	free(var_name);
 	return (temp);
 }
 
 void	handle_dollar_sign(char *input, int *i, char **result)
 {
 	int		start;
+	char	*temp;
 
-	start = *i;
 	(*i)++;
 	if (input[*i] == '?')
 	{
-		(*result) = expand_exit_status(*result, i);
+		(*i)++;
+		*result = expand_exit_status(*result);
 		return ;
 	}
-	if (ft_isalpha(input[*i]) || input[*i] == '_')
+	if (!ft_isalpha(input[*i]) && input[*i] != '_')
 	{
-		*result = expand_variable(input, i, *result, start);
+		temp = ft_strjoin_char(*result, '$');
+		free(*result);  // ← ДОБАВИЛ: освобождаем старую память
+		*result = temp;
 		return ;
 	}
-	*result = ft_strjoin_char(*result, '$');
+	start = *i;
+	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+		(*i)++;
+	*result = expand_variable(input, start, *i, *result);
 }

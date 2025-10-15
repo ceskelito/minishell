@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-/**
- * Identifies token type for special characters
- */
 t_token_type	identify_token_type(char *input, int *i)
 {
 	if (input[*i] == '|')
@@ -14,7 +11,7 @@ t_token_type	identify_token_type(char *input, int *i)
 		}
 		return (PIPE);
 	}
-	else if (input[*i] == '<')
+	if (input[*i] == '<')
 	{
 		if (input[*i + 1] == '<')
 		{
@@ -23,7 +20,7 @@ t_token_type	identify_token_type(char *input, int *i)
 		}
 		return (IN);
 	}
-	else if (input[*i] == '>')
+	if (input[*i] == '>')
 	{
 		if (input[*i + 1] == '>')
 		{
@@ -32,16 +29,30 @@ t_token_type	identify_token_type(char *input, int *i)
 		}
 		return (OUT);
 	}
-	else if (input[*i] == '&' && input[*i + 1] == '&')
+	if (input[*i] == '&' && input[*i + 1] == '&')
 	{
 		(*i)++;
 		return (AND);
 	}
-	else if (input[*i] == '(')
+	if (input[*i] == '(')
 		return (P_OPEN);
-	else if (input[*i] == ')')
+	if (input[*i] == ')')
 		return (P_CLOSE);
 	return (WORD);
+}
+
+int	is_operator_char(char c)
+{
+	return (c == '|' || c == '<' || c == '>' || c == '&' 
+		|| c == '(' || c == ')');
+}
+
+char	*create_operator_value(char *input, int pos, t_token_type type)
+{
+	if (type == OR || type == AND || type == HEREDOC || type == APPEND)
+		return (ft_substr(input, pos, 2));
+	else
+		return (ft_substr(input, pos, 1));
 }
 
 void	free_tokens(t_token *tokens)

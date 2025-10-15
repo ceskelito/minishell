@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-/**
- * Creates a new token structure
- */
 t_token	*create_token(char *value, t_token_type type)
 {
 	t_token	*token;
@@ -21,9 +18,6 @@ t_token	*create_token(char *value, t_token_type type)
 	return (token);
 }
 
-/**
- * Adds a token to the end of the token list
- */
 void	add_token(t_token **head, t_token *new_token)
 {
 	t_token	*temp;
@@ -44,15 +38,23 @@ int	is_special_in_word(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-/**
- * Main tokenization function
- * Converts input string into a linked list of tokens
- */
+static t_token	*create_operator_token(char *input, int *i)
+{
+	t_token_type	type;
+	char			*value;
+	t_token			*new_token;
+
+	type = identify_token_type(input, i);
+	value = create_operator_value(input, *i - (type == OR || type == AND || type == HEREDOC || type == APPEND ? 1 : 0), type);
+	new_token = create_token(value, type);
+	free(value);
+	return (new_token);
+}
+
 t_token	*tokenize_input(char *input)
 {
 	t_token			*tokens;
 	t_token			*new_token;
-	t_token_type	type;
 	int				i;
 	char			*value;
 
@@ -66,18 +68,22 @@ t_token	*tokenize_input(char *input)
 			break ;
 		if (ft_strchr("|<>&()", input[i]))
 		{
-			type = identify_token_type(input, &i);
-			value = ft_strdup("");
+			new_token = create_operator_token(input, &i);
 			i++;
 		}
 		else
 		{
-			type = WORD;
 			value = extract_word(input, &i);
+			if (!value)
+			{
+				free_tokens(tokens);
+				return (NULL);
+			}
+			new_token = create_token(value, WORD);
+			free(value);
 		}
-		new_token = create_token(value, type);
-		free(value);
-		add_token(&tokens, new_token);
+		if (new_token)
+			add_token(&tokens, new_token);
 	}
 	return (tokens);
 }

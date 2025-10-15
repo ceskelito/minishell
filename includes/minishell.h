@@ -101,6 +101,9 @@ int				is_special_in_word(char c);
 void			handle_dollar_sign(char *input, int *i, char **result);
 char			*process_quotes(char *input, int *i, char *result);
 char			*ft_strjoin_char(char *s1, char c);
+int				is_operator_char(char c);
+char			*create_operator_value(char *input, int pos, t_token_type type);
+int				process_word_token(char *input, int *i, t_token **tokens);
 
 /* ========================================================================== */
 /*                                PARSER                                      */
@@ -122,7 +125,11 @@ void			free_cmds(t_cmd *cmds);
 void			free_cmd_args(char **args);
 void			free_redirs(t_redir *redirs);
 void			free_single_cmd(t_cmd *cmd);
+void			cleanup_parsing(t_shell *shell);
 
+/* Debug functions */
+void			print_tokens(t_token *tokens);
+void			print_cmd_list(t_cmd *cmd_list);
 
 /* ========================================================================== */
 /*                              MAIN & UTILS                                  */

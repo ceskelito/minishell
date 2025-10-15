@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-/**
- * Joins a string with a single character
- */
 char	*ft_strjoin_char(char *s1, char c)
 {
 	char	*result;
