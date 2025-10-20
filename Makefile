@@ -1,4 +1,4 @@
-# Убрал проблемную строку: include libft/mk.var.local/Makefile
+include libft/mk.var.export/Makefile
 
 #-------------#
 ## FUNCTIONS ##
@@ -51,10 +51,14 @@ OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(FILES)))
 ## EXTERNAL LIBRARIES ##
 #----------------------#
 
-LIBFT_ROOT := libft
-LIBFT_NAME := libft.a
+#LIBFT_ROOT := libft
+#LIBFT_NAME := libft.a
 
 LIBFT := $(LIBFT_ROOT)/$(LIBFT_NAME)
+
+LIBEZ_ROOT	:= ezalloc
+LIBEZ_NAME	:= libezalloc.a
+LIBEZ		:= $(LIBEZ_ROOT)/$(LIBEZ_NAME)
 
 #--------------#
 ## MAIN RULES ##
@@ -65,7 +69,7 @@ all: $(NAME)
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR) $(OBJS_SUB)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS) $(LIBFT) $(LIBEZ)
 	$(CC) $^ $(LIB_FLAGS) -o $@ 
 
 #---------------#
@@ -80,8 +84,11 @@ $(OBJS_SUB): $(OBJS_DIR)
 ## EXTERNAL LIBRARIES ##
 #----------------------#
 
-$(LIBFT):
+$(LIBFT): $(LIBFT_OBJS)
 	$(MAKE) -C $(LIBFT_ROOT)
+
+$(LIBEZ):
+	$(MAKE) -C $(LIBEZ_ROOT)
 
 #---------#
 ## TOOLS ##
