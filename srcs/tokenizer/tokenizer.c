@@ -77,6 +77,7 @@ t_token	*tokenize_input(char *input)
 		else
 		{
 			value = extract_word(input, &i);
+			//printf("EXTRACTEDDDDD\n");
 			if (!value)
 			{
 				free_tokens(tokens);
