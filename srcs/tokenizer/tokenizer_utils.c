@@ -2,29 +2,23 @@
 
 t_token_type	get_token_type(char *input)
 {
-	if (*input == '|')
-	{
-		if (&input[1] && input[1] == '|')
-			return (OR);
+	if (input[0] == '|' && input[1] == '|')
+		return (OR);
+	if (input[0] == '|')
 		return (PIPE);
-	}
-	if (*input == '<')
-	{
-		if (&input[1] && input[1] == '<')
-			return (HEREDOC);
+	if (input[0] == '<' && input[1] == '<')
+		return (HEREDOC);
+	if (input[0] == '<')
 		return (IN);
-	}
-	if (*input == '>')
-	{
-		if (&input[1] && input[1] == '>')
-			return (APPEND);
+	if (input[0] == '>' && input[1] == '>')
+		return (APPEND);
+	if (input[0] == '>')
 		return (OUT);
-	}
-	if (*input == '&' && input[1] == '&')
+	if (input[0] == '&' && input[1] == '&')
 		return (AND);
-	if (*input == '(')
+	if (input[0] == '(')
 		return (P_OPEN);
-	if (*input == ')')
+	if (input[0] == ')')
 		return (P_CLOSE);
 	return (WORD);
 }

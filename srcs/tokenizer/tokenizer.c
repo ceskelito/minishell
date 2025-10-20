@@ -1,3 +1,4 @@
+#include "ezgalloc.h"
 #include "minishell.h"
 
 t_token	*create_token(char *value, t_token_type type)
@@ -5,6 +6,7 @@ t_token	*create_token(char *value, t_token_type type)
 	t_token	*token;
 
 	token = ezg_alloc(G_TOKEN, sizeof(t_token));
+	//token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = ft_strdup(value);
@@ -45,6 +47,7 @@ static t_token	*create_operator_token(char *input)
 	type = get_token_type(input);
 	value = get_operator_value(input, type);
 	new_token = create_token(value, type);
+	print_tokens(new_token);
 	free(value);
 	return (new_token);
 }
