@@ -1,7 +1,4 @@
-#include "ft_lib.h"
-#include "ft_sprintf.h"
 #include "minishell.h"
-#include <unistd.h>
 
 #define GREEN "\33[32m"
 #define BLUE "\33[34m"
@@ -47,6 +44,8 @@ static void	process_command(char *input, t_shell *shell)
 	}
 	cleanup_parsing(shell);
 }
+
+void __attribute__((destructor)) ezg_cleanup();
 
 int	main(void)
 {

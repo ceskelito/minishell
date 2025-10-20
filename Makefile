@@ -16,7 +16,7 @@ CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror
 RM 			:= rm -f
 MKDIR		:= mkdir -p
-INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/includes
+INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include
 LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
 			
 #────────────────────────#

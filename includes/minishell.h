@@ -2,6 +2,8 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include "ezgalloc.h" 
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
