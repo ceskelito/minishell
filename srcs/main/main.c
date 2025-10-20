@@ -32,7 +32,7 @@ static void	process_command(char *input, t_shell *shell)
 	int		debug_mode;
 
 	debug_mode = is_debug_command(input);
-	cmd = extract_command(input);
+	cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
 	shell->tokens = tokenize_input(cmd);
 	shell->cmd_list = parse_tokens(shell->tokens, shell);
 	if (debug_mode)
@@ -60,12 +60,12 @@ int	main(void)
 	{
 		input = readline("minishell$ ");
 		if (!input)
-			break ;
-		if (*input)
 		{
-			add_history(input);
-			process_command(input, &shell);
+			free(input);
+			break ;
 		}
+		add_history(input);
+		process_command(input, &shell);
 		free(input);
 	}
 	cleanup_shell(&shell);

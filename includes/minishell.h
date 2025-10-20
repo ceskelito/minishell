@@ -20,6 +20,8 @@
 # define SUCCESS 0
 # define ERROR 1
 
+# define G_TOKEN "token"
+
 /*
  * Global variable to handle signals
  * As per subject: Just one global variable to store signal number
@@ -94,7 +96,7 @@ typedef struct s_shell
 t_token			*create_token(char *value, t_token_type type);
 void			add_token(t_token **head, t_token *new_token);
 t_token			*tokenize_input(char *input);
-t_token_type	identify_token_type(char *input, int *i);
+t_token_type	get_token_type(char *input);
 char			*extract_word(char *input, int *i);
 void			free_tokens(t_token *tokens);
 
@@ -104,7 +106,7 @@ void			handle_dollar_sign(char *input, int *i, char **result);
 char			*process_quotes(char *input, int *i, char *result);
 char			*ft_strjoin_char(char *s1, char c);
 int				is_operator_char(char c);
-char			*create_operator_value(char *input, int pos, t_token_type type);
+char			*get_operator_value(char *input, t_token_type type);
 int				process_word_token(char *input, int *i, t_token **tokens);
 
 /* ========================================================================== */

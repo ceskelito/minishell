@@ -1,42 +1,30 @@
 #include "minishell.h"
 
-t_token_type	identify_token_type(char *input, int *i)
+t_token_type	get_token_type(char *input)
 {
-	if (input[*i] == '|')
+	if (*input == '|')
 	{
-		if (input[*i + 1] == '|')
-		{
-			(*i)++;
+		if (&input[1] && input[1] == '|')
 			return (OR);
-		}
 		return (PIPE);
 	}
-	if (input[*i] == '<')
+	if (*input == '<')
 	{
-		if (input[*i + 1] == '<')
-		{
-			(*i)++;
+		if (&input[1] && input[1] == '<')
 			return (HEREDOC);
-		}
 		return (IN);
 	}
-	if (input[*i] == '>')
+	if (*input == '>')
 	{
-		if (input[*i + 1] == '>')
-		{
-			(*i)++;
+		if (&input[1] && input[1] == '>')
 			return (APPEND);
-		}
 		return (OUT);
 	}
-	if (input[*i] == '&' && input[*i + 1] == '&')
-	{
-		(*i)++;
+	if (*input == '&' && input[1] == '&')
 		return (AND);
-	}
-	if (input[*i] == '(')
+	if (*input == '(')
 		return (P_OPEN);
-	if (input[*i] == ')')
+	if (*input == ')')
 		return (P_CLOSE);
 	return (WORD);
 }
@@ -47,12 +35,12 @@ int	is_operator_char(char c)
 		|| c == '(' || c == ')');
 }
 
-char	*create_operator_value(char *input, int pos, t_token_type type)
+char	*get_operator_value(char *input, t_token_type type)
 {
-	if (type == OR || type == AND || type == HEREDOC || type == APPEND)
-		return (ft_substr(input, pos, 2));
+	if (type & (OR | AND | HEREDOC |APPEND))
+		return (ft_substr(input, 0, 2));
 	else
-		return (ft_substr(input, pos, 1));
+		return (ft_substr(input, 0, 1));
 }
 
 void	free_tokens(t_token *tokens)

@@ -4,15 +4,13 @@ t_token	*create_token(char *value, t_token_type type)
 {
 	t_token	*token;
 
-	token = (t_token *)malloc(sizeof(t_token));
+	token = ezg_alloc(G_TOKEN, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = ft_strdup(value);
+	ezg_add(G_TOKEN, token->value);
 	if (!token->value)
-	{
-		free(token);
 		return (NULL);
-	}
 	token->type = type;
 	token->next = NULL;
 	return (token);
@@ -38,14 +36,14 @@ int	is_special_in_word(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-static t_token	*create_operator_token(char *input, int *i)
+static t_token	*create_operator_token(char *input)
 {
 	t_token_type	type;
 	char			*value;
 	t_token			*new_token;
 
-	type = identify_token_type(input, i);
-	value = create_operator_value(input, *i - (type == OR || type == AND || type == HEREDOC || type == APPEND ? 1 : 0), type);
+	type = get_token_type(input);
+	value = get_operator_value(input, type);
 	new_token = create_token(value, type);
 	free(value);
 	return (new_token);
@@ -68,7 +66,9 @@ t_token	*tokenize_input(char *input)
 			break ;
 		if (ft_strchr("|<>&()", input[i]))
 		{
-			new_token = create_operator_token(input, &i);
+			new_token = create_operator_token(input + i);
+			if (new_token->type & (OR | HEREDOC | APPEND | AND))
+				i++;
 			i++;
 		}
 		else
