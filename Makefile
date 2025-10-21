@@ -35,7 +35,10 @@ FILES = main 				\
 		parser_utils		\
 		parser_cleanup		\
 		parser_debug		\
-		shell_init
+		shell_init			\
+		executor			\
+		builtin				\
+		get_location		\
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -43,7 +46,8 @@ OBJS_DIR := objs
 vpath %.c	$(SRCS_DIR) \
 			:$(SRCS_DIR)/main \
 			:$(SRCS_DIR)/tokenizer \
-			:$(SRCS_DIR)/parser
+			:$(SRCS_DIR)/parser \
+			:$(SRCS_DIR)/executor
 
 SRCS := $(addsuffix .c, $(FILES))
 OBJS := $(addsuffix .o, $(addprefix $(OBJS_DIR)/, $(FILES)))
