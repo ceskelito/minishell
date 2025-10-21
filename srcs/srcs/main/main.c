@@ -1,3 +1,4 @@
+#include "ezgalloc.h"
 #include "minishell.h"
 
 #define GREEN "\33[32m"
@@ -55,29 +56,6 @@ void	create_groups()
 	ezg_group_create(PARSING);
 }
 
-static char    *get_prompt()
-{
-    char    *working_directory;
-    char    *user;
-    char    *prompt;
-    size_t  prompt_len;
-
-    user = getenv("USER");
-    working_directory = getcwd(NULL, 0);
-    prompt_len = ft_strlen(user) +
-                 ft_strlen(working_directory) + 
-                 (ft_strlen(GREEN) * 4) + 
-                 3 + 1;
-    prompt = malloc(sizeof(char) * prompt_len);
-    ft_sprintf(prompt, "%s%s%s%c%s%s%s%c%c",
-                GREEN, user, 
-                DEFAULT, ':',
-                BLUE, working_directory,
-                DEFAULT, '$', ' ');
-    free(working_directory);
-    return (prompt);
-}
-
 int	main(void)
 {
 	extern char	**environ;
@@ -89,13 +67,17 @@ int	main(void)
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (1)
 	{
-		input = readline(get_prompt());
+		input = readline("minishell$ ");
 		if (!input)
+		{
+			free(input);
 			break ;
+		}
 		add_history(input);
 		process_command(input, &shell);
+		free(input);
 	}
-	//cleanup_shell(&shell);
+	cleanup_shell(&shell);
 	printf("\nGoodbye!\n");
 	return (0);
 }
