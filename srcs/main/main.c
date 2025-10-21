@@ -53,6 +53,7 @@ void	create_groups()
 {
 	ezg_group_create(GLOBAL);
 	ezg_group_create(PARSING);
+	ezg_group_create(EXECUTING);
 }
 
 static char    *get_prompt()

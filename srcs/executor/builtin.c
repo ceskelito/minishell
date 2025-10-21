@@ -1,7 +1,6 @@
 #include "executor.h"
 #include "ft_printf.h"
 
-
 void	env()
 {
 	extern const char	**environ;
@@ -16,33 +15,57 @@ void	env()
 	
 }
 
-void	echo(char *str, bool flag_n) 
+void	echo(char **args) 
 {
-	if (flag_n)
-		ft_printf("%s", str);
-	else
-		ft_printf("%s\n", str);
+	int		i;
+	int		j;
+	bool	flag_n;
+
+	i = 1;
+	flag_n = false;
+	while (args[i] && args[i][0] == '-')
+	{
+		j = 1;
+    	while (args[i][j] == 'n')
+			j++;
+    	if (args[i][j] != '\0' || j == 1)
+			break;
+       flag_n = true;
+       i++;
+    }
+	while(args[i])
+	{
+		ft_printf("%s", args[i]);
+		if (args[i + 1])
+			ft_printf(" ");
+		i++;
+	}
+	if (!flag_n)
+		ft_printf("\n");
 }
 
-void	print_workig_directory()
+void	pwd()
 {	
 	ft_printf("%s\n", getcwd(NULL, 0));
 }
 
-void	change_directory(char *dirname)
+void	cd(char **args)
 {
-	// Need to manage the "too many arguments" case.
-	// idk how to do it before the end of tokenizer
-	//----
-	// is also needed to manage the case in wich HOME env is not set
-	if (!dirname)
+	int	i;
+
+	i = 0;
+	while(args[i])
+		i++;
+	if (i > 2)
+		perror("cd: too many arguments\0");
+	else if (i == 1)
 	{
-		chdir(getenv("HOME"));
-		return;
+		if (chdir(getenv("HOME")) != 0)
+			perror("cd: HOME not set\0");
 	}
-	if (strcmp(dirname, "") == 0)
-		return;	
-	if (chdir(dirname) != 0)
-		perror(ft_strjoin("cd: ", dirname));
+	else if (strcmp(args[1], "") == 0)
+		;	
+	else if (chdir(args[1]) != 0)
+		perror(ft_strjoin("cd: ", args[1]));
 }
 

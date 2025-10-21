@@ -1,6 +1,9 @@
 #include "executor.h"
+#include "ezgalloc.h"
+#include "ft_dprintf.h"
 #include "ft_lib.h"
 #include "minishell.h"
+#include <unistd.h>
 
 
 /* BUILTIN's TO INCLUDE
@@ -12,20 +15,6 @@
  ◦ |DID| env - with no options or arguments
  ◦ exit - with no options
 */
-
-// static void p_free_arr(char ***p) {
-//     if (*p != NULL) {
-//         for (int i = 0; *p[i] != NULL; i++) {
-//             free(*p[i]);
-//         }
-//         free(*p);
-//     }
-// }
-
-// static void	p_free(char **p)
-// {
-// 	free(*p);
-// }
 
 int ft_strcmp(const char *s1, const char *s2)
 {
@@ -40,76 +29,84 @@ int ft_strcmp(const char *s1, const char *s2)
     return (unsigned char)*s1 - (unsigned char)*s2;
 }
 
-int execute_builtin(t_token *token)
+bool	execute_builtin(char **args)
 {
-	if (!token || token->type !=  WORD)
-		return (0);
-
-	if (ft_strcmp(T_ECHO, token->value) == 0)
-	{
-		if(ft_strcmp(T_FLAG_N, token->next->value) == 0)
-			echo(token->next->next->value, true);
-		else
-			echo(token->next->value, false);
-	}
-	else if (strcmp(T_CD, token->value) == 0)
-	{
-		if (!token->next)
-			change_directory(NULL);
-		else
-			change_directory(token->next->value);
-	}
-	else if (strcmp(T_PWD, token->value) == 0)
-		print_workig_directory();
-	else if (strcmp(T_ENV, token->value) == 0)
+	if (!ft_strcmp(args[0], "echo"))
+		echo(args);
+	else if (!ft_strcmp(args[0], "cd"))
+		cd(args);
+	else if (!ft_strcmp(args[0], "pwd"))
+		pwd();
+	else if (!ft_strcmp(args[0], "env"))
 		env();
 	else
-	{
-		// is not a recognized built in
-		return (0);
-	}
+		return (false);
+	return (true);
 
-	return (1);
 }
 
-char **create_args(t_token *token)
+void redir_fd(t_redir *redirs)
 {
-	char *string;
-	char *tmp;
-	
-	string = NULL;
-	tmp = NULL;
-	while(token && token->type == WORD)
-	{
-		tmp = string;
-		string = ft_strjoin_multi(3, string, " ", token->value);
-		free(tmp);
-		tmp = NULL;
-		token = token->next;
-	}
-	return (ft_split(string, ' '));
+    t_redir *curr;
+    int		fd;
+
+	curr = redirs;
+    while (curr)
+    {
+        if (curr->type & IN) {
+            fd = open(curr->file, O_RDONLY);
+            dup2(fd, STDIN_FILENO);
+        }
+        else if (curr->type & OUT) {
+            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC);
+            dup2(fd, STDOUT_FILENO);
+        }
+        else if (curr->type & APPEND) {
+            fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND);
+            dup2(fd, STDOUT_FILENO);
+        }
+        else if (curr->type & HEREDOC) {
+            // Heredoc implementation
+            //setup_heredoc(curr->file);
+        }
+		close(fd);
+        curr = curr->next;
+    }
+}
+void	reset_fd(int std_in, int std_out)
+{
+	dup2(std_in, STDIN_FILENO);
+	dup2(std_out, STDOUT_FILENO);
 }
 
-char	*get_location(char *cmd);
-
-int executor(t_token *token)
+int executor(t_shell *shell)
 {
-	extern char									**environ;
-	//char __attribute__ ((cleanup (p_free_arr)))	**cmd;
-	//char __attribute__ ((cleanup (p_free)))		*location;
-	char	**cmd;
-	char	*location;
-	
-	if (execute_builtin(token))
-		return (0);
-	cmd = create_args(token);
-	location = get_location(cmd[0]);
-	printf("location: %s\n", location);
-	if (!location)	
-		return (1);
-	printf("command: %s\n", ft_strjoin(location, cmd[0]));
-	execve(ft_strjoin(location, cmd[0]), cmd, environ);
-	//token = create_test_tokens(token);
+	t_cmd		*curr;
+	char		*location;
+	extern char	**environ;
+	char		**args;
+
+	curr = shell->cmd_list;
+	while (curr)
+	{
+		args = curr->args;
+		redir_fd(curr->redirs);
+		if (execute_builtin(args))
+		{
+			reset_fd(shell->std_in, shell->std_out);
+			curr = curr->next;
+			continue;
+		}
+		location = get_location(args[0]);
+		if (!location)
+		{
+			ft_dprintf(STDERR_FILENO, "%s: No such file or directory\0", args[0]);
+			return (1);
+		}
+		execve(ft_strjoin(location, args[0]), args, environ);
+		reset_fd(shell->std_in, shell->std_out);
+		ezg_group_release(EXECUTING);
+	}
 	return (0);
 }
 

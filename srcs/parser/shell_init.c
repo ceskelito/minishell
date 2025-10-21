@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <unistd.h>
 
 void	init_shell(t_shell *shell, char **envp)
 {
@@ -9,6 +10,8 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->line = NULL;
 	shell->exit_status = 0;
 	shell->interactive = 1;
+	shell->std_out = dup(STDOUT_FILENO);
+	shell->std_in = dup(STDIN_FILENO);
 }
 
 void	cleanup_shell(t_shell *shell)

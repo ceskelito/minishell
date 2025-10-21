@@ -22,6 +22,7 @@
 
 # define PARSING	"parsing"
 # define GLOBAL		"global"
+# define EXECUTING	"execute"
 
 /*
  * Global variable to handle signals
@@ -56,7 +57,7 @@ typedef struct s_token
 /* Redirection structure */
 typedef struct s_redir
 {
-	int				type;
+	t_token_type	type;
 	char			*file;
 	struct s_redir	*next;
 }	t_redir;
@@ -88,6 +89,8 @@ typedef struct s_shell
 	char			*line;
 	int				exit_status;
 	int				interactive;
+	int				std_out;
+	int				std_in;
 }	t_shell;
 
 /* ========================================================================== */

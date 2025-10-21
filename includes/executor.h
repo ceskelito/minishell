@@ -17,12 +17,13 @@
 # define T_EXIT "exit"
 
 t_token 	*create_test_tokens(t_token *token);
-int			executor(t_token *tokens);
+int			executor(t_shell *shell);
+char	    *get_location(char *cmd);
 
 /* Builtins */
 void	env(void);
-void	echo(char *str, bool flag_n);
-void	change_directory(char *dirname);
-void	print_workig_directory(void);
+void	echo(char **args);
+void	cd(char **args);
+void	pwd(void);
 
 #endif
