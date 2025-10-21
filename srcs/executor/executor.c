@@ -3,6 +3,7 @@
 #include "ft_dprintf.h"
 #include "ft_lib.h"
 #include "minishell.h"
+#include <sys/types.h>
 #include <unistd.h>
 
 
@@ -79,6 +80,29 @@ void	reset_fd(int std_in, int std_out)
 	dup2(std_out, STDOUT_FILENO);
 }
 
+void execute_cmd(char *location, char **args)
+{
+	extern char	**environ;
+	pid_t		pid;
+	int 		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+	    execve(location, args, environ);
+	    perror(args[0]);
+	    _exit(127);
+	}
+	else if (pid > 0)
+	{
+	    waitpid(pid, &status, 0);
+	}
+	else
+	{
+	    perror("fork");
+	}	
+}
+
 int executor(t_shell *shell)
 {
 	t_cmd		*curr;
@@ -103,8 +127,9 @@ int executor(t_shell *shell)
 			ft_dprintf(STDERR_FILENO, "%s: No such file or directory\0", args[0]);
 			return (1);
 		}
-		execve(ft_strjoin(location, args[0]), args, environ);
+		execute_cmd(ft_strjoin(location, args[0]), args);
 		reset_fd(shell->std_in, shell->std_out);
+		curr = curr->next;
 		ezg_group_release(EXECUTING);
 	}
 	return (0);
