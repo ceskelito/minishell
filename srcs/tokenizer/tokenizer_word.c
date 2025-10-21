@@ -54,17 +54,17 @@ static char	*copy_word_simple(char *input, int start, int len)
 	return (result);
 }
 
-static char *new_copy_word(char *word, int len)
-{
-	char	*result;
-
-	result = ezg_alloc(PARSING, sizeof(char) * len);
-	if (word[0] == '"' || word[0] == '\'')
-		ft_strlcpy(result, word + 1, len - 1);
-	else
-		ft_strlcpy(result, word, len + 1);
-	return (result);
-}
+//static char *new_copy_word(char *word, int len)
+//{
+//	char	*result;
+//
+//	result = ezg_alloc(PARSING, sizeof(char) * len);
+//	if (word[0] == '"' || word[0] == '\'')
+//		ft_strlcpy(result, word + 1, len - 1);
+//	else
+//		ft_strlcpy(result, word, len + 1);
+//	return (result);
+//}
 
 char	*extract_word(char *input, int *i)
 {
