@@ -36,7 +36,7 @@ static char	*copy_word_simple(char *input, int start, int len)
 	int		i;
 	int		j;
 
-	result = ezg_alloc(PARSING, sizeof(char) * (len + 1));
+	result = ezg_alloc(GLOBAL, sizeof(char) * (len + 1));
 	if (!result)
 		return (NULL);
 	i = 0;

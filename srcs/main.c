@@ -45,7 +45,7 @@ static void	process_command(char *input, t_shell *shell)
 		executor(shell);
 	}
 	//cleanup_parsing(shell);
-	ezg_group_delete(PARSING);
+	//ezg_group_delete(PARSING);
 }
 
 void __attribute__((destructor)) ezg_cleanup();
