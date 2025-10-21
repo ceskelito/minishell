@@ -60,7 +60,7 @@ static char *new_copy_word(char *word, int len)
 {
 	char	*result;
 
-	result = ezg_alloc(G_TOKEN, len);
+	result = ezg_alloc(PARSING, len);
 	if (word[0] == '"' || word[0] == '\'')
 		ft_strlcpy(result, word + 1, len - 1);
 	else

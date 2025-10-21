@@ -20,7 +20,8 @@
 # define SUCCESS 0
 # define ERROR 1
 
-# define G_TOKEN "token"
+# define PARSING	"parsing"
+# define GLOBAL		"global"
 
 /*
  * Global variable to handle signals

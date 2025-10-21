@@ -32,9 +32,9 @@ int	is_operator_char(char c)
 char	*get_operator_value(char *input, t_token_type type)
 {
 	if (type & (OR | AND | HEREDOC |APPEND))
-		return (ft_substr(input, 0, 2));
+		return (ezg_add(PARSING, ft_substr(input, 0, 2)));
 	else
-		return (ft_substr(input, 0, 1));
+		return (ezg_add(PARSING, ft_substr(input, 0, 1)));
 }
 
 void	free_tokens(t_token *tokens)
