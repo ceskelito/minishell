@@ -4,7 +4,7 @@ t_cmd	*create_cmd(void)
 {
 	t_cmd	*cmd;
 
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	cmd = ezg_alloc(GLOBAL, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
@@ -18,16 +18,13 @@ t_redir	*create_redir(int type, char *file)
 {
 	t_redir	*redir;
 
-	redir = (t_redir *)malloc(sizeof(t_redir));
+	redir = ezg_alloc(GLOBAL, sizeof(t_redir));
 	if (!redir)
 		return (NULL);
 	redir->type = type;
-	redir->file = ft_strdup(file);
+	redir->file = ezg_add(GLOBAL, ft_strdup(file));
 	if (!redir->file)
-	{
-		free(redir);
 		return (NULL);
-	}
 	redir->next = NULL;
 	return (redir);
 }

@@ -43,7 +43,8 @@ static void	process_command(char *input, t_shell *shell)
 		/* TODO: executor будет здесь */
 		printf("Command ready for execution\n");
 	}
-	cleanup_parsing(shell);
+	//cleanup_parsing(shell);
+	ezg_group_delete(PARSING);
 }
 
 void __attribute__((destructor)) ezg_cleanup();
