@@ -53,38 +53,6 @@ static bool	execute_builtin(char **args)
 
 }
 
-// static void redir_fd(t_redir *redirs)
-// {
-//     t_redir *curr;
-//     int		fd;
-
-// 	curr = redirs;
-//     while (curr)
-//     {
-//         if (curr->type & IN) {
-//             fd = open(curr->file, O_RDONLY);
-//             dup2(fd, STDIN_FILENO);
-//         }
-//         else if (curr->type & OUT) {
-//             fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC);
-//             dup2(fd, STDOUT_FILENO);
-//         }
-//         else if (curr->type & APPEND) {
-//             fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND);
-//             dup2(fd, STDOUT_FILENO);
-//         }
-//         else if (curr->type & HEREDOC) {
-//             // Heredoc implementation
-//             fd = setup_heredoc(curr->file);
-//             dup2(fd, STDIN_FILENO);
-//         }
-//         if (fd == -1 && curr->type != HEREDOC)
-//         	perror(ft_strjoin("minishell: ", curr->file));        	
-// 		close(fd);
-//         curr = curr->next;
-//     }
-// }
-
 static int redir_fd(t_redir *redirs)
 {
     t_redir *curr;
@@ -118,12 +86,6 @@ static int redir_fd(t_redir *redirs)
     return (0);
 }
 
-static void	reset_fd(int std_in, int std_out)
-{
-	dup2(std_in, STDIN_FILENO);
-	dup2(std_out, STDOUT_FILENO);
-}
-
 static void execute_cmd(char *location, char **args)
 {
 	extern char	**environ;
@@ -147,6 +109,12 @@ static void execute_cmd(char *location, char **args)
 	}	
 }
 
+static inline void	reset_fd(int std_in, int std_out)
+{
+	dup2(std_in, STDIN_FILENO);
+	dup2(std_out, STDOUT_FILENO);
+}
+
 int executor(t_shell *shell)
 {
 	t_cmd		*curr;
@@ -157,10 +125,12 @@ int executor(t_shell *shell)
 	curr = shell->cmd_list;
 	while (curr)
 	{
-		args = curr->args;
 		if (redir_fd(curr->redirs) != 0)
 			break;
-		if (!execute_builtin(args))
+		args = curr->args;
+		if (execute_builtin(args))
+			;
+		else
 		{
 			location = get_location(args[0]);
 			if (!location)
