@@ -97,41 +97,6 @@ void execute_cmd(char *location, char **args)
 	}	
 }
 
-//int executor(t_shell *shell)
-//{
-//	t_cmd		*curr;
-//	char		*location;
-//	extern char	**environ;
-//	char		**args;
-//	
-//	curr = shell->cmd_list;
-//	while (curr)
-//	{
-//		args = curr->args;
-//		redir_fd(curr->redirs);
-//		if (execute_builtin(args))
-//		{
-//			reset_fd(shell->std_in, shell->std_out);
-//			curr = curr->next;
-//			continue;
-//		}
-//		location = get_location(args[0]);
-//		if (!location)
-//		{
-//			ft_dprintf(STDERR_FILENO, "%s: command not found\n\0", args[0]);
-//			reset_fd(shell->std_in, shell->std_out);
-//			curr = curr->next;
-//			return (1);
-//		}
-//		execute_cmd(ft_strjoin(location, args[0]), args);
-//		reset_fd(shell->std_in, shell->std_out);
-//		curr = curr->next;
-//		ezg_group_release(EXECUTING);
-//	}
-//	return (0);
-//}
-
-
 int executor(t_shell *shell)
 {
 	t_cmd		*curr;
