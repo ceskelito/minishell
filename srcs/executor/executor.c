@@ -8,7 +8,7 @@
  ◦ export - with no options
  ◦ unset - with no options
  ◦ |DID| env - with no options or arguments
- ◦ exit - with no options
+ ◦ |DID| exit - with no options
 */
 
 int ft_strcmp(const char *s1, const char *s2)
@@ -35,7 +35,7 @@ static bool	execute_builtin(char **args)
 	else if (!ft_strcmp(args[0], "env"))
 		env();
 	else if (!ft_strcmp(args[0], "exit"))
-		exit_shell();
+		exit_shell(args);
 	else
 		return (false);
 	return (true);

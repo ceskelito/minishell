@@ -1,6 +1,8 @@
 #include "executor.h"
+#include "ft_lib.h"
 #include "ft_printf.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 void	env()
 {
@@ -70,8 +72,34 @@ void	cd(char **args)
 		perror(ft_strjoin("cd: ", args[1]));
 }
 
-void exit_shell()
+void	exit_shell(char **args)
 {
-	// reset_fd(shell->std_in, shell->std_out);
-	exit(EXIT_SUCCESS);
+	int	status;
+	int	i;
+
+	ft_printf("exit\n");
+
+	if (!args[1])
+		exit(EXIT_SUCCESS);
+	
+	i = 0;
+	while (args[1][i])
+	{
+		if (!ft_isdigit(args[1][i]) && !(i == 0 && (args[1][i] == '+' || args[1][i] == '-')))
+		{
+			ft_dprintf(STDERR_FILENO, "minishell: exit: %s: numeric argument required\n", args[1]);
+			exit(255);
+		}
+		i++;
+	}
+
+	if (args[2])
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
+		//g_exit_status = 1; // Need to update exit status
+		return; // Like Bash, do not exit from the shell
+	}
+
+	status = ft_atoi(args[1]) % 256;
+	exit(status);
 }
