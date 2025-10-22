@@ -25,5 +25,5 @@ void	env(void);
 void	echo(char **args);
 void	cd(char **args);
 void	pwd(void);
-
+void	exit_shell();
 #endif

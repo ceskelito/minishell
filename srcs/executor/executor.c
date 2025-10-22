@@ -24,7 +24,7 @@ int ft_strcmp(const char *s1, const char *s2)
     return (unsigned char)*s1 - (unsigned char)*s2;
 }
 
-bool	execute_builtin(char **args)
+static bool	execute_builtin(char **args)
 {
 	if (!ft_strcmp(args[0], "echo"))
 		echo(args);
@@ -34,13 +34,15 @@ bool	execute_builtin(char **args)
 		pwd();
 	else if (!ft_strcmp(args[0], "env"))
 		env();
+	else if (!ft_strcmp(args[0], "exit"))
+		exit_shell();
 	else
 		return (false);
 	return (true);
 
 }
 
-void redir_fd(t_redir *redirs)
+static void redir_fd(t_redir *redirs)
 {
     t_redir *curr;
     int		fd;
@@ -68,13 +70,14 @@ void redir_fd(t_redir *redirs)
         curr = curr->next;
     }
 }
-void	reset_fd(int std_in, int std_out)
+
+static void	reset_fd(int std_in, int std_out)
 {
 	dup2(std_in, STDIN_FILENO);
 	dup2(std_out, STDOUT_FILENO);
 }
 
-void execute_cmd(char *location, char **args)
+static void execute_cmd(char *location, char **args)
 {
 	extern char	**environ;
 	pid_t		pid;
@@ -85,7 +88,7 @@ void execute_cmd(char *location, char **args)
 	{
 	    execve(location, args, environ);
 	    perror(args[0]);
-	    _exit(127);
+	    exit(127);
 	}
 	else if (pid > 0)
 	{
@@ -124,3 +127,4 @@ int executor(t_shell *shell)
 	}
 	return (0);
 }
+

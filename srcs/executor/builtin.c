@@ -1,5 +1,6 @@
 #include "executor.h"
 #include "ft_printf.h"
+#include <stdlib.h>
 
 void	env()
 {
@@ -69,3 +70,8 @@ void	cd(char **args)
 		perror(ft_strjoin("cd: ", args[1]));
 }
 
+void exit_shell()
+{
+	// reset_fd(shell->std_in, shell->std_out);
+	exit(EXIT_SUCCESS);
+}
