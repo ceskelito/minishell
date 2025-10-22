@@ -16,3 +16,7 @@ minishell
 
 # Cache files
 .cache/
+
+# Trash
+.nfs*
+.DS*
