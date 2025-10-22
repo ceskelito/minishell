@@ -1,11 +1,5 @@
-#include "executor.h"
-#include "ezgalloc.h"
-#include "ft_dprintf.h"
-#include "ft_lib.h"
 #include "minishell.h"
-#include <sys/types.h>
-#include <unistd.h>
-
+#include "executor.h"
 
 /* BUILTIN's TO INCLUDE
  ◦ |DID| echo - with option -n
@@ -103,6 +97,41 @@ void execute_cmd(char *location, char **args)
 	}	
 }
 
+//int executor(t_shell *shell)
+//{
+//	t_cmd		*curr;
+//	char		*location;
+//	extern char	**environ;
+//	char		**args;
+//	
+//	curr = shell->cmd_list;
+//	while (curr)
+//	{
+//		args = curr->args;
+//		redir_fd(curr->redirs);
+//		if (execute_builtin(args))
+//		{
+//			reset_fd(shell->std_in, shell->std_out);
+//			curr = curr->next;
+//			continue;
+//		}
+//		location = get_location(args[0]);
+//		if (!location)
+//		{
+//			ft_dprintf(STDERR_FILENO, "%s: command not found\n\0", args[0]);
+//			reset_fd(shell->std_in, shell->std_out);
+//			curr = curr->next;
+//			return (1);
+//		}
+//		execute_cmd(ft_strjoin(location, args[0]), args);
+//		reset_fd(shell->std_in, shell->std_out);
+//		curr = curr->next;
+//		ezg_group_release(EXECUTING);
+//	}
+//	return (0);
+//}
+
+
 int executor(t_shell *shell)
 {
 	t_cmd		*curr;
@@ -115,29 +144,18 @@ int executor(t_shell *shell)
 	{
 		args = curr->args;
 		redir_fd(curr->redirs);
-		if (execute_builtin(args))
+
+		if (!execute_builtin(args))
 		{
-			reset_fd(shell->std_in, shell->std_out);
-			curr = curr->next;
-			continue;
+			location = get_location(args[0]);
+			if (!location)
+				ft_dprintf(STDERR_FILENO, "%s: command not found\n", args[0]);
+			else
+				execute_cmd(ft_strjoin(location, args[0]), args);
 		}
-		location = get_location(args[0]);
-		if (!location)
-		{
-			ft_dprintf(STDERR_FILENO, "%s: No such file or directory\0", args[0]);
-			return (1);
-		}
-		execute_cmd(ft_strjoin(location, args[0]), args);
 		reset_fd(shell->std_in, shell->std_out);
-		curr = curr->next;
 		ezg_group_release(EXECUTING);
+		curr = curr->next;
 	}
 	return (0);
 }
-
-//int main(void)
-//{
-//	t_token	token;
-//	executor(&token);
-//	return (0);
-//}
