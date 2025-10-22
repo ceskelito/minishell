@@ -1,83 +1,34 @@
-#include "ft_dprintf.h"
-#include "ft_lib.h"
 #include "minishell.h"
 #include "executor.h"
-#include <readline/readline.h>
-#include <stdio.h>
-#include <unistd.h>
+#include <stdbool.h>
 
-// static int	create_buffer()
-// {
-// 	int		i;
-// 	int		fd;
-// 	char	*file;
-	
-// 	i = 0;
-// 	fd = -1;
-// 	while(fd == -1)
-// 	{
-// 		file = ft_strjoin("mini_heredoc_", ft_itoa(i));
-// 		ezg_add(EXECUTING, file);
-// 		fd = open(file, O_CREAT | O_EXCL | O_RDWR | O_TRUNC, 0600);
-// 		i ++;
-// 	}
-// 	unlink(file);
-// 	return (fd);
-// }
-
-// void free_char(char **c)
-// {
-// 	free(*c);
-// }
-
-
-static char *get_filename()
-{
-	int		i;
-	char	*file;
-	char	*suffix;
-
-	i = 0;
-	while(true)
-	{
-		suffix = ft_itoa(i);
-		file = ft_strjoin("mini_heredoc_", suffix);
-		ezg_add(EXECUTING, suffix);
-		ezg_add(EXECUTING, file);
-		if (access(file, F_OK))
-			break;
-		i++;
-	}
-	return (file);
-}
+// Need to expand variables
+// Need to manage cases with EOF in quotes
 
 int	setup_heredoc(char *delimiter)
 {
-	/*
-	 * --- Open a file
-	 * --- Unlink the file
-	 * Readline the input until the delimiter
-	 * Return the fd
-	*/
-	int		fd;
+	int		fd[2];
 	char	*input;
-	char	*file;
-	// fd = create_buffer();
 
-	file = get_filename();
-	// printf("FILENAME: %s\n", file);
-	fd = open(file, O_CREAT | O_EXCL | O_WRONLY | O_TRUNC, 0600);
-	input = NULL;
-	while (ft_strcmp(input, delimiter))
+	if (pipe(fd) == -1)
 	{
-		// printf("IN WHILE\n");
-		input = readline("> ");
-		ezg_add(EXECUTING, input);
-		if (ft_strcmp(input, delimiter))
-			ft_dprintf(fd, "%s\n", input);
+		perror("minishell: pipe: ");
+		return (-1);
 	}
-	// close(fd);
-	// fd = open(file, O_RDONLY);
-	unlink(file);
-	return (fd);
+	input = NULL;
+	while (true)
+	{
+		input = readline("> ");
+		if (!input)
+		{
+			perror("minishell: warning: heredoc terminated by EOF\n");
+			break;
+		}
+		ezg_add(EXECUTING, input);
+		if (!ft_strcmp(input, delimiter))
+			break;
+		ft_dprintf(fd[1], "%s\n", input);
+	}
+	close(fd[1]);
+	return (fd[0]);
 }
