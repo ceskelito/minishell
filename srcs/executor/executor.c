@@ -53,37 +53,69 @@ static bool	execute_builtin(char **args)
 
 }
 
-static void redir_fd(t_redir *redirs)
+// static void redir_fd(t_redir *redirs)
+// {
+//     t_redir *curr;
+//     int		fd;
+
+// 	curr = redirs;
+//     while (curr)
+//     {
+//         if (curr->type & IN) {
+//             fd = open(curr->file, O_RDONLY);
+//             dup2(fd, STDIN_FILENO);
+//         }
+//         else if (curr->type & OUT) {
+//             fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC);
+//             dup2(fd, STDOUT_FILENO);
+//         }
+//         else if (curr->type & APPEND) {
+//             fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND);
+//             dup2(fd, STDOUT_FILENO);
+//         }
+//         else if (curr->type & HEREDOC) {
+//             // Heredoc implementation
+//             fd = setup_heredoc(curr->file);
+//             dup2(fd, STDIN_FILENO);
+//         }
+//         if (fd == -1 && curr->type != HEREDOC)
+//         	perror(ft_strjoin("minishell: ", curr->file));        	
+// 		close(fd);
+//         curr = curr->next;
+//     }
+// }
+
+static int redir_fd(t_redir *redirs)
 {
     t_redir *curr;
-    int		fd;
+    int fd;
 
-	curr = redirs;
+    curr = redirs;
     while (curr)
     {
-        if (curr->type & IN) {
+    	fd = -1;
+        if (curr->type & IN)
             fd = open(curr->file, O_RDONLY);
-            if (fd == -1)
-            	perror(ft_strjoin("minishell: ", curr->file));
-            else
-	            dup2(fd, STDIN_FILENO);
-        }
-        else if (curr->type & OUT) {
-            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC);
-            dup2(fd, STDOUT_FILENO);
-        }
-        else if (curr->type & APPEND) {
-            fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND);
-            dup2(fd, STDOUT_FILENO);
-        }
-        else if (curr->type & HEREDOC) {
-            // Heredoc implementation
+        else if (curr->type & OUT)
+            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        else if (curr->type & APPEND)
+            fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        else if (curr->type & HEREDOC)
             fd = setup_heredoc(curr->file);
-            dup2(fd, STDIN_FILENO);
+        if (fd == -1)
+        {
+            perror(ft_strjoin("minishell: ", curr->file));
+            curr = curr->next;
+            return (1);
         }
-		close(fd);
+        if (curr->type & (IN | HEREDOC))
+            dup2(fd, STDIN_FILENO);
+        else
+            dup2(fd, STDOUT_FILENO);
+        close(fd);
         curr = curr->next;
     }
+    return (0);
 }
 
 static void	reset_fd(int std_in, int std_out)
@@ -126,8 +158,8 @@ int executor(t_shell *shell)
 	while (curr)
 	{
 		args = curr->args;
-		redir_fd(curr->redirs);
-		// need to stop if redir fails
+		if (redir_fd(curr->redirs) != 0)
+			break;
 		if (!execute_builtin(args))
 		{
 			location = get_location(args[0]);
