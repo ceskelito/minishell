@@ -19,6 +19,7 @@
 t_token 	*create_test_tokens(t_token *token);
 int			executor(t_shell *shell);
 char	    *get_location(char *cmd);
+int			setup_heredoc(char *delimiter);
 
 /* Builtins */
 void	env(void);

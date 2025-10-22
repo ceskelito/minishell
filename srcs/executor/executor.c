@@ -1,5 +1,8 @@
+#include "ft_dprintf.h"
+#include "ft_printf.h"
 #include "minishell.h"
 #include "executor.h"
+#include <unistd.h>
 
 /* BUILTIN's TO INCLUDE
  ◦ |DID| echo - with option -n
@@ -13,14 +16,22 @@
 
 int ft_strcmp(const char *s1, const char *s2)
 {
-    while (*s1 && *s2) // finché nessuna delle due stringhe è terminata
+    // Gestione dei casi NULL
+    if (s1 == NULL && s2 == NULL)
+        return 0; // entrambe le stringhe sono NULL → uguali
+    if (s1 == NULL)
+        return -1; // NULL considerata "minore" di una stringa valida
+    if (s2 == NULL)
+        return 1;  // stringa valida è "maggiore" di NULL
+
+    // Confronto effettivo dei caratteri
+    while (*s1 && *s2)
     {
         if (*s1 != *s2)
             return (unsigned char)*s1 - (unsigned char)*s2;
         s1++;
         s2++;
     }
-    // se siamo usciti dal ciclo, almeno una delle due è terminata
     return (unsigned char)*s1 - (unsigned char)*s2;
 }
 
@@ -52,7 +63,10 @@ static void redir_fd(t_redir *redirs)
     {
         if (curr->type & IN) {
             fd = open(curr->file, O_RDONLY);
-            dup2(fd, STDIN_FILENO);
+            if (fd == -1)
+            	perror(ft_strjoin("minishell: ", curr->file));
+            else
+	            dup2(fd, STDIN_FILENO);
         }
         else if (curr->type & OUT) {
             fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC);
@@ -64,7 +78,8 @@ static void redir_fd(t_redir *redirs)
         }
         else if (curr->type & HEREDOC) {
             // Heredoc implementation
-            //setup_heredoc(curr->file);
+            fd = setup_heredoc(curr->file);
+            dup2(fd, STDIN_FILENO);
         }
 		close(fd);
         curr = curr->next;
@@ -112,7 +127,7 @@ int executor(t_shell *shell)
 	{
 		args = curr->args;
 		redir_fd(curr->redirs);
-
+		// need to stop if redir fails
 		if (!execute_builtin(args))
 		{
 			location = get_location(args[0]);

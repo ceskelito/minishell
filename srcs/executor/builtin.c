@@ -33,8 +33,8 @@ void	echo(char **args)
 			j++;
     	if (args[i][j] != '\0' || j == 1)
 			break;
-       flag_n = true;
-       i++;
+    	flag_n = true;
+    	i++;
     }
 	while(args[i])
 	{
