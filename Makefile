@@ -39,7 +39,8 @@ FILES = main 				\
 		executor			\
 		builtin				\
 		get_location		\
-		heredoc
+		heredoc				\
+		pipe
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
