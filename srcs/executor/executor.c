@@ -127,9 +127,9 @@ int executor(t_shell *shell)
 	curr = shell->cmd_list;
 	while (curr)
 	{
+		setup_pipe(curr);
 		if (redir_fd(curr->redirs) != 0)
 			break;
-		setup_pipe(curr);
 		args = curr->args;
 		if (execute_builtin(args))
 			;
