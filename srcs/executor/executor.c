@@ -63,9 +63,15 @@ static int redir_fd(t_redir *redirs)
     {
     	fd = -1;
         if (curr->type & IN)
-            fd = open(curr->file, O_RDONLY);
+        	if (curr->type & PIPE)
+        		fd = curr->pipe_fd;
+        	else
+	            fd = open(curr->file, O_RDONLY);
         else if (curr->type & OUT)
-            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        	if (curr->type & PIPE)
+        		fd = curr->pipe_fd;
+        	else
+	            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         else if (curr->type & APPEND)
             fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
         else if (curr->type & HEREDOC)
