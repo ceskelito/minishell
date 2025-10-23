@@ -3,4 +3,4 @@
 	url = https://github.com/ceskelito/LIBFT_EXTENSIBLE.git
 [submodule "ezalloc"]
 	path = ezalloc
-	url = ./ezalloc/
+	url = https://github.com/ceskelito/ezalloc.git

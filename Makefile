@@ -106,11 +106,14 @@ compile_flags.txt: Makefile
 
 clean:
 	$(RM) -r $(OBJS_DIR)
+	@echo "Call 'make deep$@' to propagate the command to the external libraries\n"
 
 fclean: clean
 	$(RM) $(NAME)
+	@echo "Call 'make deep$@' to propagate the command to the external libraries\n"
 
 re: fclean all
+	@echo "Call 'make deep$@' to propagate the command to the external libraries\n"
 
 deepclean: clean
 	$(MAKE) clean -C $(LIBFT_ROOT)
