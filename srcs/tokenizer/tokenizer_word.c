@@ -30,7 +30,7 @@ static int	count_word_length(char *word)
 	return (len);
 }
 
-static char	*copy_word_simple(char *input, int start, int len)
+static char	*copy_word_simple(char *input, int len)
 {
 	char	*result;
 	int		i;
@@ -43,9 +43,9 @@ static char	*copy_word_simple(char *input, int start, int len)
 	j = 0;
 	while (i < len)
 	{
-		if (input[start + i] != '\'' && input[start + i] != '\"')
+		if (input[i] != '\'' && input[i] != '\"')
 		{
-			result[j] = input[start + i];
+			result[j] = input[i];
 			j++;
 		}
 		i++;
@@ -66,24 +66,23 @@ static char	*copy_word_simple(char *input, int start, int len)
 //	return (result);
 //}
 
-char	*extract_word(char *input, int *i)
+char	*extract_word(char *input)
 {
 	int		len;
 	char	*result;
 	int		start;
 
-	start = *i;
-	len = count_word_length(input + start);
+	len = count_word_length(input);
 	if (len == -1)
 	{
 		perror("minishell: syntax error: unclosed quote\n");
 		return (NULL);
 	}
 	if (len == 0)
-		return (ft_strdup(""));
-	result = copy_word_simple(input, start, len);
-	//result = new_copy_word(input + start, len);
-	*i += len;
+		result = ft_strdup("");
+	else
+		result = copy_word_simple(input, len);
+	ezg_add(TOKENIZING, result);
 	return (result);
 }
 

@@ -74,9 +74,11 @@ t_token	*tokenize_input(char *input)
 		}
 		else
 		{
-			value = extract_word(input, &i);
+			//i += set_word_value(value, input);
+			value = extract_word(input + i);
 			if (!value)
 				return (NULL);
+			i += ft_strlen(value);
 			new_token = create_token(value, WORD);
 		}
 		if (new_token)

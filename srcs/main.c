@@ -54,6 +54,7 @@ void __attribute__((constructor)) create_groups();
 
 void	create_groups()
 {
+	ezg_group_create(TOKENIZING);
 	ezg_group_create(GLOBAL);
 	ezg_group_create(PARSING);
 	ezg_group_create(EXECUTING);

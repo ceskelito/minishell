@@ -78,7 +78,7 @@ static int redir_fd(t_redir *redirs)
             curr = curr->next;
             return (1);
         }
-        if (curr->type & (IN | HEREDOC))
+        if (curr->type & (IN))
             dup2(fd, STDIN_FILENO);
         else
             dup2(fd, STDOUT_FILENO);
@@ -127,7 +127,8 @@ int executor(t_shell *shell)
 	curr = shell->cmd_list;
 	while (curr)
 	{
-		setup_pipe(curr);
+		if (curr->pipe_output)
+			setup_pipe(curr);
 		if (redir_fd(curr->redirs) != 0)
 			break;
 		args = curr->args;

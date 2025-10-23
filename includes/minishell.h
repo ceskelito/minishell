@@ -23,6 +23,7 @@
 # define PARSING	"parsing"
 # define GLOBAL		"global"
 # define EXECUTING	"execute"
+# define TOKENIZING	"tokenizing"
 
 /*
  * Global variable to handle signals
@@ -33,18 +34,19 @@ extern int	g_sig_status;
 /* Token types */
 typedef enum e_token_type
 {
-	WORD = 0,
+	WORD = 1 << 0,
 	PIPE = 1 << 1,
 	IN = 1 << 2,
 	OUT = 1 << 3,
-	APPEND = 1 << 4,
-	HEREDOC = 1 << 5,
+	APPEND = 1 << 4 | OUT,
+	HEREDOC = 1 << 5 | IN,
 	AND = 1 << 6,
 	OR = 1 << 7,
 	P_OPEN = 1 << 8,
 	P_CLOSE = 1 << 9,
 	BUILT = 1 << 10
 }	t_token_type;
+
 
 /* Token structure */
 typedef struct s_token
@@ -102,7 +104,7 @@ t_token			*create_token(char *value, t_token_type type);
 void			add_token(t_token **head, t_token *new_token);
 t_token			*tokenize_input(char *input);
 t_token_type	get_token_type(char *input);
-char			*extract_word(char *input, int *i);
+char			*extract_word(char *input);
 void			free_tokens(t_token *tokens);
 
 /* Tokenizer utilities */
