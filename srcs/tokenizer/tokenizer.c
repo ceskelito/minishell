@@ -67,7 +67,7 @@ t_token	*tokenize_input(char *input)
 	t_token			*tokens;
 	t_token			*new_token;
 	int				i;
-	char			*value;
+	//char			*value;
 
 	tokens = NULL;
 	i = 0;
@@ -75,7 +75,7 @@ t_token	*tokenize_input(char *input)
 	{
 		skip_spaces(input, &i);
 		continue;
-		new_token = create_token(NULL, 0);
+		new_token = create_token(NULL, 0); // maybe change the creae token function to set all to zero
 		if (ft_strchr("|<>&()", input[i]))
 		{
 			//new_token = create_operator_token(input + i);
