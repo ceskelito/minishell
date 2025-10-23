@@ -52,14 +52,10 @@ int	is_special_in_word(char c)
 
 static void	fill_operator_token(t_token *token, char *input)
 {
+	if (!token)
+		return ;
 	token->type = get_token_type(input);
 	token->value = get_operator_value(input, token->type);
-}
-
-static inline void	skip_spaces(char *str, int *i)
-{
-	while (ft_isspace(str[*i]))
-			(*i)++;
 }
 
 t_token	*tokenize_input(char *input)
@@ -73,8 +69,10 @@ t_token	*tokenize_input(char *input)
 	i = 0;
 	while (input[i])
 	{
-		skip_spaces(input, &i);
-		continue;
+		while (ft_isspace(input[i]))
+			(i)++;
+		if (!input[i])
+			break;
 		new_token = create_token(NULL, 0); // maybe change the creae token function to set all to zero
 		if (ft_strchr("|<>&()", input[i]))
 		{
