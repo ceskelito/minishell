@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include "executor.h"
 
-void	add_pipe_redir(t_cmd *cmd, int fd, t_token_type type)
+static void	add_pipe_redir(t_cmd *cmd, int fd, t_token_type type)
 {
 	t_redir	*new;
 
@@ -15,23 +15,11 @@ void	add_pipe_redir(t_cmd *cmd, int fd, t_token_type type)
 void 	setup_pipe(t_cmd *cmd)
 {
 	int	fd[2];
-	int	parent;
 
+	if (!cmd || !cmd->next)
+		return ;
 	if (pipe(fd) == -1)
-	{
 		return ;
-	}
-	parent = fork();
-	if (parent == -1)
-	{
-		return ;
-	}
-	if (parent)
-	{
-		add_pipe_redir(cmd->next, fd[1], IN);
-	}
-	else
-	{
-		add_pipe_redir(cmd, fd[0], OUT);
-	}
+	add_pipe_redir(cmd, fd[1], OUT);
+	add_pipe_redir(cmd->next, fd[0], IN);
 }
