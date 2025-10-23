@@ -5,11 +5,11 @@ t_token	*create_token(char *value, t_token_type type)
 {
 	t_token	*token;
 
-	token = ezg_alloc(GLOBAL, sizeof(t_token));
+	token = ezg_alloc(TOKENIZING, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = ft_strdup(value);
-	ezg_add(GLOBAL, token->value);
+	ezg_add(TOKENIZING, token->value);
 	if (!token->value)
 		return (NULL);
 	token->type = type;
@@ -37,17 +37,29 @@ int	is_special_in_word(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-static t_token	*create_operator_token(char *input)
-{
-	t_token_type	type;
-	char			*value;
-	t_token			*new_token;
+//static t_token	*create_operator_token(char *input)
+//{
+//	t_token_type	type;
+//	char			*value;
+//	t_token			*new_token;
+//
+//	type = get_token_type(input);
+//	value = get_operator_value(input, type);
+//	new_token = create_token(value, type);
+//	// print_tokens(new_token);
+//	return (new_token);
+//}
 
-	type = get_token_type(input);
-	value = get_operator_value(input, type);
-	new_token = create_token(value, type);
-	// print_tokens(new_token);
-	return (new_token);
+static void	fill_operator_token(t_token *token, char *input)
+{
+	token->type = get_token_type(input);
+	token->value = get_operator_value(input, token->type);
+}
+
+static inline void	skip_spaces(char *str, int *i)
+{
+	while (ft_isspace(str[*i]))
+			(*i)++;
 }
 
 t_token	*tokenize_input(char *input)
@@ -61,28 +73,29 @@ t_token	*tokenize_input(char *input)
 	i = 0;
 	while (input[i])
 	{
-		while (ft_isspace(input[i]))
-			i++;
-		if (!input[i])
-			break ;
+		skip_spaces(input, &i);
+		continue;
+		new_token = create_token(NULL, 0);
 		if (ft_strchr("|<>&()", input[i]))
 		{
-			new_token = create_operator_token(input + i);
+			//new_token = create_operator_token(input + i);
+			fill_operator_token(new_token, input + i);
 			if (new_token->type & (OR | HEREDOC | APPEND | AND))
 				i++;
 			i++;
 		}
 		else
 		{
-			//i += set_word_value(value, input);
-			value = extract_word(input + i);
-			if (!value)
+			i += fill_word_token(new_token, input + i);
+			if (!new_token->value)
 				return (NULL);
-			i += ft_strlen(value);
-			new_token = create_token(value, WORD);
+			//new_token = create_token(value, WORD);
 		}
-		if (new_token)
+		if (new_token->value)
+		{
 			add_token(&tokens, new_token);
+			new_token = NULL;
+		}
 	}
 	return (tokens);
 }

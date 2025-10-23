@@ -26,7 +26,10 @@ static int	count_word_length(char *word)
 		len++;
 	}
 	if (in_quote)
-		return (-1); // unclosed quote
+	{
+		perror("minishell: syntax error: unclosed quote\n");
+		return (-1);
+	}
 	return (len);
 }
 
@@ -66,24 +69,34 @@ static char	*copy_word_simple(char *input, int len)
 //	return (result);
 //}
 
-char	*extract_word(char *input)
+//int	set_word_value(char *result, char *input)
+//{
+//	int		len;
+//
+//	result = NULL;
+//	len = count_word_length(input);
+//	if (len == -1)
+//		return (-1);
+//	if (len == 0)
+//		result = ft_strdup("");
+//	else
+//		result = copy_word_simple(input, len);
+//	ezg_add(TOKENIZING, result);
+//	return (len);
+//}
+
+int	fill_word_token(t_token *token, char *input)
 {
 	int		len;
-	char	*result;
-	int		start;
 
 	len = count_word_length(input);
 	if (len == -1)
-	{
-		perror("minishell: syntax error: unclosed quote\n");
-		return (NULL);
-	}
+		return (-1);
 	if (len == 0)
-		result = ft_strdup("");
+		token->value = ft_strdup("");
 	else
-		result = copy_word_simple(input, len);
-	ezg_add(TOKENIZING, result);
-	return (result);
+		token->value = copy_word_simple(input, len);
+	token->type = WORD;
+	//ezg_add(TOKENIZING, token->value);
+	return (len);
 }
-
-// A new word occur when, out of the quotes, there's a space
