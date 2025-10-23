@@ -62,20 +62,16 @@ static int redir_fd(t_redir *redirs)
     while (curr)
     {
     	fd = -1;
-        if (curr->type & IN)
-        	if (curr->type & PIPE)
-        		fd = curr->pipe_fd;
-        	else
-	            fd = open(curr->file, O_RDONLY);
-        else if (curr->type & OUT)
-        	if (curr->type & PIPE)
-        		fd = curr->pipe_fd;
-        	else
-	            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        else if (curr->type & APPEND)
-            fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        else if (curr->type & HEREDOC)
+    	if (curr->type & PIPE)
+    		fd = curr->pipe_fd;
+    	else if (curr->type & HEREDOC)
             fd = setup_heredoc(curr->file);
+    	else if (curr->type & IN)
+            fd = open(curr->file, O_RDONLY);
+    	else if (curr->type & OUT)
+            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    	else if (curr->type & APPEND)
+            fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
         {
             perror(ft_strjoin("minishell: ", curr->file));
@@ -133,6 +129,7 @@ int executor(t_shell *shell)
 	{
 		if (redir_fd(curr->redirs) != 0)
 			break;
+		setup_pipe(curr);
 		args = curr->args;
 		if (execute_builtin(args))
 			;
