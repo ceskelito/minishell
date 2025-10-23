@@ -1,4 +1,5 @@
 #include "executor.h"
+#include "ezgalloc.h"
 #include "minishell.h"
 
 #define GREEN "\33[32m"

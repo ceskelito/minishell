@@ -1,3 +1,4 @@
+#include "ezgalloc.h"
 #include "minishell.h"
 
 t_cmd	*create_cmd(void)
