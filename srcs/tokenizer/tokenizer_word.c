@@ -74,6 +74,8 @@ static char	*copy_word_simple(char *input, int word_len)
 	}
 } */
 
+char *refine_word(char *raw_word);
+
 int		fill_word_token(t_token *token, char *input)
 {
 	int		word_len;

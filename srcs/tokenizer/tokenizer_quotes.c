@@ -1,3 +1,4 @@
+#include "ft_lib.h"
 #include "minishell.h"
 
 /* static char	*append_char_safe(char *str, char c)
@@ -81,27 +82,27 @@ char	*process_quotes(char *input, int *i, char *result)
 	return (result);
 }
 
-static int	__handle_single_quote(char *result, char *input, int start)
+static int	__handle_single_quote(char *dest, char *input, int start)
 {
+	int	len;
 	int	i;
 
-	i = start;
+	i = start + 1;
+	len = 0;
 	while (input[i] && input[i] != '\'')
 	{
-		result = ft_strjoin_char(result, input[i]); //append_char_safe(result, input[*i]);
-		if (!result)
-			return (NULL);
-		(i)++;
+		i++;
+		len++;
 	}
 	if (input[i] != '\'')
 	{
 		printf("minishell: syntax error: unclosed single quote\n");
-		if (result)
-			free(result);
-		return (NULL);
+		return (-1);
 	}
-	(i)++;
-	return (result);
+	dest = ft_substr(input, start + 1, len);
+	if (!dest)
+		return (-1);
+	return (i);
 }
 
 char *refine_word(char *raw_word)
@@ -116,8 +117,11 @@ char *refine_word(char *raw_word)
 	{
 		if (raw_word[i] == '\'')
 			gap = __handle_single_quote(refined, raw_word, i);
-/* 		else if (raw_word[i] == '"')
-			gap = */
+		if (gap == -1)
+			return (NULL);
 		i += gap;
 	}
+	if (refined)
+		return (refined);
+	return (raw_word);
 }
