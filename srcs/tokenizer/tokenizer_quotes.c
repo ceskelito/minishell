@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static char	*append_char_safe(char *str, char c)
+/* static char	*append_char_safe(char *str, char c)
 {
 	char	*temp;
 
@@ -9,28 +9,7 @@ static char	*append_char_safe(char *str, char c)
 		return (NULL);
 	free(str);
 	return (temp);
-}
-
-static char	*handle_single_quote(char *input, int *i, char *result)
-{
-	(*i)++;
-	while (input[*i] && input[*i] != '\'')
-	{
-		result = append_char_safe(result, input[*i]);
-		if (!result)
-			return (NULL);
-		(*i)++;
-	}
-	if (input[*i] != '\'')
-	{
-		printf("minishell: syntax error: unclosed single quote\n");
-		if (result)
-			free(result);
-		return (NULL);
-	}
-	(*i)++;
-	return (result);
-}
+} */
 
 static char	*handle_double_quote(char *input, int *i, char *result)
 {
@@ -52,7 +31,7 @@ static char	*handle_double_quote(char *input, int *i, char *result)
 		}
 		else
 		{
-			result = append_char_safe(result, input[*i]);
+			result = ft_strjoin_char(result, input[*i]); //append_char_safe(result, input[*i]);
 			if (!result)
 				return (NULL);
 			(*i)++;
@@ -61,6 +40,27 @@ static char	*handle_double_quote(char *input, int *i, char *result)
 	if (input[*i] != '\"')
 	{
 		printf("minishell: syntax error: unclosed double quote\n");
+		if (result)
+			free(result);
+		return (NULL);
+	}
+	(*i)++;
+	return (result);
+}
+
+static char	*handle_single_quote(char *input, int *i, char *result)
+{
+	(*i)++;
+	while (input[*i] && input[*i] != '\'')
+	{
+		result = ft_strjoin_char(result, input[*i]); //append_char_safe(result, input[*i]);
+		if (!result)
+			return (NULL);
+		(*i)++;
+	}
+	if (input[*i] != '\'')
+	{
+		printf("minishell: syntax error: unclosed single quote\n");
 		if (result)
 			free(result);
 		return (NULL);
@@ -79,4 +79,45 @@ char	*process_quotes(char *input, int *i, char *result)
 	else if (quote == '\"')
 		return (handle_double_quote(input, i, result));
 	return (result);
+}
+
+static int	__handle_single_quote(char *result, char *input, int start)
+{
+	int	i;
+
+	i = start;
+	while (input[i] && input[i] != '\'')
+	{
+		result = ft_strjoin_char(result, input[i]); //append_char_safe(result, input[*i]);
+		if (!result)
+			return (NULL);
+		(i)++;
+	}
+	if (input[i] != '\'')
+	{
+		printf("minishell: syntax error: unclosed single quote\n");
+		if (result)
+			free(result);
+		return (NULL);
+	}
+	(i)++;
+	return (result);
+}
+
+char *refine_word(char *raw_word)
+{
+	char	*refined;
+	int		gap;
+	int		i;
+
+	refined = NULL;
+	i = 0;
+	while(raw_word[i])
+	{
+		if (raw_word[i] == '\'')
+			gap = __handle_single_quote(refined, raw_word, i);
+/* 		else if (raw_word[i] == '"')
+			gap = */
+		i += gap;
+	}
 }

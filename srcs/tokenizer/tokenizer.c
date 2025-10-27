@@ -21,25 +21,27 @@ int	is_special_in_word(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-static void	fill_operator_token(t_token *token, char *input)
+static int	fill_operator_token(t_token *token, char *input)
 {
 	if (!token)
-		return ;
+		return (0);
 	token->type = get_token_type(input);
 	token->value = get_operator_value(input, token->type);
+	return (ft_strlen(token->value));
 }
 
 t_token	*tokenize_input(char *input)
 {
 	t_token			*tokens;
 	t_token			*new_token;
+	int				token_gap; // The lenght occupied from the token in the input string
 	int				i;
-	//char			*value;
 
 	tokens = NULL;
 	i = 0;
 	while (input[i])
 	{
+		token_gap = 0;
 		while (ft_isspace(input[i]))
 			(i)++;
 		if (!input[i])
@@ -47,22 +49,20 @@ t_token	*tokenize_input(char *input)
 		new_token = ezg_calloc(TOKENIZING, sizeof(t_token), 1);
 		if (ft_strchr("|<>&()", input[i]))
 		{
-			fill_operator_token(new_token, input + i);
-			if (new_token->type & (OR | HEREDOC | APPEND | AND))
-				i++;
-			i++;
+			token_gap = fill_operator_token(new_token, input + i);
 		}
 		else
 		{
-			i += fill_word_token(new_token, input + i);
-			if (!new_token->value)
-				return (NULL);
+			token_gap = fill_word_token(new_token, input + i);
 		}
-		if (new_token->value)
-		{
-			add_token(&tokens, new_token);
-			new_token = NULL;
+		if (token_gap == -1 || !new_token->value)
+		{	
+			perror("minishell: failed in token creation");
+			return (NULL);
 		}
+		i += token_gap;
+		add_token(&tokens, new_token);
+		new_token = NULL;
 	}
 	return (tokens);
 }

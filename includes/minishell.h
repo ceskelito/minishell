@@ -47,11 +47,19 @@ typedef enum e_token_type
 	BUILT = 1 << 10
 }	t_token_type;
 
+typedef enum e_quote_type
+{
+	NONE,
+	SINGLE,
+	DOUBLE
+} t_quote_type;
+
 
 /* Token structure */
 typedef struct s_token
 {
 	char			*value;
+	t_quote_type	quotes;
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;

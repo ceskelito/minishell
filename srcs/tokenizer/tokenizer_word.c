@@ -1,6 +1,7 @@
+#include "ft_lib.h"
 #include "minishell.h"
 
-static int	count_word_length(char *word)
+static int	count_word_length(char *input)
 {
 	int	len;
 	int	in_quote;
@@ -9,16 +10,16 @@ static int	count_word_length(char *word)
 	len = 0;
 	in_quote = 0;
 	quote_char = 0;
-	while (word[len])
+	while (input[len])
 	{
-		if (!in_quote && (ft_isspace(word[len]) || ft_strchr("|<>&()", word[len])))
+		if (!in_quote && (ft_isspace(input[len]) || ft_strchr("|<>&()", input[len])))
 			break;
-		if (!in_quote && (word[len] == '\'' || word[len] == '"'))
+		if (!in_quote && (input[len] == '\'' || input[len] == '"'))
 		{		
 			in_quote = 1;
-			quote_char = word[len];
+			quote_char = input[len];
 		}
-		else if (in_quote && word[len] == quote_char)
+		else if (in_quote && input[len] == quote_char)
 		{
 			in_quote = 0;
 			quote_char = 0;
@@ -33,70 +34,64 @@ static int	count_word_length(char *word)
 	return (len);
 }
 
-static char	*copy_word_simple(char *input, int len)
+static char	*copy_word_simple(char *input, int word_len)
 {
-	char	*result;
+	char	*word;
 	int		i;
 	int		j;
 
-	result = ezg_alloc(GLOBAL, sizeof(char) * (len + 1));
-	if (!result)
+	word = ezg_alloc(GLOBAL, sizeof(char) * (word_len + 1));
+	if (!word)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (i < len)
+	while (i < word_len)
 	{
 		if (input[i] != '\'' && input[i] != '\"')
 		{
-			result[j] = input[i];
+			word[j] = input[i];
 			j++;
+			word[j] = '\0';
 		}
+		else
+			word = process_quotes(input, &i, word); // don't work
 		i++;
 	}
-	result[j] = '\0';
-	return (result);
+	printf("EXT result: %s\n", word); //DEBUG
+	return (word);
 }
 
-//static char *new_copy_word(char *word, int len)
-//{
-//	char	*result;
-//
-//	result = ezg_alloc(PARSING, sizeof(char) * len);
-//	if (word[0] == '"' || word[0] == '\'')
-//		ft_strlcpy(result, word + 1, len - 1);
-//	else
-//		ft_strlcpy(result, word, len + 1);
-//	return (result);
-//}
-
-//int	set_word_value(char *result, char *input)
-//{
-//	int		len;
-//
-//	result = NULL;
-//	len = count_word_length(input);
-//	if (len == -1)
-//		return (-1);
-//	if (len == 0)
-//		result = ft_strdup("");
-//	else
-//		result = copy_word_simple(input, len);
-//	ezg_add(TOKENIZING, result);
-//	return (len);
-//}
-
-int	fill_word_token(t_token *token, char *input)
+/* char	*refine_word(char *raw, int word_len)
 {
-	int		len;
+	char	*word;
+	int		i;
 
-	len = count_word_length(input);
-	if (len == -1)
+	i = 0;
+	while(word[i])
+	{
+
+		i++;
+	}
+} */
+
+int		fill_word_token(t_token *token, char *input)
+{
+	int		word_len;
+	char	*raw_word;
+
+	word_len = count_word_length(input);
+	if (word_len == -1)
 		return (-1);
-	if (len == 0)
+	if (word_len == 0)
 		token->value = ft_strdup("");
 	else
-		token->value = copy_word_simple(input, len);
+	{
+		raw_word = ft_substr(input, 0, word_len);
+		printf("WORD: %s\n", raw_word);
+		token->value = refine_word(raw_word);
+		//token->value = copy_word_simple(input, word_len);
+	}
 	token->type = WORD;
 	//ezg_add(TOKENIZING, token->value);
-	return (len);
+	return (word_len);
 }
