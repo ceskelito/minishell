@@ -20,10 +20,10 @@
 # define SUCCESS 0
 # define ERROR 1
 
-# define PARSING	"parsing"
+# define COMMAND	"parsing"
 # define GLOBAL		"global"
 # define EXECUTING	"execute"
-# define TOKENIZING	"tokenizing"
+# define TOKEN	"tokenizing"
 
 /*
  * Global variable to handle signals

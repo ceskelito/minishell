@@ -46,7 +46,7 @@ static void	process_command(char *input, t_shell *shell)
 		executor(shell);
 	}
 	//cleanup_parsing(shell);
-	//ezg_group_delete(PARSING);
+	//ezg_group_delete(COMMAND);
 }
 
 void __attribute__((destructor)) ezg_cleanup();
@@ -54,9 +54,9 @@ void __attribute__((constructor)) create_groups();
 
 void	create_groups()
 {
-	ezg_group_create(TOKENIZING);
+	ezg_group_create(TOKEN);
 	ezg_group_create(GLOBAL);
-	ezg_group_create(PARSING);
+	ezg_group_create(COMMAND);
 	ezg_group_create(EXECUTING);
 }
 

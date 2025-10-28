@@ -62,7 +62,7 @@ static char	*copy_word_simple(t_token *token, char *input, int len)
 //{
 //	char	*result;
 //
-//	result = ezg_alloc(PARSING, sizeof(char) * len);
+//	result = ezg_alloc(COMMAND, sizeof(char) * len);
 //	if (word[0] == '"' || word[0] == '\'')
 //		ft_strlcpy(result, word + 1, len - 1);
 //	else
@@ -82,7 +82,7 @@ static char	*copy_word_simple(t_token *token, char *input, int len)
 //		result = ft_strdup("");
 //	else
 //		result = copy_word_simple(input, len);
-//	ezg_add(TOKENIZING, result);
+//	ezg_add(TOKEN, result);
 //	return (len);
 //}
 
@@ -98,6 +98,6 @@ int	fill_word_token(t_token *token, char *input)
 	else
 		copy_word_simple(token, input, len);
 	token->type = WORD;
-	//ezg_add(TOKENIZING, token->value);
+	//ezg_add(TOKEN, token->value);
 	return (len);
 }

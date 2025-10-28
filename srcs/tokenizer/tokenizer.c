@@ -34,7 +34,7 @@ static t_token	*new_token()
 {
 	t_token *new;
 
-	new = ezg_calloc(TOKENIZING, sizeof(t_token), 1);
+	new = ezg_calloc(TOKEN, sizeof(t_token), 1);
 	new->expand_dollar = true;
 	return (new);
 }
