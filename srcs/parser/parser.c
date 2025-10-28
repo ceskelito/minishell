@@ -42,12 +42,12 @@ void	add_redir(t_cmd *cmd, t_redir *redir)
 }
 
 /* Set @curr_cmd to his next. */
-static int	go_next_cmd(t_cmd *curr_cmd)
+static int	go_next_cmd(t_cmd **curr_cmd)
 {
-	curr_cmd->next = create_cmd();
-	if (!curr_cmd->next)
+	(*curr_cmd)->next = create_cmd();
+	if (!(*curr_cmd)->next)
 		return (-1);
-	curr_cmd = curr_cmd->next;
+	(*curr_cmd) = (*curr_cmd)->next;
 	return (0);
 }
 
@@ -112,13 +112,12 @@ static int set_cmd_args(t_cmd *cmd, t_token *token)
 	return (args_count);
 }
 
-t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
+t_cmd	*parse_tokens(t_token *tokens)
 {
 	t_cmd	*cmd_head;
 	t_cmd	*curr_cmd;
 	t_token	*curr_token;
 
-	(void)shell;
 	if (!tokens)
 		return (NULL);
 	cmd_head = create_cmd();
@@ -128,24 +127,22 @@ t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 	curr_token = tokens;
 	while (curr_token)
 	{
-		if (curr_token->type == WORD)
+		if (curr_token->type & WORD)
 		{
-			set_cmd_args(curr_cmd, curr_token);
+			if (set_cmd_args(curr_cmd, curr_token) == -1)
+				return (NULL);
 			while (curr_token->next && curr_token->next->type & WORD)
 				curr_token = curr_token->next;
 		}
 		else if (is_redir_token(curr_token->type))
 		{
 			if (parse_redirection(curr_cmd, &curr_token) != 0)
-			{
-				free_cmds(cmd_head);
 				return (NULL);
-			}
 		}
 		else if (curr_token->type & PIPE)
 		{
 			curr_cmd->pipe_output = true;
-			if (go_next_cmd(curr_cmd) != 0)
+			if (go_next_cmd(&curr_cmd) != 0)
 				return (NULL);
 		}
 		curr_token = curr_token->next;

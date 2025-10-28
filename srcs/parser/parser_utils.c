@@ -9,22 +9,34 @@ int	is_redir_token(t_token_type type)
 	return (type & (IN | OUT | APPEND | HEREDOC));
 }
 
-int	parse_redirection(t_cmd *cmd, t_token **token)
+bool is_redirection_valid(t_token **token)
 {
-	int		type;
-	t_redir	*redir;
-
-	if (!*token || !(*token)->next)
-		return (-1);
-	type = (*token)->type;
-	*token = (*token)->next;
-	if ((*token)->type != WORD)
+	if (!*token)
+		return (false);
+	if (!(*token)->next)
+	{
+		ft_dprintf(STDERR_FILENO,"minishell: syntax error near unexpected token `%s'",
+			"newline");
+		return (false);
+	}
+	if ((*token)->next->type != WORD)
 	{
 		ft_dprintf(STDERR_FILENO,"minishell: syntax error near unexpected token `%s'",
 			(*token)->value);
-		return (-1);
+		return (false);
 	}
-	redir = create_redir(type, (*token)->value);
+	return (true);
+}
+
+int	parse_redirection(t_cmd *cmd, t_token **token)
+{
+	int		redir_type;
+	t_redir	*redir;
+
+	if (!is_redirection_valid(token))
+		return (-1);
+	redir_type = (*token)->type;
+	redir = create_redir(redir_type, (*token)->next->value);
 	if (!redir)
 		return (-1);
 	add_redir(cmd, redir);

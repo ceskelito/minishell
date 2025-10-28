@@ -121,7 +121,7 @@ int				process_word_token(char *input, int *i, t_token **tokens);
 /*                                PARSER                                      */
 /* ========================================================================== */
 
-t_cmd			*parse_tokens(t_token *tokens, t_shell *shell);
+t_cmd			*parse_tokens(t_token *tokens);
 t_cmd			*create_cmd(void);
 t_redir			*create_redir(int type, char *file);
 void			add_redir(t_cmd *cmd, t_redir *redir);
