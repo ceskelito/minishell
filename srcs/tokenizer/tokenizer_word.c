@@ -33,28 +33,29 @@ static int	count_word_length(char *word)
 	return (len);
 }
 
-static char	*copy_word_simple(char *input, int len)
+static char	*copy_word_simple(t_token *token, char *input, int len)
 {
-	char	*result;
 	int		i;
 	int		j;
 
-	result = ezg_alloc(GLOBAL, sizeof(char) * (len + 1));
-	if (!result)
+	token->value = ezg_alloc(GLOBAL, sizeof(char) * (len + 1));
+	if (!token->value)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (i < len)
 	{
+		if (input[i] == '\'')
+			token->expand_dollar = false;
 		if (input[i] != '\'' && input[i] != '\"')
 		{
-			result[j] = input[i];
+			token->value[j] = input[i];
 			j++;
 		}
 		i++;
 	}
-	result[j] = '\0';
-	return (result);
+	token->value[j] = '\0';
+	return (token->value);
 }
 
 //static char *new_copy_word(char *word, int len)
@@ -93,9 +94,9 @@ int	fill_word_token(t_token *token, char *input)
 	if (len == -1)
 		return (-1);
 	if (len == 0)
-		token->value = ft_strdup("");
+		token->value = NULL; //ft_strdup("");
 	else
-		token->value = copy_word_simple(input, len);
+		copy_word_simple(token, input, len);
 	token->type = WORD;
 	//ezg_add(TOKENIZING, token->value);
 	return (len);

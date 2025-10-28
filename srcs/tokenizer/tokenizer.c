@@ -29,12 +29,20 @@ static void	fill_operator_token(t_token *token, char *input)
 	token->value = get_operator_value(input, token->type);
 }
 
+static t_token	*new_token()
+{
+	t_token *new;
+
+	new = ezg_calloc(TOKENIZING, sizeof(t_token), 1);
+	new->expand_dollar = true;
+	return (new);
+}
+
 t_token	*tokenize_input(char *input)
 {
 	t_token			*tokens;
-	t_token			*new_token;
+	t_token			*new;
 	int				i;
-	//char			*value;
 
 	tokens = NULL;
 	i = 0;
@@ -44,24 +52,24 @@ t_token	*tokenize_input(char *input)
 			(i)++;
 		if (!input[i])
 			break;
-		new_token = ezg_calloc(TOKENIZING, sizeof(t_token), 1);
+		new = new_token();
 		if (ft_strchr("|<>&()", input[i]))
 		{
-			fill_operator_token(new_token, input + i);
-			if (new_token->type & (OR | HEREDOC | APPEND | AND))
+			fill_operator_token(new, input + i);
+			if (new->type & (OR | HEREDOC | APPEND | AND))
 				i++;
 			i++;
 		}
 		else
 		{
-			i += fill_word_token(new_token, input + i);
-			if (!new_token->value)
+			i += fill_word_token(new, input + i);
+			if (!new->value)
 				return (NULL);
 		}
-		if (new_token->value)
+		if (new->value)
 		{
-			add_token(&tokens, new_token);
-			new_token = NULL;
+			add_token(&tokens, new);
+			new = NULL;
 		}
 	}
 	return (tokens);

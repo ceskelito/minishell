@@ -53,6 +53,7 @@ typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
+	bool			expand_dollar;
 	struct s_token	*next;
 }	t_token;
 
