@@ -151,6 +151,8 @@ void			init_shell(t_shell *shell, char **envp);
 int				process_line(t_shell *shell);
 void			shell_loop(t_shell *shell);
 void			cleanup_shell(t_shell *shell);
+void			set_exit_status(int value);
+int				get_exit_status();
 
 /* Error handling */
 void			ft_error(char *str, int n);
