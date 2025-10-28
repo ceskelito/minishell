@@ -21,12 +21,13 @@ int	is_special_in_word(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-static void	fill_operator_token(t_token *token, char *input)
+static int	fill_operator_token(t_token *token, char *input)
 {
 	if (!token)
-		return ;
+		return (-1);
 	token->type = get_token_type(input);
 	token->value = get_operator_value(input, token->type);
+	return (ft_strlen(token->value));
 }
 
 static t_token	*new_token()
@@ -42,6 +43,7 @@ t_token	*tokenize_input(char *input)
 {
 	t_token			*tokens;
 	t_token			*new;
+	int				token_gap;
 	int				i;
 
 	tokens = NULL;
@@ -55,22 +57,16 @@ t_token	*tokenize_input(char *input)
 		new = new_token();
 		if (ft_strchr("|<>&()", input[i]))
 		{
-			fill_operator_token(new, input + i);
-			if (new->type & (OR | HEREDOC | APPEND | AND))
-				i++;
-			i++;
+			token_gap = fill_operator_token(new, input + i);
 		}
 		else
 		{
-			i += fill_word_token(new, input + i);
-			if (!new->value)
-				return (NULL);
+			token_gap = fill_word_token(new, input + i);
 		}
-		if (new->value)
-		{
-			add_token(&tokens, new);
-			new = NULL;
-		}
+		if (token_gap == -1 || !new->value)
+			return (NULL);
+		add_token(&tokens, new);
+		new = NULL;
 	}
 	return (tokens);
 }
