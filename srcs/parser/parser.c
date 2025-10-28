@@ -15,11 +15,11 @@ t_redir	*create_redir(int type, char *file)
 {
 	t_redir	*redir;
 
-	redir = ezg_alloc(GLOBAL, sizeof(t_redir));
+	redir = ezg_alloc(COMMAND, sizeof(t_redir));
 	if (!redir)
 		return (NULL);
 	redir->type = type;
-	redir->file = ezg_add(GLOBAL, ft_strdup(file));
+	redir->file = ezg_add(COMMAND, ft_strdup(file));
 	if (!redir->file)
 		return (NULL);
 	redir->next = NULL;
@@ -41,60 +41,114 @@ void	add_redir(t_cmd *cmd, t_redir *redir)
 	}
 }
 
-static t_cmd	*handle_pipe_token(t_cmd *current_cmd)
+/* Set @curr_cmd to his next. */
+static int	go_next_cmd(t_cmd *curr_cmd)
 {
-	t_cmd	*new_cmd;
+	curr_cmd->next = create_cmd();
+	if (!curr_cmd->next)
+		return (-1);
+	curr_cmd = curr_cmd->next;
+	return (0);
+}
 
-	current_cmd->pipe_output = 1;
-	new_cmd = create_cmd();
-	if (!new_cmd)
-		return (NULL);
-	current_cmd->next = new_cmd;
-	return (new_cmd);
+/*
+ * count_all_args - Count consecutive argument tokens.
+ *
+ * @token: Pointer to the first token to analyze.
+ *
+ * Count consecutive WORD tokens starting from the given token.
+ * Used to determine the number of arguments for the next command.
+ *
+ * Return: The number of consecutive WORD tokens.
+ */
+static int	count_all_args(t_token *token)
+{
+	t_token *tmp;
+	int		argc;
+	
+	argc = 0;
+	tmp = token;
+	while (tmp && tmp->type & WORD)
+	{
+		tmp = tmp->next;
+		argc ++;
+	}
+	return (argc);
+}
+
+/*
+ * set_cmd_args - Initialize the argument list of a command.
+ *
+ * @cmd:   Pointer to the command structure to populate.
+ * @token: Linked list of tokens representing the command arguments.
+ *
+ * This function allocates and fills the argument array for the given command
+ * based on the provided token list. The function duplicates each token value
+ * and stores it in cmd->args. The caller is responsible for advancing or
+ * skipping the used tokens outside of this function.
+ *
+ * Return: The number of arguments set on success, or -1 on allocation failure.
+ */
+static int set_cmd_args(t_cmd *cmd, t_token *token)
+{
+	int	i;
+	int	args_count;
+
+	args_count = count_all_args(token);
+	cmd->args = ezg_calloc(COMMAND, sizeof(char *), args_count + 1);
+	if (!cmd->args)
+		return (-1);
+	i = 0;
+	while (i < args_count)
+	{
+		cmd->args[i] = ft_strdup(token->value);
+		if (!cmd->args[i])
+			return (-1);
+		ezg_add(COMMAND, cmd->args[i]);
+		token = token->next;
+		i++;
+	}
+	cmd->args[i] = NULL;
+	return (args_count);
 }
 
 t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 {
-	t_cmd	*cmd_list;
-	t_cmd	*current_cmd;
-	t_token	*current_token;
+	t_cmd	*cmd_head;
+	t_cmd	*curr_cmd;
+	t_token	*curr_token;
 
 	(void)shell;
 	if (!tokens)
 		return (NULL);
-	cmd_list = create_cmd();
-	if (!cmd_list)
+	cmd_head = create_cmd();
+	if (!cmd_head)
 		return (NULL);
-	current_cmd = cmd_list;
-	current_token = tokens;
-	while (current_token)
+	curr_cmd = cmd_head;
+	curr_token = tokens;
+	while (curr_token)
 	{
-		if (current_token->type & PIPE)
+		if (curr_token->type == WORD)
 		{
-			current_cmd = handle_pipe_token(current_cmd);
-			if (!current_cmd)
+			set_cmd_args(curr_cmd, curr_token);
+			while (curr_token->next && curr_token->next->type & WORD)
+				curr_token = curr_token->next;
+		}
+		else if (is_redir_token(curr_token->type))
+		{
+			if (parse_redirection(curr_cmd, &curr_token) != 0)
 			{
-				free_cmds(cmd_list);
+				free_cmds(cmd_head);
 				return (NULL);
 			}
 		}
-		else if (is_redir_token(current_token->type))
+		else if (curr_token->type & PIPE)
 		{
-			if (!parse_redirection(current_cmd, &current_token))
-			{
-				free_cmds(cmd_list);
+			curr_cmd->pipe_output = true;
+			if (go_next_cmd(curr_cmd) != 0)
 				return (NULL);
-			}
 		}
-		else if (current_token->type == WORD)
-		{
-			if (!add_arg(current_cmd, current_token->value))
-			{
-				free_cmds(cmd_list);
-				return (NULL);
-			}
-		}
-		current_token = current_token->next;
+		curr_token = curr_token->next;
 	}
-	return (cmd_list);
+	return (cmd_head);
 }

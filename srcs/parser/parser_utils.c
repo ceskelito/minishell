@@ -1,5 +1,7 @@
 #include "ezgalloc.h"
+#include "ft_lib.h"
 #include "minishell.h"
+#include <unistd.h>
 
 int	is_redir_token(t_token_type type)
 {
@@ -13,16 +15,20 @@ int	parse_redirection(t_cmd *cmd, t_token **token)
 	t_redir	*redir;
 
 	if (!*token || !(*token)->next)
-		return (0);
+		return (-1);
 	type = (*token)->type;
 	*token = (*token)->next;
 	if ((*token)->type != WORD)
-		return (0);
+	{
+		ft_dprintf(STDERR_FILENO,"minishell: syntax error near unexpected token `%s'",
+			(*token)->value);
+		return (-1);
+	}
 	redir = create_redir(type, (*token)->value);
 	if (!redir)
-		return (0);
+		return (-1);
 	add_redir(cmd, redir);
-	return (1);
+	return (0);
 }
 
 int	count_args(char **args)
@@ -45,20 +51,20 @@ int	count_args(char **args)
 //	return (new_args);
 //}
 
-int	add_arg(t_cmd *cmd, char *arg)
+int	add_arg(char **args, char *arg)
 {
 	int		count;
 	char	**new_args;
 	int		i;
 
-	count = count_args(cmd->args);
-	new_args = ezg_alloc(GLOBAL, sizeof(char *) * (count + 2));
+	count = count_args(args);
+	new_args = ezg_alloc(COMMAND, sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (0);
 	i = 0;
 	while (i < count)
 	{
-		new_args[i] = cmd->args[i];
+		new_args[i] = args[i];
 		i++;
 	}
 	new_args[i] = ezg_add(GLOBAL, ft_strdup(arg));
@@ -68,7 +74,7 @@ int	add_arg(t_cmd *cmd, char *arg)
 		return (0);
 	}
 	new_args[i + 1] = NULL;
-	ezg_release(GLOBAL, cmd->args);
-	cmd->args = new_args;
+	ezg_release(COMMAND, args);
+	args = new_args;
 	return (1);
 }
