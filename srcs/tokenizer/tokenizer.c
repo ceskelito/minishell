@@ -67,6 +67,7 @@ t_token	*tokenize_input(char *input)
 			return (NULL);
 		add_token(&tokens, new);
 		new = NULL;
+		i += token_gap;
 	}
 	return (tokens);
 }
