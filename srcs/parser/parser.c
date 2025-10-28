@@ -5,13 +5,9 @@ t_cmd	*create_cmd(void)
 {
 	t_cmd	*cmd;
 
-	cmd = ezg_alloc(GLOBAL, sizeof(t_cmd));
+	cmd = ezg_calloc(COMMAND, sizeof(t_cmd), 1);
 	if (!cmd)
 		return (NULL);
-	cmd->args = NULL;
-	cmd->redirs = NULL;
-	cmd->next = NULL;
-	cmd->pipe_output = 0;
 	return (cmd);
 }
 
