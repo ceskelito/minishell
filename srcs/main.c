@@ -80,7 +80,7 @@ static char    *get_prompt()
                 BLUE, working_directory,
                 DEFAULT, '$', ' ');
     free(working_directory);
-    return (prompt);
+    return (ezg_add(EXECUTING, prompt));
 }
 
 int	main(void)
@@ -94,13 +94,14 @@ int	main(void)
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (1)
 	{
-		input = readline(get_prompt());
+		input = ezg_add(EXECUTING, readline(get_prompt()));
 		if (!input)
 			break ;
 		add_history(input);
 		process_command(input, &shell);
+		// ezg_cleanup();
 	}
 	//cleanup_shell(&shell);
-	printf("\nGoodbye!\n");
+	// printf("\nGoodbye!\n");
 	return (0);
 }

@@ -74,7 +74,7 @@ static int redir_fd(t_redir *redirs)
             fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
         {
-            perror(ft_strjoin("minishell: ", curr->file));
+        	ft_dprintf(STDERR_FILENO, "minishell: ", curr->file);
             curr = curr->next;
             return (1);
         }
@@ -140,7 +140,7 @@ int executor(t_shell *shell)
 			if (!location)
 				ft_dprintf(STDERR_FILENO, "%s: command not found\n", args[0]);
 			else
-				execute_cmd(ft_strjoin(location, args[0]), args);
+				execute_cmd(ezg_add(EXECUTING, ft_strjoin(location, args[0])), args);
 		}
 		reset_fd(shell->std_in, shell->std_out);
 		ezg_group_release(EXECUTING);
