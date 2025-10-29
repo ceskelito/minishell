@@ -1,17 +1,19 @@
 #include "minishell.h"
 #include "executor.h"
 
-static void	p_closedir(DIR **dir)
-{
-	closedir(*dir);
-}
+// static void	p_closedir(DIR **dir)
+// {
+// 	if (dir)
+// 		closedir(*dir);
+// }
 
 char	*get_location(char *cmd)
 {
-	char										**path;
-	DIR __attribute__ ((cleanup (p_closedir)))	*dir;
-	struct dirent 								*entry;
-	int											i;
+	char			**path;
+	// DIR __attribute__ ((cleanup (p_closedir)))	*dir;
+	DIR				*dir;
+	struct dirent 	*entry;
+	int				i;
 
 	if (!cmd)
 		return (NULL);
@@ -34,7 +36,10 @@ char	*get_location(char *cmd)
 		while((entry = readdir(dir)))
 		{
 			if (ft_strcmp(entry->d_name, cmd) == 0)
+			{
+				closedir(dir);
 				return (ezg_add(EXECUTING, ft_strjoin(path[i], "/")));
+			}
 		}
 		closedir(dir);
 		i++;
