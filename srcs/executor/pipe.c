@@ -5,7 +5,9 @@ static void	add_pipe_redir(t_cmd *cmd, int fd, t_token_type type)
 {
 	t_redir	*new;
 
-	new = ezg_alloc(GLOBAL, sizeof(t_redir));
+	new = ezg_calloc(GLOBAL, sizeof(t_redir), 1);
+	if (!new)
+		return ;
 	new->file = NULL;
 	new->pipe_fd = fd;
 	new->type = PIPE | type;
