@@ -68,10 +68,10 @@ static int redir_fd(t_redir *redirs)
             fd = setup_heredoc(curr->file);
     	else if (curr->type & IN)
             fd = open(curr->file, O_RDONLY);
-    	else if (curr->type & OUT)
-            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     	else if (curr->type & APPEND)
             fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    	else if (curr->type & OUT)
+            fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
         {
         	ft_dprintf(STDERR_FILENO, "minishell: ", curr->file);

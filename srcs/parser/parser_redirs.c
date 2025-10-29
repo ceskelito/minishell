@@ -34,7 +34,7 @@ t_redir	*create_redir(int type, char *file)
 	redir = ezg_alloc(COMMAND, sizeof(t_redir));
 	if (!redir)
 		return (NULL);
-	redir->type = type;
+	redir->type = type; 
 	redir->file = ezg_add(COMMAND, ft_strdup(file));
 	if (!redir->file)
 		return (NULL);

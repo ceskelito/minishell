@@ -2,14 +2,14 @@
 
 static void	print_redir_type(int type)
 {
-	if (type & IN)
-		printf("<");
-	else if (type & OUT)
-		printf(">");
-	else if (type & APPEND)
+	if (type & APPEND)
 		printf(">>");
 	else if (type & HEREDOC)
 		printf("<<");
+	else if (type & IN)
+		printf("<");
+	else if (type & OUT)
+		printf(">");
 }
 
 static void	print_cmd_args(char **args)
