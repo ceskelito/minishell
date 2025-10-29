@@ -167,4 +167,7 @@ int				ft_isalnum(int c);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 void			ft_putendl_fd(char *s, int fd);
 
+/* Environment variables managing */
+char *ft_getenv(char *key);
+char	**env_handler(int mode, char *key, char *value, char **envarray);
 #endif

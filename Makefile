@@ -40,7 +40,8 @@ FILES = main 				\
 		builtin				\
 		get_location		\
 		heredoc				\
-		pipe
+		pipe				\
+		environment
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -49,7 +50,8 @@ vpath %.c	$(SRCS_DIR) \
 			:$(SRCS_DIR)/main \
 			:$(SRCS_DIR)/tokenizer \
 			:$(SRCS_DIR)/parser \
-			:$(SRCS_DIR)/executor
+			:$(SRCS_DIR)/executor \
+			:$(SRCS_DIR)/utils
 
 SRCS := $(addsuffix .c, $(FILES))
 OBJS := $(addsuffix .o, $(addprefix $(OBJS_DIR)/, $(FILES)))
