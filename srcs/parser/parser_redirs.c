@@ -27,21 +27,6 @@ bool is_redirection_valid(t_token **token)
 	return (true);
 }
 
-int	parse_redirection(t_cmd *cmd, t_token **token)
-{
-	int		redir_type;
-	t_redir	*redir;
-
-	if (!is_redirection_valid(token))
-		return (-1);
-	redir_type = (*token)->type;
-	redir = create_redir(redir_type, (*token)->next->value);
-	if (!redir)
-		return (-1);
-	add_redir(cmd, redir);
-	return (0);
-}
-
 t_redir	*create_redir(int type, char *file)
 {
 	t_redir	*redir;
@@ -70,4 +55,20 @@ void	add_redir(t_cmd *cmd, t_redir *redir)
 			temp = temp->next;
 		temp->next = redir;
 	}
+}
+
+int	parse_redirection(t_cmd *cmd, t_token **token)
+{
+	int		redir_type;
+	t_redir	*redir;
+
+	if (!is_redirection_valid(token))
+		return (-1);
+	redir_type = (*token)->type;
+	redir = create_redir(redir_type, (*token)->next->value);
+	if (!redir)
+		return (-1);
+	add_redir(cmd, redir);
+	*token = (*token)->next;
+	return (0);
 }
