@@ -57,7 +57,7 @@ void	cleanup_parsing(t_shell *shell)
 {
 	if (shell->tokens)
 	{
-		free_tokens(shell->tokens);
+		// free_tokens(shell->tokens); TO REMOVE (use ezg_* functions instead)
 		shell->tokens = NULL;
 	}
 	if (shell->cmd_list)

@@ -17,7 +17,7 @@ void	init_shell(t_shell *shell, char **envp)
 void	cleanup_shell(t_shell *shell)
 {
 	if (shell->tokens)
-		free_tokens(shell->tokens);
+		// free_tokens(shell->tokens); TO REMOVE (use ezg_* functions instead)
 	if (shell->cmd_list)
 		free_cmds(shell->cmd_list);
 	if (shell->line)
