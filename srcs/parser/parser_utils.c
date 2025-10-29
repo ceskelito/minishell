@@ -43,7 +43,8 @@ int	parse_redirection(t_cmd *cmd, t_token **token)
 	return (0);
 }
 
-int	count_args(char **args)
+/* NOT USED 
+int	cmd_count_args(char **args)
 {
 	int	count;
 
@@ -53,7 +54,7 @@ int	count_args(char **args)
 	while (args[count])
 		count++;
 	return (count);
-}
+} */
 
 //static char	**allocate_new_args(int count)
 //{
@@ -63,13 +64,14 @@ int	count_args(char **args)
 //	return (new_args);
 //}
 
+/* NOT USED
 int	add_arg(char **args, char *arg)
 {
 	int		count;
 	char	**new_args;
 	int		i;
 
-	count = count_args(args);
+	count = cmd_count_args(args);
 	new_args = ezg_alloc(COMMAND, sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (0);
@@ -89,4 +91,4 @@ int	add_arg(char **args, char *arg)
 	ezg_release(COMMAND, args);
 	args = new_args;
 	return (1);
-}
+} */

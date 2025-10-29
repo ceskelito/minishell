@@ -124,12 +124,12 @@ t_cmd			*parse_tokens(t_token *tokens);
 t_cmd			*create_cmd(void);
 t_redir			*create_redir(int type, char *file);
 void			add_redir(t_cmd *cmd, t_redir *redir);
-int				add_arg(char **args, char *arg);
+//int				add_arg(char **args, char *arg); NOT USED
 
 /* Parser utilities */
 int				is_redir_token(t_token_type type);
 int				parse_redirection(t_cmd *cmd, t_token **token);
-int				count_args(char **args);
+// int				cmd_count_args(char **args); NOT USED
 
 /* Parser cleanup */
 void			free_cmds(t_cmd *cmds);

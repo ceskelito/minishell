@@ -52,7 +52,7 @@ static int	go_next_cmd(t_cmd **curr_cmd)
 }
 
 /*
- * count_all_args - Count consecutive argument tokens.
+ * token_count_args - Count consecutive argument tokens.
  *
  * @token: Pointer to the first token to analyze.
  *
@@ -61,7 +61,7 @@ static int	go_next_cmd(t_cmd **curr_cmd)
  *
  * Return: The number of consecutive WORD tokens.
  */
-static int	count_all_args(t_token *token)
+static int	token_count_args(t_token *token)
 {
 	t_token *tmp;
 	int		argc;
@@ -77,24 +77,24 @@ static int	count_all_args(t_token *token)
 }
 
 /*
- * set_cmd_args - Initialize the argument list of a command.
- *
- * @cmd:   Pointer to the command structure to populate.
- * @token: Linked list of tokens representing the command arguments.
- *
- * This function allocates and fills the argument array for the given command
- * based on the provided token list. The function duplicates each token value
- * and stores it in cmd->args. The caller is responsible for advancing or
- * skipping the used tokens outside of this function.
- *
- * Return: The number of arguments set on success, or -1 on allocation failure.
+ set_cmd_args - Initialize the argument list of a command.
+
+ @cmd:   Pointer to the command structure to populate.
+ @token: Linked list of tokens representing the command arguments.
+
+ Allocate and fill the cmd->arg array duplicating each token value
+ of the provided token list.
+ The caller is responsible for advancing or
+ skipping the used tokens outside of this function.
+
+ Return: The number of arguments set on success, or -1 on allocation failure.
  */
 static int set_cmd_args(t_cmd *cmd, t_token *token)
 {
 	int	i;
 	int	args_count;
 
-	args_count = count_all_args(token);
+	args_count = token_count_args(token);
 	cmd->args = ezg_calloc(COMMAND, sizeof(char *), args_count + 1);
 	if (!cmd->args)
 		return (-1);
