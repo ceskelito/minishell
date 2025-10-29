@@ -106,14 +106,13 @@ void			add_token(t_token **head, t_token *new_token);
 t_token			*tokenize_input(char *input);
 t_token_type	get_token_type(char *input);
 int				fill_word_token(t_token *token, char *input);
-void			free_tokens(t_token *tokens);
 
 /* Tokenizer utilities */
-int				is_special_in_word(char c);
+// int				is_special_in_word(char c); NOT USED
 void			handle_dollar_sign(char *input, int *i, char **result);
 char			*process_quotes(char *input, int *i, char *result);
 char			*ft_strjoin_char(char *s1, char c);
-int				is_operator_char(char c);
+//int				is_operator_char(char c); NOT USED
 char			*get_operator_value(char *input, t_token_type type);
 int				process_word_token(char *input, int *i, t_token **tokens);
 

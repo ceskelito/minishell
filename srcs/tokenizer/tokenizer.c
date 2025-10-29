@@ -1,26 +1,6 @@
 #include "ezgalloc.h"
 #include "minishell.h"
 
-void	add_token(t_token **head, t_token *new_token)
-{
-	t_token	*temp;
-
-	if (!*head)
-		*head = new_token;
-	else
-	{
-		temp = *head;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new_token;
-	}
-}
-
-int	is_special_in_word(char c)
-{
-	return (c == '$' || c == '\'' || c == '\"');
-}
-
 static int	fill_operator_token(t_token *token, char *input)
 {
 	if (!token)
@@ -71,3 +51,9 @@ t_token	*tokenize_input(char *input)
 	}
 	return (tokens);
 }
+
+/* NOT USED
+int	is_special_in_word(char c)
+{
+	return (c == '$' || c == '\'' || c == '\"');
+} */

@@ -58,34 +58,6 @@ static char	*copy_word_simple(t_token *token, char *input, int len)
 	return (token->value);
 }
 
-//static char *new_copy_word(char *word, int len)
-//{
-//	char	*result;
-//
-//	result = ezg_alloc(COMMAND, sizeof(char) * len);
-//	if (word[0] == '"' || word[0] == '\'')
-//		ft_strlcpy(result, word + 1, len - 1);
-//	else
-//		ft_strlcpy(result, word, len + 1);
-//	return (result);
-//}
-
-//int	set_word_value(char *result, char *input)
-//{
-//	int		len;
-//
-//	result = NULL;
-//	len = count_word_length(input);
-//	if (len == -1)
-//		return (-1);
-//	if (len == 0)
-//		result = ft_strdup("");
-//	else
-//		result = copy_word_simple(input, len);
-//	ezg_add(TOKEN, result);
-//	return (len);
-//}
-
 int	fill_word_token(t_token *token, char *input)
 {
 	int		len;
