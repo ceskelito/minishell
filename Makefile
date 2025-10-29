@@ -32,7 +32,7 @@ FILES = main 				\
 		tokenizer_utils		\
 		tokenizer_debug		\
 		parser				\
-		parser_utils		\
+		parser_redirs		\
 		parser_cleanup		\
 		parser_debug		\
 		shell_init			\
