@@ -2,6 +2,8 @@
 #include "ft_printf.h"
 #include "minishell.h"
 #include "executor.h"
+#include <errno.h>
+#include <string.h>
 #include <unistd.h>
 
 /* BUILTIN's TO INCLUDE
@@ -74,7 +76,7 @@ static int redir_fd(t_redir *redirs)
             fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
         {
-        	ft_dprintf(STDERR_FILENO, "minishell: ", curr->file);
+			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", curr->file, strerror(errno));
             curr = curr->next;
             return (1);
         }
