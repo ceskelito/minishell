@@ -121,7 +121,6 @@ int				process_word_token(char *input, int *i, t_token **tokens);
 /* ========================================================================== */
 
 t_cmd			*parse_tokens(t_token *tokens);
-t_cmd			*create_cmd(void);
 t_redir			*create_redir(int type, char *file);
 void			add_redir(t_cmd *cmd, t_redir *redir);
 //int				add_arg(char **args, char *arg); NOT USED

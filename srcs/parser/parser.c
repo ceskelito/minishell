@@ -1,50 +1,10 @@
 #include "ezgalloc.h"
 #include "minishell.h"
 
-t_cmd	*create_cmd(void)
-{
-	t_cmd	*cmd;
-
-	cmd = ezg_calloc(COMMAND, sizeof(t_cmd), 1);
-	if (!cmd)
-		return (NULL);
-	return (cmd);
-}
-
-t_redir	*create_redir(int type, char *file)
-{
-	t_redir	*redir;
-
-	redir = ezg_alloc(COMMAND, sizeof(t_redir));
-	if (!redir)
-		return (NULL);
-	redir->type = type;
-	redir->file = ezg_add(COMMAND, ft_strdup(file));
-	if (!redir->file)
-		return (NULL);
-	redir->next = NULL;
-	return (redir);
-}
-
-void	add_redir(t_cmd *cmd, t_redir *redir)
-{
-	t_redir	*temp;
-
-	if (!cmd->redirs)
-		cmd->redirs = redir;
-	else
-	{
-		temp = cmd->redirs;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = redir;
-	}
-}
-
 /* Set @curr_cmd to his next. */
 static int	go_next_cmd(t_cmd **curr_cmd)
 {
-	(*curr_cmd)->next = create_cmd();
+	(*curr_cmd)->next = ezg_calloc(COMMAND, sizeof(t_cmd), 1);;
 	if (!(*curr_cmd)->next)
 		return (-1);
 	(*curr_cmd) = (*curr_cmd)->next;
@@ -52,14 +12,14 @@ static int	go_next_cmd(t_cmd **curr_cmd)
 }
 
 /*
- * token_count_args - Count consecutive argument tokens.
- *
- * @token: Pointer to the first token to analyze.
- *
- * Count consecutive WORD tokens starting from the given token.
- * Used to determine the number of arguments for the next command.
- *
- * Return: The number of consecutive WORD tokens.
+ token_count_args - Count consecutive argument tokens.
+
+ @token: Pointer to the first token to analyze.
+
+ Count consecutive WORD tokens starting from the given token.
+ Used to determine the number of arguments for the next command.
+
+ Return: The number of consecutive WORD tokens.
  */
 static int	token_count_args(t_token *token)
 {
@@ -120,7 +80,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 
 	if (!tokens)
 		return (NULL);
-	cmd_head = create_cmd();
+	cmd_head = ezg_calloc(COMMAND, sizeof(t_cmd), 1);
 	if (!cmd_head)
 		return (NULL);
 	curr_cmd = cmd_head;
