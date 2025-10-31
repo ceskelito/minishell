@@ -99,7 +99,7 @@ static void execute_cmd(char *location, char **args, char **env)
 	if (pid == 0)
 	{
 	    execve(location, args, env);
-	    perror(args[0]);
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", args[0], strerror(errno));
 	    exit(127);
 	}
 	else if (pid > 0)
@@ -135,7 +135,7 @@ int executor(t_shell *shell)
 		{
 			resolve_command_path(cmd);
 			if (!cmd->location)
-				ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd->args[0]);
+				ft_dprintf(STDERR_FILENO, "minishell: %s: Command not found\n", cmd->args[0]);
 			else
 				execute_cmd(cmd->location, cmd->args, environ);
 		}

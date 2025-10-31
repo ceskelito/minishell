@@ -38,7 +38,7 @@ FILES = main 				\
 		shell_init			\
 		executor			\
 		builtin				\
-		get_location		\
+		resolve_command_path	\
 		heredoc				\
 		pipe				
 		# environment

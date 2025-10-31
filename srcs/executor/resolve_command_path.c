@@ -39,7 +39,7 @@ static char	*lookup_command_path(char *cmd)
 	if (!path)
 		return (NULL);
 	i = -1;
-	while (path[++i])
+	while (i++, path[i])
 	{
 		dir = opendir(path[i]);
 		if (!dir)
@@ -55,7 +55,6 @@ static char	*lookup_command_path(char *cmd)
 			entry = readdir(dir);
 		}
 		closedir(dir);
-		i++;
 	}
 	return (NULL);
 }
