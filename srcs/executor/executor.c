@@ -90,16 +90,15 @@ static int redir_fd(t_redir *redirs)
     return (0);
 }
 
-static void execute_cmd(char *location, char **args)
+static void execute_cmd(char *location, char **args, char **env)
 {
-	extern char	**environ;
 	pid_t		pid;
 	int 		status;
 
 	pid = fork();
 	if (pid == 0)
 	{
-	    execve(location, args, environ);
+	    execve(location, args, env);
 	    perror(args[0]);
 	    exit(127);
 	}
@@ -142,7 +141,7 @@ int executor(t_shell *shell)
 			if (!location)
 				ft_dprintf(STDERR_FILENO, "%s: command not found\n", args[0]);
 			else
-				execute_cmd(ezg_add(EXECUTING, ft_strjoin(location, args[0])), args);
+				execute_cmd(location, args, environ);
 		}
 		reset_fd(shell->std_in, shell->std_out);
 		ezg_group_release(EXECUTING);
