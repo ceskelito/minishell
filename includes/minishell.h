@@ -70,6 +70,7 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	char			**args;
+	char			*location;
 	t_redir			*redirs;
 	struct s_cmd	*next;
 	int				pipe_output;

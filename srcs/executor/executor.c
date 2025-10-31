@@ -90,16 +90,15 @@ static int redir_fd(t_redir *redirs)
     return (0);
 }
 
-static void execute_cmd(char *location, char **args)
+static void execute_cmd(char *location, char **args, char **env)
 {
-	extern char	**environ;
 	pid_t		pid;
 	int 		status;
 
 	pid = fork();
 	if (pid == 0)
 	{
-	    execve(location, args, environ);
+	    execve(location, args, env);
 	    perror(args[0]);
 	    exit(127);
 	}
@@ -121,32 +120,28 @@ static inline void	reset_fd(int std_in, int std_out)
 
 int executor(t_shell *shell)
 {
-	t_cmd		*curr;
-	char		*location;
+	t_cmd		*cmd;
 	extern char	**environ;
-	char		**args;
 
-	curr = shell->cmd_list;
-	while (curr)
+	cmd = shell->cmd_list;
+	while (cmd)
 	{
-		if (curr->pipe_output)
-			setup_pipe(curr);
-		if (redir_fd(curr->redirs) != 0)
+		setup_pipe(cmd);
+		if (redir_fd(cmd->redirs) != 0)
 			break;
-		args = curr->args;
-		if (execute_builtin(args))
+		if (execute_builtin(cmd->args))
 			;
 		else
 		{
-			location = get_location(args[0]);
-			if (!location)
-				ft_dprintf(STDERR_FILENO, "%s: command not found\n", args[0]);
+			resolve_command_path(cmd);
+			if (!cmd->location)
+				ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd->args[0]);
 			else
-				execute_cmd(ezg_add(EXECUTING, ft_strjoin(location, args[0])), args);
+				execute_cmd(cmd->location, cmd->args, environ);
 		}
 		reset_fd(shell->std_in, shell->std_out);
 		ezg_group_release(EXECUTING);
-		curr = curr->next;
+		cmd = cmd->next;
 	}
 	return (0);
 }

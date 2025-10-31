@@ -18,7 +18,7 @@ void 	setup_pipe(t_cmd *cmd)
 {
 	int	fd[2];
 
-	if (!cmd || !cmd->next)
+	if (!(cmd && cmd->pipe_output && cmd->next))
 		return ;
 	if (pipe(fd) == -1)
 		return ;
