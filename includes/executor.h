@@ -18,7 +18,8 @@
 
 t_token 	*create_test_tokens(t_token *token);
 int			executor(t_shell *shell);
-char	    *get_location(char *cmd);
+// char	    *get_location(char *cmd);
+void		resolve_command_path(t_cmd *cmd);
 int			setup_heredoc(char *delimiter);
 void 		setup_pipe(t_cmd *cmd);
 
