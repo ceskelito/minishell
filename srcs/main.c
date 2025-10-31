@@ -90,7 +90,6 @@ int	main(void)
 	char		*input;
 
 	init_shell(&shell, environ);
-	env_handler(0, NULL, NULL, shell.env_array);
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (1)

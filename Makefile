@@ -40,8 +40,8 @@ FILES = main 				\
 		builtin				\
 		get_location		\
 		heredoc				\
-		pipe				\
-		environment
+		pipe				
+		# environment
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
