@@ -3,9 +3,6 @@
 
 /*
  * create_token - Creates a new token with given value and type
- * @value: String value for the token
- * @type: Token type (WORD, PIPE, etc.)
- * Return: New token or NULL on failure
  */
 t_token	*create_token(char *value, t_token_type type)
 {
@@ -42,78 +39,97 @@ static t_token	*new_token(void)
 }
 
 /*
- * process_attached_quotes - Handles attached quotes as separate tokens
- * Example: "$ONE""two" becomes two tokens: "$ONE" and "two"
- * @input: Input string starting at current position
- * @i: Pointer to current position in input
- * @tokens: Token list to add new tokens to
- * Return: Number of characters processed or -1 on error
+ * find_quote_end - Find the end of a quoted section
  */
-static int	process_attached_quotes(char *input, int *i, t_token **tokens)
+static int	find_quote_end(char *input, int start, char quote_char)
 {
-	int		start;
-	int		len;
+	int	i;
+
+	i = start + 1;
+	while (input[i])
+	{
+		if (input[i] == quote_char)
+			return (i + 1);
+		i++;
+	}
+	return (-1);
+}
+
+/*
+ * extract_quote - Extract content between quotes (including quotes)
+ */
+static char	*extract_quote(char *input, int start, int end)
+{
+	return (ezg_add(TOKEN, ft_substr(input, start, end - start)));
+}
+
+/*
+ * process_quotes - Handle word that may contain attached quotes
+ * Example: "$ONE""two"three -> ["$ONE"] ["two"] [three]
+ */
+static int	process_quotes(char *input, int *i, t_token **tokens)
+{
+	int		start_pos;
+	int		current_pos;
 	char	*token_value;
 	t_token	*new;
 
-	start = *i;
-	len = 0;
-	
-	// Process each quoted section as separate token
-	while (input[*i] && !ft_isspace(input[*i]) && !ft_strchr("|<>&()", input[*i]))
+	start_pos = *i;
+	current_pos = *i;
+
+	while (input[current_pos] && !ft_isspace(input[current_pos]) 
+		   && !ft_strchr("|<>&()", input[current_pos]))
 	{
-		if (input[*i] == '\'' || input[*i] == '\"')
+		if (input[current_pos] == '\'' || input[current_pos] == '\"')
 		{
-			// If we have accumulated characters, create token for them
-			if (len > 0)
+			if (current_pos > start_pos)
 			{
-				token_value = ezg_add(TOKEN, ft_substr(input, start, len));
+				token_value = ezg_add(TOKEN, ft_substr(input, start_pos, current_pos - start_pos));
 				new = create_token(token_value, WORD);
 				if (!new)
 					return (-1);
 				add_token(tokens, new);
 			}
+
+			char quote_char = input[current_pos];
+			int quote_end = find_quote_end(input, current_pos, quote_char);
 			
-			// Process the quoted part as separate token
-			start = *i;
-			char quote = input[*i];
-			(*i)++; // Skip opening quote
-			while (input[*i] && input[*i] != quote)
-				(*i)++;
-			if (input[*i] == quote)
-				(*i)++; // Skip closing quote
-			
-			len = *i - start;
-			token_value = ezg_add(TOKEN, ft_substr(input, start, len));
+			if (quote_end == -1)
+			{
+				ft_dprintf(STDERR_FILENO, "minishell: syntax error: unclosed quote\n");
+				return (-1);
+			}
+
+			token_value = extract_quote(input, current_pos, quote_end);
 			new = create_token(token_value, WORD);
 			if (!new)
 				return (-1);
-			if (quote == '\'')
-				new->expand_dollar = false;
-			add_token(tokens, new);
 			
-			// Reset for next part
-			start = *i;
-			len = 0;
+			if (quote_char == '\'')
+				new->expand_dollar = false;
+				
+			add_token(tokens, new);
+
+			current_pos = quote_end;
+			start_pos = current_pos;
 		}
 		else
 		{
-			(*i)++;
-			len++;
+			current_pos++;
 		}
 	}
-	
-	// Handle remaining characters
-	if (len > 0)
+
+	if (current_pos > start_pos)
 	{
-		token_value = ezg_add(TOKEN, ft_substr(input, start, len));
+		token_value = ezg_add(TOKEN, ft_substr(input, start_pos, current_pos - start_pos));
 		new = create_token(token_value, WORD);
 		if (!new)
 			return (-1);
 		add_token(tokens, new);
 	}
-	
-	return (*i - start + len);
+
+	*i = current_pos;
+	return (current_pos - start_pos);
 }
 
 t_token	*tokenize_input(char *input)
@@ -145,36 +161,9 @@ t_token	*tokenize_input(char *input)
 		}
 		else
 		{
-			// Check if this word has attached quotes
-			int temp_i = i;
-			bool has_quotes = false;
-			while (input[temp_i] && !ft_isspace(input[temp_i]) && !ft_strchr("|<>&()", input[temp_i]))
-			{
-				if (input[temp_i] == '\'' || input[temp_i] == '\"')
-				{
-					has_quotes = true;
-					break;
-				}
-				temp_i++;
-			}
-			
-			if (has_quotes)
-			{
-				token_gap = process_attached_quotes(input, &i, &tokens);
-				if (token_gap == -1)
-					return (NULL);
-			}
-			else
-			{
-				new = new_token();
-				if (!new)
-					return (NULL);
-				token_gap = fill_word_token(new, input + i);
-				if (token_gap == -1 || !new->value)
-					return (NULL);
-				add_token(&tokens, new);
-				i += token_gap;
-			}
+			token_gap = process_quotes(input, &i, &tokens);
+			if (token_gap == -1)
+				return (NULL);
 		}
 	}
 	return (tokens);
