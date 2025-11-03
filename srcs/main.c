@@ -36,34 +36,23 @@ static void	process_command(char *input, t_shell *shell)
 	debug_mode = is_debug_command(input);
 	cmd = extract_command(input);
 	
-	// 1. Check syntax errors in input
-	if (validate_syntax(cmd, NULL) == -1)
-		return;
-	
-	// 2. Tokenize input
+	// Простая токенизация без дополнительных проверок
 	shell->tokens = tokenize_input(cmd);
 	if (!shell->tokens)
 	{
-		handle_parsing_error("tokenization", ERR_INTERNAL);
+		printf("Error: tokenization failed\n");
 		return;
 	}
 	
-	// 3. Check token syntax
-	if (validate_syntax(cmd, shell->tokens) == -1)
-		return;
-	
-	// 4. Expand variables
-	expand_token_list(shell->tokens);
-	
-	// 5. Parse tokens
+	// Простой парсинг
 	shell->cmd_list = parse_tokens(shell->tokens);
 	if (!shell->cmd_list)
 	{
-		handle_parsing_error("command parsing", ERR_INTERNAL);
+		printf("Error: parsing failed\n");
 		return;
 	}
 	
-	// 6. Debug or execute
+	// Debug или выполнение
 	if (debug_mode)
 		print_debug_info(shell);
 	else
@@ -88,13 +77,14 @@ static char	*get_prompt(void)
 	char	*prompt;
 	size_t	prompt_len;
 
-	user = env_get_safe("USER", "user");
+	// Используем простые функции вместо wrapper'ов
+	user = getenv("USER");
+	if (!user)
+		user = "user";
+		
 	working_directory = getcwd(NULL, 0);
 	if (!working_directory)
-	{
-		handle_system_error("getcwd", NULL);
 		working_directory = ft_strdup("unknown");
-	}
 	
 	prompt_len = ft_strlen(user) + ft_strlen(working_directory) + 
 				 (ft_strlen(GREEN) * 4) + 3 + 1;

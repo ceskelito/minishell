@@ -104,9 +104,10 @@ int				fill_word_token(t_token *token, char *input);
 
 /* Tokenizer utilities */
 void			handle_dollar_sign(char *input, int *i, char **result);
-char			*process_quotes(char *input, int *i, char *result);
 char			*ft_strjoin_char(char *s1, char c);
 char			*get_operator_value(char *input, t_token_type type);
+
+/* Удалил process_quotes из заголовка - она static в tokenizer_quotes.c */
 
 /* ========================================================================== */
 /*                                PARSER                                      */
@@ -132,59 +133,10 @@ void			print_tokens(t_token *tokens);
 void			print_cmd_list(t_cmd *cmd_list);
 
 /* ========================================================================== */
-/*                           VARIABLE EXPANSION                               */
-/* ========================================================================== */
-
-char			*expand_variables(char *str, bool expand_flag);
-void			expand_token_list(t_token *tokens);
-
-/* ========================================================================== */
-/*                           SYNTAX VALIDATION                                */
-/* ========================================================================== */
-
-int				check_unclosed_quotes(char *input);
-int				check_pipe_syntax(t_token *tokens);
-int				check_redir_syntax(t_token *tokens);
-int				validate_syntax(char *input, t_token *tokens);
-
-/* ========================================================================== */
-/*                           ERROR MANAGEMENT                                 */
-/* ========================================================================== */
-
-typedef enum e_error_type
-{
-	ERR_SYSTEM,
-	ERR_INTERNAL,
-	ERR_SYNTAX
-} t_error_type;
-
-void			handle_system_error(char *context, char *filename);
-void			handle_internal_error(char *context, char *details);
-void			handle_syntax_error(char *token, char *message);
-void			handle_command_not_found(char *command);
-void			handle_execution_error(char *command, t_error_type error_type);
-void			handle_parsing_error(char *context, t_error_type error_type);
-
-/* ========================================================================== */
-/*                        ENVIRONMENT VARIABLES                               */
-/* ========================================================================== */
-
-char			*env_get(char *key);
-char			*env_get_safe(char *key, char *default_val);
-int				env_set(char *key, char *value);
-int				env_unset(char *key);
-bool			env_exists(char *key);
-bool			validate_env_name(char *name);
-int				env_export(char *assignment);
-void			env_print_all(void);
-
-/* ========================================================================== */
 /*                              MAIN & UTILS                                  */
 /* ========================================================================== */
 
 void			init_shell(t_shell *shell, char **envp);
-int				process_line(t_shell *shell);
-void			shell_loop(t_shell *shell);
 void			cleanup_shell(t_shell *shell);
 void			set_exit_status(int value);
 int				get_exit_status(void);
