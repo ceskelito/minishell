@@ -30,17 +30,17 @@ extern int	g_sig_status;
 /* Token types */
 typedef enum e_token_type
 {
-	WORD = 1 << 0,
-	PIPE = 1 << 1,
-	IN = 1 << 2,
-	OUT = 1 << 3,
-	APPEND = 1 << 4 | OUT,
-	HEREDOC = 1 << 5 | IN,
-	AND = 1 << 6,
-	OR = 1 << 7,
-	P_OPEN = 1 << 8,
-	P_CLOSE = 1 << 9,
-	BUILT = 1 << 10
+	WORD = 1,
+	PIPE = 2,
+	IN = 3,
+	OUT = 4,
+	APPEND = 5,
+	HEREDOC = 6,
+	AND = 7,
+	OR = 8,
+	P_OPEN = 9,
+	P_CLOSE = 10,
+	BUILT = 11
 }	t_token_type;
 
 /* Token structure */
@@ -140,6 +140,10 @@ void			init_shell(t_shell *shell, char **envp);
 void			cleanup_shell(t_shell *shell);
 void			set_exit_status(int value);
 int				get_exit_status(void);
+
+/* Variable expansion */
+void			expand_token_list(t_token *tokens);
+char			*expand_variables(char *str, bool expand_flag);
 
 /* Error handling */
 void			ft_error(char *str, int n);

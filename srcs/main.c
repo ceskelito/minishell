@@ -44,6 +44,9 @@ static void	process_command(char *input, t_shell *shell)
 		return;
 	}
 	
+	// ✅ Расширение переменных окружения (используем существующую функцию)
+	expand_token_list(shell->tokens);
+	
 	// Простой парсинг
 	shell->cmd_list = parse_tokens(shell->tokens);
 	if (!shell->cmd_list)

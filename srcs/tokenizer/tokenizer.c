@@ -20,10 +20,25 @@ t_token	*create_token(char *value, t_token_type type)
 
 static int	fill_operator_token(t_token *token, char *input)
 {
+	t_token_type type;
+	char *value;
+	
 	if (!token)
 		return (-1);
-	token->type = get_token_type(input);
-	token->value = get_operator_value(input, token->type);
+		
+	type = get_token_type(input);
+	printf("DEBUG fill_operator_token: get_token_type returned %d\n", type);
+	
+	value = get_operator_value(input, type);
+	if (!value)
+		return (-1);
+		
+	token->type = type;
+	token->value = value;
+	
+	printf("DEBUG fill_operator_token: final token type = %d, value = '%s'\n", 
+		   token->type, token->value);
+	
 	return (ft_strlen(token->value));
 }
 

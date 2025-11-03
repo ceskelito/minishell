@@ -16,7 +16,7 @@ CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror
 RM 			:= rm -f
 MKDIR		:= mkdir -p
-INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include
+INC_FLAGS 	:= -Iincludes -Ilibft/headers -Ilibft/ft_dprintf -Iezalloc/include
 LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
 			
 #────────────────────────#
@@ -38,10 +38,6 @@ FILES = main 				\
 		parser_redirs		\
 		parser_cleanup		\
 		parser_debug		\
-		variable_expansion	\
-		syntax_validation	\
-		error_management	\
-		env_wrapper			\
 		executor			\
 		builtin				\
 		get_location		\
@@ -108,36 +104,6 @@ compile_flags.txt: Makefile
 	$(call write_flags,$(INC_FLAGS),$@)
 	$(call write_flags,$(LIB_FLAGS),$@)
 
-#─────────#
-## TESTS ##
-#─────────#
-
-test-simple:
-	echo "ls" | ./$(NAME)
-
-test-pipe:
-	echo "ls | grep minishell" | ./$(NAME)
-
-test-redir:
-	echo "echo hello > test.txt" | ./$(NAME)
-
-test-quotes:
-	echo 'echo "hello world"' | ./$(NAME)
-
-test-vars:
-	echo 'echo $$USER' | ./$(NAME)
-
-test-debug:
-	echo 'DEBUG: echo "test"' | ./$(NAME)
-
-# Debug build
-debug: CFLAGS += -DDEBUG -fsanitize=address -g
-debug: $(NAME)
-
-# Norminette check
-norm:
-	norminette $(SRCS_DIR) includes/*.h
-
 #───────────────#
 ## CLEAN RULES ##
 #───────────────#
@@ -163,4 +129,4 @@ deepfclean: fclean
 
 deepre: deepfclean all
 
-.PHONY: all clean fclean re deepclean deepfclean deepre debug norm test-simple test-pipe test-redir test-quotes test-vars test-debug
+.PHONY: all clean fclean re deepclean deepfclean deepre
