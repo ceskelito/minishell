@@ -102,7 +102,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 		else if (curr_token->type & PIPE)
 		{
 			curr_cmd->pipe_output = true;
-			if (go_next_cmd(&curr_cmd) != 0)
+			if (!curr_token->next)
+				break;
+			else if (go_next_cmd(&curr_cmd) != 0)
 				return (NULL);
 		}
 		curr_token = curr_token->next;
