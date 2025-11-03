@@ -21,7 +21,7 @@ int			executor(t_shell *shell);
 // char	    *get_location(char *cmd);
 void		resolve_command_path(t_cmd *cmd);
 int			setup_heredoc(char *delimiter);
-bool		setup_pipe(t_cmd *cmd);
+int 		setup_pipe(t_cmd *cmd);
 
 /* Builtins */
 void	env(void);

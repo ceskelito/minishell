@@ -12,7 +12,7 @@ int	setup_heredoc(char *delimiter)
 
 	if (pipe(fd) == -1)
 	{
-		perror("minishell: pipe: ");
+		perror("minishell");
 		return (-1);
 	}
 	input = NULL;
