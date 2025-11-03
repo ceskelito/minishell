@@ -25,6 +25,11 @@ void	expand_array(char ***array, int *count)
 	new = NULL;
 }
 
+char	*get_value(char **array, char *key)
+{
+	return (NULL);
+}
+
 char	*env_handler(int mode, char *key, char *value)
 {
 	static char	**env;
@@ -39,19 +44,16 @@ char	*env_handler(int mode, char *key, char *value)
 	}
 	else if (mode == GET)	
 	{
-		// poi
+		return (get_value(env, key));
 	}
 	return (NULL);
 }
 void	ft_setenv(char *key, char *value)
 {
-
-	if (ft_strcmp(value, "===") == 0)
-		return ()
 }
 
 char	*ft_getenv(char *key)
 {
-	
+	return (NULL);	
 }
 
