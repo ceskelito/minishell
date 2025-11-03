@@ -56,16 +56,21 @@ static int	find_quote_end(char *input, int start, char quote_char)
 }
 
 /*
- * extract_quote - Extract content between quotes (including quotes)
+ * extract_quote_content - Extract content INSIDE quotes (without quote chars)
+ * Example: "hello" -> hello, 'world' -> world
  */
-static char	*extract_quote(char *input, int start, int end)
+static char	*extract_quote_content(char *input, int start, int end, char quote_char)
 {
-	return (ezg_add(TOKEN, ft_substr(input, start, end - start)));
+	// Skip the opening and closing quotes
+	if (end - start <= 2)
+		return (ezg_add(TOKEN, ft_strdup(""))); // Empty quoted string
+	
+	return (ezg_add(TOKEN, ft_substr(input, start + 1, end - start - 2)));
 }
 
 /*
  * process_quotes - Handle word that may contain attached quotes
- * Example: "$ONE""two"three -> ["$ONE"] ["two"] [three]
+ * Example: "$ONE""two"three -> [content of $ONE] [two] [three]
  */
 static int	process_quotes(char *input, int *i, t_token **tokens)
 {
@@ -82,6 +87,7 @@ static int	process_quotes(char *input, int *i, t_token **tokens)
 	{
 		if (input[current_pos] == '\'' || input[current_pos] == '\"')
 		{
+			// Handle unquoted content before quotes
 			if (current_pos > start_pos)
 			{
 				token_value = ezg_add(TOKEN, ft_substr(input, start_pos, current_pos - start_pos));
@@ -91,6 +97,7 @@ static int	process_quotes(char *input, int *i, t_token **tokens)
 				add_token(tokens, new);
 			}
 
+			// Process quoted section
 			char quote_char = input[current_pos];
 			int quote_end = find_quote_end(input, current_pos, quote_char);
 			
@@ -100,11 +107,13 @@ static int	process_quotes(char *input, int *i, t_token **tokens)
 				return (-1);
 			}
 
-			token_value = extract_quote(input, current_pos, quote_end);
+			// Extract content WITHOUT quotes
+			token_value = extract_quote_content(input, current_pos, quote_end, quote_char);
 			new = create_token(token_value, WORD);
 			if (!new)
 				return (-1);
 			
+			// Single quotes don't expand variables
 			if (quote_char == '\'')
 				new->expand_dollar = false;
 				
@@ -119,6 +128,7 @@ static int	process_quotes(char *input, int *i, t_token **tokens)
 		}
 	}
 
+	// Handle remaining unquoted content
 	if (current_pos > start_pos)
 	{
 		token_value = ezg_add(TOKEN, ft_substr(input, start_pos, current_pos - start_pos));
