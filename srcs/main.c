@@ -34,25 +34,46 @@ static void	process_command(char *input, t_shell *shell)
 	int		debug_mode;
 
 	debug_mode = is_debug_command(input);
-	cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
+	cmd = extract_command(input);
+	
+	// 1. Check syntax errors in input
+	if (validate_syntax(cmd, NULL) == -1)
+		return;
+	
+	// 2. Tokenize input
 	shell->tokens = tokenize_input(cmd);
+	if (!shell->tokens)
+	{
+		handle_parsing_error("tokenization", ERR_INTERNAL);
+		return;
+	}
+	
+	// 3. Check token syntax
+	if (validate_syntax(cmd, shell->tokens) == -1)
+		return;
+	
+	// 4. Expand variables
+	expand_token_list(shell->tokens);
+	
+	// 5. Parse tokens
 	shell->cmd_list = parse_tokens(shell->tokens);
+	if (!shell->cmd_list)
+	{
+		handle_parsing_error("command parsing", ERR_INTERNAL);
+		return;
+	}
+	
+	// 6. Debug or execute
 	if (debug_mode)
 		print_debug_info(shell);
 	else
-	{
-		/* TODO: executor будет здесь */
-		//printf("Command ready for execution\n");
 		executor(shell);
-	}
-	//cleanup_parsing(shell);
-	//ezg_group_delete(COMMAND);
 }
 
 void __attribute__((destructor)) ezg_cleanup();
 void __attribute__((constructor)) create_groups();
 
-void	create_groups()
+void	create_groups(void)
 {
 	ezg_group_create(TOKEN);
 	ezg_group_create(GLOBAL);
@@ -60,27 +81,37 @@ void	create_groups()
 	ezg_group_create(EXECUTING);
 }
 
-static char    *get_prompt()
+static char	*get_prompt(void)
 {
-    char    *working_directory;
-    char    *user;
-    char    *prompt;
-    size_t  prompt_len;
+	char	*working_directory;
+	char	*user;
+	char	*prompt;
+	size_t	prompt_len;
 
-    user = getenv("USER");
-    working_directory = getcwd(NULL, 0);
-    prompt_len = ft_strlen(user) +
-                 ft_strlen(working_directory) + 
-                 (ft_strlen(GREEN) * 4) + 
-                 3 + 1;
-    prompt = malloc(sizeof(char) * prompt_len);
-    ft_sprintf(prompt, "%s%s%s%c%s%s%s%c%c",
-                GREEN, user, 
-                DEFAULT, ':',
-                BLUE, working_directory,
-                DEFAULT, '$', ' ');
-    free(working_directory);
-    return (ezg_add(EXECUTING, prompt));
+	user = env_get_safe("USER", "user");
+	working_directory = getcwd(NULL, 0);
+	if (!working_directory)
+	{
+		handle_system_error("getcwd", NULL);
+		working_directory = ft_strdup("unknown");
+	}
+	
+	prompt_len = ft_strlen(user) + ft_strlen(working_directory) + 
+				 (ft_strlen(GREEN) * 4) + 3 + 1;
+	prompt = ezg_alloc(EXECUTING, sizeof(char) * prompt_len);
+	if (!prompt)
+	{
+		free(working_directory);
+		return (ezg_add(EXECUTING, ft_strdup("$ ")));
+	}
+	
+	ft_sprintf(prompt, "%s%s%s%c%s%s%s%c%c",
+				GREEN, user, 
+				DEFAULT, ':',
+				BLUE, working_directory,
+				DEFAULT, '$', ' ');
+	free(working_directory);
+	return (prompt);
 }
 
 int	main(void)
@@ -92,16 +123,22 @@ int	main(void)
 	init_shell(&shell, environ);
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
+	
 	while (1)
 	{
 		input = ezg_add(EXECUTING, readline(get_prompt()));
 		if (!input)
-			break ;
-		add_history(input);
-		process_command(input, &shell);
-		// ezg_cleanup();
+			break;
+		
+		if (ft_strlen(input) > 0)
+		{
+			add_history(input);
+			process_command(input, &shell);
+		}
+		
+		ezg_group_release(EXECUTING);
 	}
-	//cleanup_shell(&shell);
-	// printf("\nGoodbye!\n");
-	return (0);
+	
+	printf("\nGoodbye!\n");
+	return (get_exit_status());
 }

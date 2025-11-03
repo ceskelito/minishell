@@ -3,7 +3,6 @@
 
 # include "libft.h"
 # include "ezgalloc.h" 
-
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -16,6 +15,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
+# include <stdbool.h>
 
 # define SUCCESS 0
 # define ERROR 1
@@ -23,12 +23,8 @@
 # define COMMAND	"parsing"
 # define GLOBAL		"global"
 # define EXECUTING	"execute"
-# define TOKEN	"tokenizing"
+# define TOKEN		"tokenizing"
 
-/*
- * Global variable to handle signals
- * As per subject: Just one global variable to store signal number
-*/
 extern int	g_sig_status;
 
 /* Token types */
@@ -46,7 +42,6 @@ typedef enum e_token_type
 	P_CLOSE = 1 << 9,
 	BUILT = 1 << 10
 }	t_token_type;
-
 
 /* Token structure */
 typedef struct s_token
@@ -108,13 +103,10 @@ t_token_type	get_token_type(char *input);
 int				fill_word_token(t_token *token, char *input);
 
 /* Tokenizer utilities */
-// int				is_special_in_word(char c); NOT USED
 void			handle_dollar_sign(char *input, int *i, char **result);
 char			*process_quotes(char *input, int *i, char *result);
 char			*ft_strjoin_char(char *s1, char c);
-//int				is_operator_char(char c); NOT USED
 char			*get_operator_value(char *input, t_token_type type);
-int				process_word_token(char *input, int *i, t_token **tokens);
 
 /* ========================================================================== */
 /*                                PARSER                                      */
@@ -123,12 +115,10 @@ int				process_word_token(char *input, int *i, t_token **tokens);
 t_cmd			*parse_tokens(t_token *tokens);
 t_redir			*create_redir(int type, char *file);
 void			add_redir(t_cmd *cmd, t_redir *redir);
-//int				add_arg(char **args, char *arg); NOT USED
 
 /* Parser utilities */
 int				is_redir_token(t_token_type type);
 int				parse_redirection(t_cmd *cmd, t_token **token);
-// int				cmd_count_args(char **args); NOT USED
 
 /* Parser cleanup */
 void			free_cmds(t_cmd *cmds);
@@ -142,6 +132,53 @@ void			print_tokens(t_token *tokens);
 void			print_cmd_list(t_cmd *cmd_list);
 
 /* ========================================================================== */
+/*                           VARIABLE EXPANSION                               */
+/* ========================================================================== */
+
+char			*expand_variables(char *str, bool expand_flag);
+void			expand_token_list(t_token *tokens);
+
+/* ========================================================================== */
+/*                           SYNTAX VALIDATION                                */
+/* ========================================================================== */
+
+int				check_unclosed_quotes(char *input);
+int				check_pipe_syntax(t_token *tokens);
+int				check_redir_syntax(t_token *tokens);
+int				validate_syntax(char *input, t_token *tokens);
+
+/* ========================================================================== */
+/*                           ERROR MANAGEMENT                                 */
+/* ========================================================================== */
+
+typedef enum e_error_type
+{
+	ERR_SYSTEM,
+	ERR_INTERNAL,
+	ERR_SYNTAX
+} t_error_type;
+
+void			handle_system_error(char *context, char *filename);
+void			handle_internal_error(char *context, char *details);
+void			handle_syntax_error(char *token, char *message);
+void			handle_command_not_found(char *command);
+void			handle_execution_error(char *command, t_error_type error_type);
+void			handle_parsing_error(char *context, t_error_type error_type);
+
+/* ========================================================================== */
+/*                        ENVIRONMENT VARIABLES                               */
+/* ========================================================================== */
+
+char			*env_get(char *key);
+char			*env_get_safe(char *key, char *default_val);
+int				env_set(char *key, char *value);
+int				env_unset(char *key);
+bool			env_exists(char *key);
+bool			validate_env_name(char *name);
+int				env_export(char *assignment);
+void			env_print_all(void);
+
+/* ========================================================================== */
 /*                              MAIN & UTILS                                  */
 /* ========================================================================== */
 
@@ -150,7 +187,7 @@ int				process_line(t_shell *shell);
 void			shell_loop(t_shell *shell);
 void			cleanup_shell(t_shell *shell);
 void			set_exit_status(int value);
-int				get_exit_status();
+int				get_exit_status(void);
 
 /* Error handling */
 void			ft_error(char *str, int n);

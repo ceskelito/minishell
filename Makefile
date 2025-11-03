@@ -25,6 +25,9 @@ LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
 
 FILES = main 				\
 		ft_strjoin_char		\
+		exit_status			\
+		shell_init			\
+		cleanup				\
 		tokenizer			\
 		tokenizer_dollar	\
 		tokenizer_quotes	\
@@ -35,7 +38,10 @@ FILES = main 				\
 		parser_redirs		\
 		parser_cleanup		\
 		parser_debug		\
-		shell_init			\
+		variable_expansion	\
+		syntax_validation	\
+		error_management	\
+		env_wrapper			\
 		executor			\
 		builtin				\
 		get_location		\
@@ -47,6 +53,7 @@ OBJS_DIR := objs
 
 vpath %.c	$(SRCS_DIR) \
 			:$(SRCS_DIR)/main \
+			:$(SRCS_DIR)/utils \
 			:$(SRCS_DIR)/tokenizer \
 			:$(SRCS_DIR)/parser \
 			:$(SRCS_DIR)/executor
@@ -101,6 +108,36 @@ compile_flags.txt: Makefile
 	$(call write_flags,$(INC_FLAGS),$@)
 	$(call write_flags,$(LIB_FLAGS),$@)
 
+#─────────#
+## TESTS ##
+#─────────#
+
+test-simple:
+	echo "ls" | ./$(NAME)
+
+test-pipe:
+	echo "ls | grep minishell" | ./$(NAME)
+
+test-redir:
+	echo "echo hello > test.txt" | ./$(NAME)
+
+test-quotes:
+	echo 'echo "hello world"' | ./$(NAME)
+
+test-vars:
+	echo 'echo $$USER' | ./$(NAME)
+
+test-debug:
+	echo 'DEBUG: echo "test"' | ./$(NAME)
+
+# Debug build
+debug: CFLAGS += -DDEBUG -fsanitize=address -g
+debug: $(NAME)
+
+# Norminette check
+norm:
+	norminette $(SRCS_DIR) includes/*.h
+
 #───────────────#
 ## CLEAN RULES ##
 #───────────────#
@@ -126,4 +163,4 @@ deepfclean: fclean
 
 deepre: deepfclean all
 
-.PHONY: all clean fclean re deepclean deepfclean deepre
+.PHONY: all clean fclean re deepclean deepfclean deepre debug norm test-simple test-pipe test-redir test-quotes test-vars test-debug
