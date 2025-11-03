@@ -18,5 +18,5 @@ minishell
 .cache/
 
 # Trash
-.nfs*
-.DS*
+*.nfs*
+*.DS*
