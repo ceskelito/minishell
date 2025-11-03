@@ -1,5 +1,6 @@
 #include "minishell.h"
 #include "executor.h"
+#include <unistd.h>
 
 static void	add_pipe_redir(t_cmd *cmd, int fd, t_token_type type)
 {
@@ -14,14 +15,23 @@ static void	add_pipe_redir(t_cmd *cmd, int fd, t_token_type type)
 	add_redir(cmd, new);
 }
 
-void 	setup_pipe(t_cmd *cmd)
+bool 	setup_pipe(t_cmd *cmd)
 {
 	int	fd[2];
 
-	if (!(cmd && cmd->pipe_output && cmd->next))
-		return ;
+	if (!cmd)
+		return (false); // bash: syntax error near unexpected token `|'
+	if (!cmd->pipe_output)
+		return (true);
+	// cmd->next = NULL;
+	if (!cmd->next)
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: syntax error: unclosed pipe\n");
+		return (false);
+	}
 	if (pipe(fd) == -1)
-		return ;
+		return (false);
 	add_pipe_redir(cmd, fd[1], OUT);
 	add_pipe_redir(cmd->next, fd[0], IN);
+	return (true);
 }

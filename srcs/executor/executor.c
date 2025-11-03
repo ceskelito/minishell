@@ -126,7 +126,8 @@ int executor(t_shell *shell)
 	cmd = shell->cmd_list;
 	while (cmd)
 	{
-		setup_pipe(cmd);
+		if (!setup_pipe(cmd))
+			break ;
 		if (redir_fd(cmd->redirs) != 0)
 			break;
 		if (execute_builtin(cmd->args))
