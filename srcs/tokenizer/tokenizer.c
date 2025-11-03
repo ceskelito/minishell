@@ -59,7 +59,7 @@ static int	find_quote_end(char *input, int start, char quote_char)
  * extract_quote_content - Extract content INSIDE quotes (without quote chars)
  * Example: "hello" -> hello, 'world' -> world
  */
-static char	*extract_quote_content(char *input, int start, int end, char quote_char)
+static char	*extract_quote_content(char *input, int start, int end)//, char quote_char)
 {
 	// Skip the opening and closing quotes
 	if (end - start <= 2)
@@ -108,7 +108,7 @@ static int	process_quotes(char *input, int *i, t_token **tokens)
 			}
 
 			// Extract content WITHOUT quotes
-			token_value = extract_quote_content(input, current_pos, quote_end, quote_char);
+			token_value = extract_quote_content(input, current_pos, quote_end);//, quote_char);
 			new = create_token(token_value, WORD);
 			if (!new)
 				return (-1);

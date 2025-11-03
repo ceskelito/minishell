@@ -31,14 +31,14 @@ static char	*handle_single_quote(char *input, int *i, char *result)
 
 static char	*handle_double_quote(char *input, int *i, char *result)
 {
-	char	*temp;
+	// char	*temp;
 
 	(*i)++;
 	while (input[*i] && input[*i] != '\"')
 	{
 		if (input[*i] == '$')
 		{
-			temp = result;
+			// temp = result;
 			handle_dollar_sign(input, i, &result);
 			if (!result)
 			{

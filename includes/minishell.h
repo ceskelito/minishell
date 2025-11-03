@@ -104,7 +104,7 @@ int				fill_word_token(t_token *token, char *input);
 
 /* Tokenizer utilities */
 void			handle_dollar_sign(char *input, int *i, char **result);
-char			*process_quotes(char *input, int *i, char *result);
+// char			*process_quotes(char *input, int *i, char *result);
 char			*ft_strjoin_char(char *s1, char c);
 char			*get_operator_value(char *input, t_token_type type);
 
