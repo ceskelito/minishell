@@ -27,7 +27,7 @@ static int	count_word_length(char *word)
 	}
 	if (in_quote)
 	{
-		perror("minishell: syntax error: unclosed quote\n");
+		ft_dprintf(STDERR_FILENO, "minishell: syntax error: unclosed quote\n");
 		return (-1);
 	}
 	return (len);
@@ -66,10 +66,9 @@ int	fill_word_token(t_token *token, char *input)
 	if (len == -1)
 		return (-1);
 	if (len == 0)
-		token->value = NULL; //ft_strdup("");
+		token->value = ezg_add(GLOBAL, ft_strdup("")); // ✅ ИСПРАВЛЕНО: не NULL
 	else
 		copy_word_simple(token, input, len);
 	token->type = WORD;
-	//ezg_add(TOKEN, token->value);
 	return (len);
 }

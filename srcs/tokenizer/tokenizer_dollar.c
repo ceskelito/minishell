@@ -4,12 +4,12 @@ static char	*get_exit_status_value(void)
 {
 	extern int	g_sig_status;
 
-	return (ft_itoa(g_sig_status));
+	return (ezg_add(TOKEN, ft_itoa(g_sig_status))); // ИСПРАВЛЕНО: используем ezg_add
 }
 
 static char	*get_variable_name(char *input, int start, int end)
 {
-	return (ft_substr(input, start, end - start));
+	return (ezg_add(TOKEN, ft_substr(input, start, end - start))); //  ezg_add
 }
 
 static char	*expand_exit_status(char *result)
@@ -20,9 +20,7 @@ static char	*expand_exit_status(char *result)
 	exit_val = get_exit_status_value();
 	if (!exit_val)
 		return (result);
-	temp = ft_strjoin(result, exit_val);
-	free(result);
-	free(exit_val);
+	temp = ezg_add(TOKEN, ft_strjoin(result, exit_val)); //  ezg_add
 	return (temp);
 }
 
@@ -38,9 +36,7 @@ static char	*expand_variable(char *input, int start, int end, char *result)
 	var_value = getenv(var_name);
 	if (!var_value)
 		var_value = "";
-	temp = ft_strjoin(result, var_value);
-	free(result);
-	free(var_name);
+	temp = ezg_add(TOKEN, ft_strjoin(result, var_value)); //  ezg_add
 	return (temp);
 }
 
@@ -58,8 +54,7 @@ void	handle_dollar_sign(char *input, int *i, char **result)
 	}
 	if (!ft_isalpha(input[*i]) && input[*i] != '_')
 	{
-		temp = ft_strjoin_char(*result, '$');
-		free(*result);  // ← ДОБАВИЛ: освобождаем старую память
+		temp = ezg_add(TOKEN, ft_strjoin_char(*result, '$')); //  ezg_add
 		*result = temp;
 		return ;
 	}

@@ -4,10 +4,9 @@ static char	*append_char_safe(char *str, char c)
 {
 	char	*temp;
 
-	temp = ft_strjoin_char(str, c);
+	temp = ezg_add(TOKEN, ft_strjoin_char(str, c)); // ✅ ezg_add
 	if (!temp)
 		return (NULL);
-	free(str);
 	return (temp);
 }
 
@@ -23,9 +22,7 @@ static char	*handle_single_quote(char *input, int *i, char *result)
 	}
 	if (input[*i] != '\'')
 	{
-		printf("minishell: syntax error: unclosed single quote\n");
-		if (result)
-			free(result);
+		ft_dprintf(STDERR_FILENO, "minishell: syntax error: unclosed single quote\n"); // ✅ ИСПРАВЛЕНО
 		return (NULL);
 	}
 	(*i)++;
@@ -45,8 +42,6 @@ static char	*handle_double_quote(char *input, int *i, char *result)
 			handle_dollar_sign(input, i, &result);
 			if (!result)
 			{
-				if (temp)
-					free(temp);
 				return (NULL);
 			}
 		}
@@ -60,9 +55,7 @@ static char	*handle_double_quote(char *input, int *i, char *result)
 	}
 	if (input[*i] != '\"')
 	{
-		printf("minishell: syntax error: unclosed double quote\n");
-		if (result)
-			free(result);
+		ft_dprintf(STDERR_FILENO, "minishell: syntax error: unclosed double quote\n"); // ✅ ИСПРАВЛЕНО
 		return (NULL);
 	}
 	(*i)++;

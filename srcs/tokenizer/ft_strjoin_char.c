@@ -9,7 +9,7 @@ char	*ft_strjoin_char(char *s1, char c)
 	if (!s1)
 		return (NULL);
 	len = ft_strlen(s1);
-	result = malloc(sizeof(char) * (len + 2));
+	result = ezg_alloc(TOKEN, sizeof(char) * (len + 2)); // ✅ используем ezg_alloc
 	if (!result)
 		return (NULL);
 	i = 0;
