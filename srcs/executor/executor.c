@@ -90,17 +90,17 @@ static int redir_fd(t_redir *redirs)
     return (0);
 }
 
-static void execute_cmd(char *location, char **args)
+static int execute_cmd(char *location, char **args, char **env)
 {
-	extern char	**environ;
 	pid_t		pid;
 	int 		status;
 
+	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
-	    execve(location, args, environ);
-	    perror(args[0]);
+		execve(location, args, env);
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", args[0], strerror(errno));
 	    exit(127);
 	}
 	else if (pid > 0)
@@ -109,8 +109,10 @@ static void execute_cmd(char *location, char **args)
 	}
 	else
 	{
-	    perror("fork");
-	}	
+	    perror("minishell");
+		status = errno;
+	}
+	return (status);
 }
 
 static inline void	reset_fd(int std_in, int std_out)
@@ -121,32 +123,27 @@ static inline void	reset_fd(int std_in, int std_out)
 
 int executor(t_shell *shell)
 {
-	t_cmd		*curr;
-	char		*location;
+	t_cmd		*cmd;
 	extern char	**environ;
-	char		**args;
 
-	curr = shell->cmd_list;
-	while (curr)
+	cmd = shell->cmd_list;
+	while (cmd)
 	{
-		if (curr->pipe_output)
-			setup_pipe(curr);
-		if (redir_fd(curr->redirs) != 0)
-			break;
-		args = curr->args;
-		if (execute_builtin(args))
+		if (setup_pipe(cmd) != 0 || redir_fd(cmd->redirs) != 0)
+			break ;
+		if (execute_builtin(cmd->args))
 			;
 		else
 		{
-			location = get_location(args[0]);
-			if (!location)
-				ft_dprintf(STDERR_FILENO, "%s: command not found\n", args[0]);
+			resolve_command_path(cmd);
+			if (!cmd->location)
+				ft_dprintf(STDERR_FILENO, "minishell: %s: Command not found\n", cmd->args[0]);
 			else
-				execute_cmd(ezg_add(EXECUTING, ft_strjoin(location, args[0])), args);
+				shell->exit_status = execute_cmd(cmd->location, cmd->args, environ);
 		}
 		reset_fd(shell->std_in, shell->std_out);
 		ezg_group_release(EXECUTING);
-		curr = curr->next;
+		cmd = cmd->next;
 	}
 	return (0);
 }

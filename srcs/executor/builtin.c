@@ -1,7 +1,10 @@
 #include "executor.h"
+#include "ft_dprintf.h"
 #include "ft_lib.h"
 #include "ft_printf.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <string.h> 
 
@@ -55,22 +58,31 @@ void	pwd()
 
 void	cd(char **args)
 {
-	int	i;
+	int		count;
+	char	*dir;
 
-	i = 0;
-	while(args[i])
-		i++;
-	if (i > 2)
-		perror("cd: too many arguments\0");
-	else if (i == 1)
+	count = 0;
+	while(args[count])
+		count++;
+	if (count > 2)
 	{
-		if (chdir(getenv("HOME")) != 0)
-			perror("cd: HOME not set\0");
+		ft_dprintf(STDERR_FILENO, "minishell: cd: too many arguments\n");
+		return ;
 	}
-	else if (strcmp(args[1], "") == 0)
-		;	
-	else if (chdir(args[1]) != 0)
-		perror(ft_strjoin("cd: ", args[1]));
+	if (count == 1)
+	{
+		dir = getenv("HOME");
+		if (!dir)
+		{
+			ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
+			return ;
+		}
+	}
+	else
+		dir = args[1];
+	if (strcmp(dir, "") != 0)
+		if (chdir(dir) != 0)
+			ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir, strerror(errno));
 }
 
 void	exit_shell(char **args)
