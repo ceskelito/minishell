@@ -25,6 +25,8 @@ LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
 
 FILES = main 				\
 		ft_strjoin_char		\
+		cleanup				\
+		exit_status			\
 		tokenizer			\
 		tokenizer_dollar	\
 		tokenizer_quotes	\

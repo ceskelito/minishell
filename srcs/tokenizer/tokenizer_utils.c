@@ -40,15 +40,8 @@ t_token_type	get_token_type(char *input)
 
 char	*get_operator_value(char *input, t_token_type type)
 {
-	if (type & (OR | AND | HEREDOC |APPEND))
+	if (type == OR || type == AND || type == HEREDOC || type == APPEND)
 		return (ezg_add(TOKEN, ft_substr(input, 0, 2)));
 	else
 		return (ezg_add(TOKEN, ft_substr(input, 0, 1)));
 }
-
-/* NOT USED 
-int	is_operator_char(char c)
-{
-	return (c == '|' || c == '<' || c == '>' || c == '&' 
-		|| c == '(' || c == ')');
-} */
