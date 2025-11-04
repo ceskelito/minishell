@@ -20,10 +20,25 @@ t_token	*create_token(char *value, t_token_type type)
 
 static int	fill_operator_token(t_token *token, char *input)
 {
+	t_token_type type;
+	char *value;
+	
 	if (!token)
 		return (-1);
-	token->type = get_token_type(input);
-	token->value = get_operator_value(input, token->type);
+		
+	type = get_token_type(input);
+	printf("DEBUG fill_operator_token: get_token_type returned %d\n", type);
+	
+	value = get_operator_value(input, type);
+	if (!value)
+		return (-1);
+		
+	token->type = type;
+	token->value = value;
+	
+	printf("DEBUG fill_operator_token: final token type = %d, value = '%s'\n", 
+		   token->type, token->value);
+	
 	return (ft_strlen(token->value));
 }
 
@@ -36,110 +51,6 @@ static t_token	*new_token(void)
 		return (NULL);
 	new->expand_dollar = true;
 	return (new);
-}
-
-/*
- * find_quote_end - Find the end of a quoted section
- */
-static int	find_quote_end(char *input, int start, char quote_char)
-{
-	int	i;
-
-	i = start + 1;
-	while (input[i])
-	{
-		if (input[i] == quote_char)
-			return (i + 1);
-		i++;
-	}
-	return (-1);
-}
-
-/*
- * extract_quote_content - Extract content INSIDE quotes (without quote chars)
- * Example: "hello" -> hello, 'world' -> world
- */
-static char	*extract_quote_content(char *input, int start, int end)//, char quote_char)
-{
-	// Skip the opening and closing quotes
-	if (end - start <= 2)
-		return (ezg_add(TOKEN, ft_strdup(""))); // Empty quoted string
-	
-	return (ezg_add(TOKEN, ft_substr(input, start + 1, end - start - 2)));
-}
-
-/*
- * process_quotes - Handle word that may contain attached quotes
- * Example: "$ONE""two"three -> [content of $ONE] [two] [three]
- */
-static int	process_quotes(char *input, int *i, t_token **tokens)
-{
-	int		start_pos;
-	int		current_pos;
-	char	*token_value;
-	t_token	*new;
-
-	start_pos = *i;
-	current_pos = *i;
-
-	while (input[current_pos] && !ft_isspace(input[current_pos]) 
-		   && !ft_strchr("|<>&()", input[current_pos]))
-	{
-		if (input[current_pos] == '\'' || input[current_pos] == '\"')
-		{
-			// Handle unquoted content before quotes
-			if (current_pos > start_pos)
-			{
-				token_value = ezg_add(TOKEN, ft_substr(input, start_pos, current_pos - start_pos));
-				new = create_token(token_value, WORD);
-				if (!new)
-					return (-1);
-				add_token(tokens, new);
-			}
-
-			// Process quoted section
-			char quote_char = input[current_pos];
-			int quote_end = find_quote_end(input, current_pos, quote_char);
-			
-			if (quote_end == -1)
-			{
-				ft_dprintf(STDERR_FILENO, "minishell: syntax error: unclosed quote\n");
-				return (-1);
-			}
-
-			// Extract content WITHOUT quotes
-			token_value = extract_quote_content(input, current_pos, quote_end);//, quote_char);
-			new = create_token(token_value, WORD);
-			if (!new)
-				return (-1);
-			
-			// Single quotes don't expand variables
-			if (quote_char == '\'')
-				new->expand_dollar = false;
-				
-			add_token(tokens, new);
-
-			current_pos = quote_end;
-			start_pos = current_pos;
-		}
-		else
-		{
-			current_pos++;
-		}
-	}
-
-	// Handle remaining unquoted content
-	if (current_pos > start_pos)
-	{
-		token_value = ezg_add(TOKEN, ft_substr(input, start_pos, current_pos - start_pos));
-		new = create_token(token_value, WORD);
-		if (!new)
-			return (-1);
-		add_token(tokens, new);
-	}
-
-	*i = current_pos;
-	return (current_pos - start_pos);
 }
 
 t_token	*tokenize_input(char *input)
@@ -171,9 +82,14 @@ t_token	*tokenize_input(char *input)
 		}
 		else
 		{
-			token_gap = process_quotes(input, &i, &tokens);
-			if (token_gap == -1)
+			new = new_token();
+			if (!new)
 				return (NULL);
+			token_gap = fill_word_token(new, input + i);
+			if (token_gap == -1 || !new->value)
+				return (NULL);
+			add_token(&tokens, new);
+			i += token_gap;
 		}
 	}
 	return (tokens);
