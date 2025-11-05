@@ -2,10 +2,6 @@
 #include "ezgalloc.h"
 #include "minishell.h"
 
-#define GREEN "\33[32m"
-#define BLUE "\33[34m"
-#define DEFAULT "\33[39m"
-
 int	g_sig_status = 0;
 
 static int	is_debug_command(char *input)
@@ -58,6 +54,7 @@ void	create_groups()
 	ezg_group_create(GLOBAL);
 	ezg_group_create(COMMAND);
 	ezg_group_create(EXECUTING);
+	ezg_group_create(ENV);
 }
 
 static char    *get_prompt()
@@ -83,13 +80,15 @@ static char    *get_prompt()
     return (ezg_add(EXECUTING, prompt));
 }
 
+
 int	main(void)
 {
 	extern char	**environ;
 	t_shell		shell;
 	char		*input;
 
-	init_shell(&shell, environ);
+	init_shell(&shell);
+	init_env(environ);
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (1)

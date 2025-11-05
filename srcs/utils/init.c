@@ -1,11 +1,10 @@
 #include "minishell.h"
 
-void	init_shell(t_shell *shell, char **envp)
+void	init_shell(t_shell *shell)
 {
 	shell->env_list = NULL;
 	shell->cmd_list = NULL;
 	shell->tokens = NULL;
-	shell->env_array = envp;
 	shell->line = NULL;
 	shell->exit_status = 0;
 	shell->interactive = 1;
