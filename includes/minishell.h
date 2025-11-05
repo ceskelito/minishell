@@ -168,4 +168,38 @@ int				ft_isalnum(int c);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 void			ft_putendl_fd(char *s, int fd);
 
+/* === Environment Variables Managing === */
+
+/**
+ * ft_getenv - Retrieve the value of an environment variable.
+ *
+ * Searches for a variable named @key in the environment array and returns
+ * a pointer to the value portion (the substring following '=').
+ *
+ * @key  Name of the variable to look up.
+ *
+ * Return: A pointer to the variable's value, or NULL if not found.
+ */
+char	*ft_getenv(char *key);
+
+/**
+ * ft_setenv - Set or update an environment variable.
+ *
+ * If the variable identified by @key exists, its value is replaced with @value.
+ * Otherwise, a new entry with the format "key=value" is appended to the environment array.
+ *
+ * @key    Variable name to set.
+ * @value  New value to assign.
+ */
+void	ft_setenv(char *key, char *value);
+
+/**
+ * ft_getenv_array - Retrieve the environment array.
+ *
+ * Return: A pointer to the NULL-terminated array of "key=value" strings
+ *         representing the current environment.
+ */
+char	**ft_getenv_array(void);
+
+
 #endif
