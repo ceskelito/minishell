@@ -1,6 +1,7 @@
 - Created file: ustils/init.c
-- Moved init_shell() function in init.c
-- Added init_env() function in init.c
 - Created file: utils/environment.c
-- Populated eith functions utils/environment.c
-- Changed the environment managmente accordly with the new functions
+
+- init_shell() - Moved function in init.c
+- init_env() - Declared function in init.c
+
+- Changed the environment management according with the functions declared in environment.c
