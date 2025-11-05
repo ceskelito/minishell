@@ -2,6 +2,7 @@
 #include "ft_dprintf.h"
 #include "ft_lib.h"
 #include "ft_printf.h"
+#include "minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,13 +10,14 @@
 
 void	env()
 {
-	extern const char	**environ;
-	int					i;
+	char	**env_array;
+	int		i;
 
+	env_array = ft_getenv_array();
 	i = 0;
-	while(environ[i])
+	while(env_array[i])
 	{
-		ft_printf("%s\n", environ[i]);
+		ft_printf("%s\n", env_array[i]);
 		i++;
 	}
 	

@@ -124,7 +124,6 @@ static inline void	reset_fd(int std_in, int std_out)
 int executor(t_shell *shell)
 {
 	t_cmd		*cmd;
-	extern char	**environ;
 
 	cmd = shell->cmd_list;
 	while (cmd)
@@ -139,7 +138,7 @@ int executor(t_shell *shell)
 			if (!cmd->location)
 				ft_dprintf(STDERR_FILENO, "minishell: %s: Command not found\n", cmd->args[0]);
 			else
-				shell->exit_status = execute_cmd(cmd->location, cmd->args, environ);
+				shell->exit_status = execute_cmd(cmd->location, cmd->args, ft_getenv_array());
 		}
 		reset_fd(shell->std_in, shell->std_out);
 		ezg_group_release(EXECUTING);
