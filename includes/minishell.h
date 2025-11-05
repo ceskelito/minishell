@@ -20,10 +20,17 @@
 # define SUCCESS 0
 # define ERROR 1
 
+// ezalloc groups
 # define COMMAND	"parsing"
 # define GLOBAL		"global"
 # define EXECUTING	"execute"
-# define TOKEN	"tokenizing"
+# define TOKEN		"tokenizing"
+# define ENV		"environment"
+
+// colors
+# define GREEN	"\33[32m"
+# define BLUE	"\33[34m"
+# define DEFAULT "\33[39m"
 
 /*
  * Global variable to handle signals
@@ -169,6 +176,8 @@ char			*ft_substr(char const *s, unsigned int start, size_t len);
 void			ft_putendl_fd(char *s, int fd);
 
 /* === Environment Variables Managing === */
+
+void	init_env(char **environ);
 
 /**
  * ft_getenv - Retrieve the value of an environment variable.
