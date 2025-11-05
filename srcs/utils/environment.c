@@ -68,13 +68,17 @@ static char	**expand_array(char *group, char **array, int nmemb, int increment)
 static char **env_handler(int mode, char *key, char *value)
 {
 	static char	**env;
+	extern char	**environ;
 	int			nmemb;
 	int			i;
 	int			j;
-	
+
+	if (!env)
+		env = dup_array(environ);
 	if (mode == GET)
-	{		
-		while (env[i])
+	{
+		i = 0;
+		while (env && env[i])
 		{
 			j = 0;
 			while (key[j] && env[i][j] && key[j] == env[i][j])
@@ -91,8 +95,11 @@ static char **env_handler(int mode, char *key, char *value)
 		while (env[nmemb])
 			nmemb++;
 		env = expand_array(ENV, env, nmemb, 1);
+		if (!env)
+			return (NULL);
 		env[nmemb] = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
 		ft_sprintf(env[nmemb], "%s=%s", key, value);
+		env[nmemb + 1] = NULL;
 	}
 	else if (mode == GET_ARRAY)
 	{
@@ -100,6 +107,11 @@ static char **env_handler(int mode, char *key, char *value)
 	}
 	return (NULL);
 }
+
+/* void ft_setenv_array()
+{
+	env_handler(SET_ARRAY, NOKEY, NOVALUE);
+} */
 
 char **ft_getenv_array()
 {
@@ -110,6 +122,8 @@ void	ft_setenv(char *key, char *value)
 {
 	if (!key)
 		return ;
+	if (!value)
+		value = "";
 	env_handler(SET, key, value);
 }
 

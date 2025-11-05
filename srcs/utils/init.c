@@ -13,7 +13,7 @@ void	init_shell(t_shell *shell)
 }
 
 /**
- * init_env - Duplicate the system environment into the ezgalloc-managed ENV group.
+ * dup_array - Duplicate the system environment into the ezgalloc-managed ENV group.
  *
  * This function copies all entries from the provided @environ array into
  * a new NULL-terminated array allocated under the ezgalloc group ENV.
@@ -25,15 +25,12 @@ void	init_shell(t_shell *shell)
  *
  * Return: None.
  */
-void	init_env(char **environ)
+char	**dup_array(char **environ)
 {
 	int		i;
 	int		nmemb;
 	char	**env;
 
-	env = ft_getenv_array();
-	if (!env)
-		return ;
 	nmemb = 0;
 	while (environ[nmemb])
 		nmemb++;
@@ -46,4 +43,5 @@ void	init_env(char **environ)
 		i++;
 	}
     env[i] = NULL;
+	return (env);
 }

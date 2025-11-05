@@ -66,6 +66,10 @@ static char    *get_prompt()
 
     user = ft_getenv("USER");
     working_directory = getcwd(NULL, 0);
+	if (!user)
+		user = "\0";
+	if (!working_directory)
+		working_directory = "\0";
     prompt_len = ft_strlen(user) +
                  ft_strlen(working_directory) + 
                  (ft_strlen(GREEN) * 4) + 
@@ -83,12 +87,11 @@ static char    *get_prompt()
 
 int	main(void)
 {
-	extern char	**environ;
+	//extern char	**environ;
 	t_shell		shell;
 	char		*input;
 
 	init_shell(&shell);
-	init_env(environ);
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (1)

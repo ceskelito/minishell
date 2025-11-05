@@ -177,7 +177,7 @@ void			ft_putendl_fd(char *s, int fd);
 
 /* === Environment Variables Managing === */
 
-void	init_env(char **environ);
+char	**dup_array(char **environ);
 
 /**
  * ft_getenv - Retrieve the value of an environment variable.
