@@ -90,8 +90,8 @@ static char **env_handler(int mode, char *key, char *value)
 		nmemb = 0;
 		while (env[nmemb])
 			nmemb++;
-		env = expand_array(GLOBAL, env, nmemb, 1);
-		env[nmemb] = ezg_calloc(GLOBAL, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
+		env = expand_array(ENV, env, nmemb, 1);
+		env[nmemb] = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
 		ft_sprintf(env[nmemb], "%s=%s", key, value);
 	}
 	else if (mode == GET_ARRAY)
