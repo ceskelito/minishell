@@ -2,54 +2,28 @@
 #include "ft_lib.h"
 #include "minishell.h"
 #include <stdlib.h>
+#include <sys/types.h>
 
-// #define GET 1
-// #define SET 2
+#define NOKEY	0
+#define NOVALUE	0
 
-// void	expand_array(char ***array, int *count)
-// {
-// 	int		i;
-// 	char	**new;
+enum { GET, SET, GET_ARRAY };
 
-// 	new = ezg_calloc(GLOBAL, sizeof(char *), *count + 1);
-// 	i = 0;
-// 	while (i < *count)
-// 	{
-// 		new[i] = (*array)[i];
-// 		i++;
-// 	}
-// 	new[i + 1] = NULL;
-// 	new[i + 2] = NULL;
-// 	ezg_release(GLOBAL, (*array));
-// 	(*array) = new;
-// 	(*count) += 1;
-// 	new = NULL;
-// }
-
-// char	*get_value(char **array, char *key)
-// {
-// 	return (NULL);
-// }
-
-// char	*env_handler(int mode, char *key, char *value)
-// {
-// 	static char	**env;
-// 	static int	count;
-
-// 	if (mode == SET)
-// 	{
-// 		expand_array(&env, &count);
-// 		env[count - 1] = ezg_calloc(GLOBAL, sizeof(char),
-// 		                    ft_strlen(key) + ft_strlen(value) + 2);
-// 		ft_sprintf(env[count], "%s=%s\0", key, value);
-// 	}
-// 	else if (mode == GET)	
-// 	{
-// 		return (get_value(env, key));
-// 	}
-// 	return (NULL);
-// }
-
+/**
+ * expand_array - Expand or shrink a dynamically allocated NULL-terminated array of strings.
+ *
+ * This function reallocates the given array by the specified increment.
+ * If @increment is positive, the array is expanded; if negative, it is reduced.
+ * If the resulting size is zero or negative, the entire array and its contents are released.
+ *
+ * @group      Identifier of the ezgalloc memory group used for allocation.
+ * @array      Pointer to the NULL-terminated array to be modified.
+ * @nmemb      Number of elements currently stored in the array.
+ * @increment  Number of elements to add (positive) or remove (negative).
+ *
+ * Return: A pointer to the new array if successful, or NULL if the array
+ *         was released or allocation failed.
+ */
 static char	**expand_array(char *group, char **array, int nmemb, int increment)
 {
 	char	**new;
@@ -73,33 +47,81 @@ static char	**expand_array(char *group, char **array, int nmemb, int increment)
 	return (new);
 }
 
-void	ft_setenv(char **env, char *key, char *value)
+/**
+ * env_handler - Internal environment handler for key=value string arrays.
+ *
+ * This function provides centralized management for environment variables
+ * stored as a static array of "key=value" strings. It supports three modes:
+ *   GET        - Search for an entry matching @key and return a pointer to it.
+ *   SET        - Update the value of @key if it exists, otherwise append a new entry.
+ *   GET_ARRAY  - Return a pointer to the full environment array.
+ *
+ * @mode   Operation mode (GET, SET, or GET_ARRAY).
+ * @key    Variable name to retrieve or modify. Ignored if mode is GET_ARRAY.
+ * @value  New value to assign when using SET mode.
+ *
+ * Return: A pointer to:
+ *         - The matching environment string (GET),
+ *         - The environment array (GET_ARRAY),
+ *         - NULL on error or if the key was not found.
+ */
+static char **env_handler(int mode, char *key, char *value)
 {
-	int	nmemb;
-
-	nmemb = 0;
-	while (env[nmemb])
-		nmemb++;
-	env = expand_array(GLOBAL, env, nmemb, 1);
-	env[nmemb] = ezg_calloc(GLOBAL, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
-	ft_sprintf(env[nmemb], "%s=%s", key, value);
-}
-
-char	*ft_getenv(char **env, char *key)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	while (env[i])
+	static char	**env;
+	int			nmemb;
+	int			i;
+	int			j;
+	
+	if (mode == GET)
+	{		
+		while (env[i])
+		{
+			j = 0;
+			while (key[j] && env[i][j] && key[j] == env[i][j])
+				j++;
+			if (!key[j] && env[i][j] == '=')
+				return (&env[i]);
+			i++;
+		}
+		return (NULL);
+	}
+	else if (mode == SET) // NEED TO CHECK IF A VARIABLE ALREADY EXISTS
 	{
-		j = 0;
-		while (key[j] && env[i][j] && key[j] == env[i][j])
-			j++;
-		if (!key[j] && env[i][j] == '=')
-			return(ft_strchr(env[i], '=') + 1);
-		i++;
+		nmemb = 0;
+		while (env[nmemb])
+			nmemb++;
+		env = expand_array(GLOBAL, env, nmemb, 1);
+		env[nmemb] = ezg_calloc(GLOBAL, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
+		ft_sprintf(env[nmemb], "%s=%s", key, value);
+	}
+	else if (mode == GET_ARRAY)
+	{
+		return (env);
 	}
 	return (NULL);
+}
+
+char **ft_getenv_array()
+{
+	return (env_handler(GET_ARRAY, NOKEY, NOVALUE));
+}
+
+void	ft_setenv(char *key, char *value)
+{
+	if (!key)
+		return ;
+	env_handler(SET, key, value);
+}
+
+char	*ft_getenv(char *key)
+{
+	char	**tmp;
+
+	if (!key)
+		return (NULL);
+	tmp = env_handler(GET, key, NOVALUE);
+	if (!tmp)
+		return (NULL);
+	return (ft_strchr(*tmp, '=') + 1);
 }
 
