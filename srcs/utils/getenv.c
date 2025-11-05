@@ -50,7 +50,7 @@
 // 	return (NULL);
 // }
 
-char	**expand_array(char *group, char **array, int nmemb, int increment)
+static char	**expand_array(char *group, char **array, int nmemb, int increment)
 {
 	char	**new;
 
