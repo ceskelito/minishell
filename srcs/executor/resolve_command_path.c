@@ -35,7 +35,7 @@ static char	*lookup_command_path(char *cmd)
 
 	if (!cmd)
 		return (NULL);
-	path = ft_split(getenv("PATH"), ':');
+	path = ft_split(ft_getenv("PATH"), ':');
 	if (!path)
 		return (NULL);
 	i = -1;

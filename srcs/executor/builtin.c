@@ -70,7 +70,7 @@ void	cd(char **args)
 	}
 	if (count == 1)
 	{
-		dir = getenv("HOME");
+		dir = ft_getenv("HOME");
 		if (!dir)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");

@@ -64,7 +64,7 @@ static char    *get_prompt()
     char    *prompt;
     size_t  prompt_len;
 
-    user = getenv("USER");
+    user = ft_getenv("USER");
     working_directory = getcwd(NULL, 0);
     prompt_len = ft_strlen(user) +
                  ft_strlen(working_directory) + 
