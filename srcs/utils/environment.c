@@ -9,43 +9,6 @@
 
 enum { GET, SET, GET_ARRAY };
 
-/**
- * expand_array - Expand or shrink a dynamically allocated NULL-terminated array of strings.
- *
- * This function reallocates the given array by the specified increment.
- * If @increment is positive, the array is expanded; if negative, it is reduced.
- * If the resulting size is zero or negative, the entire array and its contents are released.
- *
- * @group      Identifier of the ezgalloc memory group used for allocation.
- * @array      Pointer to the NULL-terminated array to be modified.
- * @nmemb      Number of elements currently stored in the array.
- * @increment  Number of elements to add (positive) or remove (negative).
- *
- * Return: A pointer to the new array if successful, or NULL if the array
- *         was released or allocation failed.
- */
-static char	**expand_array(char *group, char **array, int nmemb, int increment)
-{
-	char	**new;
-
-	if (!array)
-		return (NULL);
-	if (increment == 0)
-		return (array);
-	if ((nmemb + increment) <= 0)
-	{
-		while (nmemb-- > 0)
-			ezg_release(group, array[nmemb]);
-		ezg_release(group, array);
-		return (NULL);
-	}
-	new = ezg_calloc(group, sizeof(char *), nmemb + increment + 1);
-	if (!new)
-		return (array);
-	ft_memcpy(new, array, nmemb * sizeof(char *));
-	ezg_release(group, array);
-	return (new);
-}
 
 /**
  * env_handler - Internal environment handler for key=value string arrays.
@@ -107,11 +70,6 @@ static char **env_handler(int mode, char *key, char *value)
 	}
 	return (NULL);
 }
-
-/* void ft_setenv_array()
-{
-	env_handler(SET_ARRAY, NOKEY, NOVALUE);
-} */
 
 char **ft_getenv_array()
 {
