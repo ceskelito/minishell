@@ -174,10 +174,10 @@ char			*ft_strjoin_three(char *s1, char *s2, char *s3);
 int				ft_isalnum(int c);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 void			ft_putendl_fd(char *s, int fd);
+char			**dup_array(char *group, char **srcs);
+char			**expand_array(char *group, char **array, int nmemb, int increment);
 
 /* === Environment Variables Managing === */
-
-char	**dup_array(char **environ);
 
 /**
  * ft_getenv - Retrieve the value of an environment variable.
