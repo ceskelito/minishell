@@ -1,6 +1,7 @@
 #include "ezgalloc.h"
 #include "ft_lib.h"
 #include "minishell.h"
+#include <stdlib.h>
 
 // #define GET 1
 // #define SET 2
@@ -48,6 +49,30 @@
 // 	}
 // 	return (NULL);
 // }
+
+char	**expand_array(char *group, char **array, int nmemb, int increment)
+{
+	char	**new;
+
+	if (!array)
+		return (NULL);
+	if (increment == 0)
+		return (array);
+	if ((nmemb + increment) <= 0)
+	{
+		while (nmemb-- > 0)
+			ezg_release(group, array[nmemb]);
+		ezg_release(group, array);
+		return (NULL);
+	}
+	new = ezg_calloc(group, sizeof(char *), nmemb + increment + 1);
+	if (!new)
+		return (array);
+	ft_memcpy(new, array, nmemb * sizeof(char *));
+	ezg_release(group, array);
+	return (new);
+}
+
 void	ft_setenv(char **env, char *key, char *value)
 {
 	int	nmemb;
@@ -55,7 +80,7 @@ void	ft_setenv(char **env, char *key, char *value)
 	nmemb = 0;
 	while (env[nmemb])
 		nmemb++;
-	env = ft_realloc(env, sizeof(char *) * nmemb + 1, sizeof(char *) * nmemb + 2);
+	env = expand_array(GLOBAL, env, nmemb, 1);
 	env[nmemb] = ezg_calloc(GLOBAL, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
 	ft_sprintf(env[nmemb], "%s=%s", key, value);
 }
