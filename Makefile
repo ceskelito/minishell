@@ -40,8 +40,8 @@ FILES = main 				\
 		builtin				\
 		resolve_command_path	\
 		heredoc				\
-		pipe				
-		# environment
+		pipe				\
+		environment
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -87,8 +87,7 @@ $(OBJS_DIR):
 ## LIBRARIES ##
 #─────────────#
 
-$(LIBFT): $(LIBFT_OBJS)
-$(LIBFT_OBJS): $(LIBFT_SRCS)
+$(LIBFT):
 	$(MAKE) -C $(LIBFT_ROOT)
 
 $(LIBEZ):
