@@ -2,9 +2,7 @@
 
 static char	*get_exit_status_value(void)
 {
-	extern int	g_sig_status;
-
-	return (ft_itoa(g_sig_status));
+	return (ft_itoa(get_exit_status()));
 }
 
 static char	*get_variable_name(char *input, int start, int end)
@@ -59,7 +57,7 @@ void	handle_dollar_sign(char *input, int *i, char **result)
 	if (!ft_isalpha(input[*i]) && input[*i] != '_')
 	{
 		temp = ft_strjoin_char(*result, '$');
-		free(*result);  // ← ДОБАВИЛ: освобождаем старую память
+		free(*result);
 		*result = temp;
 		return ;
 	}

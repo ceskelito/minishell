@@ -2,19 +2,20 @@
 
 static int	count_word_length(char *word)
 {
-	int	len;
-	int	in_quote;
-	char quote_char;
+	int		len;
+	int		in_quote;
+	char	quote_char;
 
 	len = 0;
 	in_quote = 0;
 	quote_char = 0;
 	while (word[len])
 	{
-		if (!in_quote && (ft_isspace(word[len]) || ft_strchr("|<>&()", word[len])))
-			break;
+		if (!in_quote && (ft_isspace(word[len]) || ft_strchr("|<>&()",
+					word[len])))
+			break ;
 		if (!in_quote && (word[len] == '\'' || word[len] == '"'))
-		{		
+		{
 			in_quote = 1;
 			quote_char = word[len];
 		}
@@ -33,43 +34,114 @@ static int	count_word_length(char *word)
 	return (len);
 }
 
-static char	*copy_word_simple(t_token *token, char *input, int len)
+static char	*handle_word_char(char *result, char c)
 {
-	int		i;
-	int		j;
+	char	*temp;
 
-	token->value = ezg_alloc(GLOBAL, sizeof(char) * (len + 1));
-	if (!token->value)
+	temp = ft_strjoin_char(result, c);
+	if (!temp)
+		return (NULL);
+	free(result);
+	return (temp);
+}
+
+static char	*process_single_quote(char *input, int *i, char *result)
+{
+	(*i)++;
+	while (input[*i] && input[*i] != '\'')
+	{
+		result = handle_word_char(result, input[*i]);
+		if (!result)
+			return (NULL);
+		(*i)++;
+	}
+	if (input[*i] == '\'')
+		(*i)++;
+	return (result);
+}
+
+static char	*process_double_quote(char *input, int *i, char *result)
+{
+	(*i)++;
+	while (input[*i] && input[*i] != '\"')
+	{
+		if (input[*i] == '$')
+		{
+			handle_dollar_sign(input, i, &result);
+			if (!result)
+				return (NULL);
+		}
+		else
+		{
+			result = handle_word_char(result, input[*i]);
+			if (!result)
+				return (NULL);
+			(*i)++;
+		}
+	}
+	if (input[*i] == '\"')
+		(*i)++;
+	return (result);
+}
+
+static char	*expand_word_value(char *input, int len)
+{
+	char	*result;
+	int		i;
+
+	result = ft_strdup("");
+	if (!result)
 		return (NULL);
 	i = 0;
-	j = 0;
 	while (i < len)
 	{
 		if (input[i] == '\'')
-			token->expand_dollar = false;
-		if (input[i] != '\'' && input[i] != '\"')
 		{
-			token->value[j] = input[i];
-			j++;
+			result = process_single_quote(input, &i, result);
+			if (!result)
+				return (NULL);
 		}
-		i++;
+		else if (input[i] == '\"')
+		{
+			result = process_double_quote(input, &i, result);
+			if (!result)
+				return (NULL);
+		}
+		else if (input[i] == '$')
+		{
+			handle_dollar_sign(input, &i, &result);
+			if (!result)
+				return (NULL);
+		}
+		else
+		{
+			result = handle_word_char(result, input[i]);
+			if (!result)
+				return (NULL);
+			i++;
+		}
 	}
-	token->value[j] = '\0';
-	return (token->value);
+	return (result);
 }
 
 int	fill_word_token(t_token *token, char *input)
 {
 	int		len;
+	char	*expanded;
 
 	len = count_word_length(input);
 	if (len == -1)
 		return (-1);
 	if (len == 0)
-		token->value = NULL; //ft_strdup("");
-	else
-		copy_word_simple(token, input, len);
+	{
+		token->value = NULL;
+		token->type = WORD;
+		return (0);
+	}
+	expanded = expand_word_value(input, len);
+	if (!expanded)
+		return (-1);
+	token->value = ezg_add(GLOBAL, expanded);
 	token->type = WORD;
-	//ezg_add(TOKEN, token->value);
 	return (len);
 }
