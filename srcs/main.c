@@ -1,6 +1,8 @@
 #include "executor.h"
 #include "ezgalloc.h"
 #include "minishell.h"
+#include <signal.h>
+#include <unistd.h>
 
 int	g_sig_status = 0;
 
@@ -84,12 +86,33 @@ static char    *get_prompt()
     return (ezg_add(EXECUTING, prompt));
 }
 
+void	signal_handler(int signal)
+{
+	extern unsigned long	rl_readline_state;
+
+	if (signal == SIGINT) // NEED TO SEE IF WE ARE IN A TTY
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		g_sig_status = SIGINT;
+	}
+}
 
 int	main(void)
 {
 	//extern char	**environ;
-	t_shell		shell;
-	char		*input;
+	t_shell				shell;
+	char				*input;
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sa.sa_handler = signal_handler;
+	sigaction(SIGINT, &sa, NULL);
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa, NULL);
 
 	init_shell(&shell);
 	printf("Welcome to minishell!\n");
