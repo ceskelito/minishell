@@ -20,10 +20,17 @@
 # define SUCCESS 0
 # define ERROR 1
 
+// ezalloc groups
 # define COMMAND	"parsing"
 # define GLOBAL		"global"
 # define EXECUTING	"execute"
-# define TOKEN	"tokenizing"
+# define TOKEN		"tokenizing"
+# define ENV		"environment"
+
+// colors
+# define GREEN	"\33[32m"
+# define BLUE	"\33[34m"
+# define DEFAULT "\33[39m"
 
 /*
  * Global variable to handle signals
@@ -146,7 +153,7 @@ void			print_cmd_list(t_cmd *cmd_list);
 /*                              MAIN & UTILS                                  */
 /* ========================================================================== */
 
-void			init_shell(t_shell *shell, char **envp);
+void			init_shell(t_shell *shell);
 int				process_line(t_shell *shell);
 void			shell_loop(t_shell *shell);
 void			cleanup_shell(t_shell *shell);
@@ -167,5 +174,41 @@ char			*ft_strjoin_three(char *s1, char *s2, char *s3);
 int				ft_isalnum(int c);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 void			ft_putendl_fd(char *s, int fd);
+char			**dup_array(char *group, char **srcs);
+char			**expand_array(char *group, char **array, int nmemb, int increment);
+
+/* === Environment Variables Managing === */
+
+/**
+ * ft_getenv - Retrieve the value of an environment variable.
+ *
+ * Searches for a variable named @key in the environment array and returns
+ * a pointer to the value portion (the substring following '=').
+ *
+ * @key  Name of the variable to look up.
+ *
+ * Return: A pointer to the variable's value, or NULL if not found.
+ */
+char	*ft_getenv(char *key);
+
+/**
+ * ft_setenv - Set or update an environment variable.
+ *
+ * If the variable identified by @key exists, its value is replaced with @value.
+ * Otherwise, a new entry with the format "key=value" is appended to the environment array.
+ *
+ * @key    Variable name to set.
+ * @value  New value to assign.
+ */
+void	ft_setenv(char *key, char *value);
+
+/**
+ * ft_getenv_array - Retrieve the environment array.
+ *
+ * Return: A pointer to the NULL-terminated array of "key=value" strings
+ *         representing the current environment.
+ */
+char	**ft_getenv_array(void);
+
 
 #endif

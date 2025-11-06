@@ -1,6 +1,10 @@
 #include "minishell.h"
 #include <unistd.h>
 
+/* 
+
+ * FUNCTION MOVED TO utils/init.c
+
 void	init_shell(t_shell *shell, char **envp)
 {
 	shell->env_list = NULL;
@@ -12,11 +16,11 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->interactive = 1;
 	shell->std_out = dup(STDOUT_FILENO);
 	shell->std_in = dup(STDIN_FILENO);
-}
+} */
 
 void	cleanup_shell(t_shell *shell)
 {
-	if (shell->tokens)
+	//if (shell->tokens)
 		// free_tokens(shell->tokens); TO REMOVE (use ezg_* functions instead)
 	if (shell->cmd_list)
 		free_cmds(shell->cmd_list);

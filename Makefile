@@ -13,7 +13,7 @@ endef
 
 NAME 		:= minishell
 CC 			:= gcc
-CFLAGS 		:= -Wall -Wextra -Werror
+CFLAGS 		:= -Wall -Wextra -Werror -g
 RM 			:= rm -f
 MKDIR		:= mkdir -p
 INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include
@@ -42,8 +42,11 @@ FILES = main 				\
 		builtin				\
 		resolve_command_path	\
 		heredoc				\
-		pipe				
-		# environment
+		pipe				\
+		environment			\
+		environment_handler	\
+		array				\
+		init
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -89,8 +92,7 @@ $(OBJS_DIR):
 ## LIBRARIES ##
 #─────────────#
 
-$(LIBFT): $(LIBFT_OBJS)
-$(LIBFT_OBJS): $(LIBFT_SRCS)
+$(LIBFT):
 	$(MAKE) -C $(LIBFT_ROOT)
 
 $(LIBEZ):

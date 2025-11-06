@@ -33,7 +33,7 @@ static char	*expand_variable(char *input, int start, int end, char *result)
 	var_name = get_variable_name(input, start, end);
 	if (!var_name)
 		return (result);
-	var_value = getenv(var_name);
+	var_value = ft_getenv(var_name);
 	if (!var_value)
 		var_value = "";
 	temp = ft_strjoin(result, var_value);

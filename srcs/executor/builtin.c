@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
+/*   Updated: 2025/11/06 12:42:42 by rceschel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "executor.h"
 #include "ft_dprintf.h"
 #include "ft_lib.h"
 #include "ft_printf.h"
+#include "minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,13 +22,14 @@
 
 void	env()
 {
-	extern const char	**environ;
-	int					i;
+	char	**env_array;
+	int		i;
 
+	env_array = ft_getenv_array();
 	i = 0;
-	while(environ[i])
+	while(env_array[i])
 	{
-		ft_printf("%s\n", environ[i]);
+		ft_printf("%s\n", env_array[i]);
 		i++;
 	}
 	
@@ -70,7 +84,7 @@ void	cd(char **args)
 	}
 	if (count == 1)
 	{
-		dir = getenv("HOME");
+		dir = ft_getenv("HOME");
 		if (!dir)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");

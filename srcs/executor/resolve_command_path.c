@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   resolve_command_path.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/06 12:42:52 by rceschel          #+#    #+#             */
+/*   Updated: 2025/11/06 12:42:55 by rceschel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ezgalloc.h"
 #include "ft_lib.h"
 #include "minishell.h"
@@ -35,7 +47,7 @@ static char	*lookup_command_path(char *cmd)
 
 	if (!cmd)
 		return (NULL);
-	path = ft_split(getenv("PATH"), ':');
+	path = ft_split(ft_getenv("PATH"), ':');
 	if (!path)
 		return (NULL);
 	i = -1;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
+/*   Updated: 2025/11/06 12:59:23 by rceschel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_dprintf.h"
 #include "ft_printf.h"
 #include "minishell.h"
@@ -120,7 +132,6 @@ static inline void	reset_fd(int std_in, int std_out)
 int	executor(t_shell *shell)
 {
 	t_cmd		*cmd;
-	extern char	**environ;
 
 	cmd = shell->cmd_list;
 	while (cmd)
@@ -139,8 +150,7 @@ int	executor(t_shell *shell)
 				set_exit_status(127);
 			}
 			else
-				shell->exit_status = execute_cmd(cmd->location, cmd->args,
-						environ);
+				shell->exit_status = execute_cmd(cmd->location, cmd->args, ft_getenv_array());
 		}
 		reset_fd(shell->std_in, shell->std_out);
 		ezg_group_release(EXECUTING);
