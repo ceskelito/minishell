@@ -43,6 +43,7 @@ FILES = main 				\
 		pipe				\
 		environment			\
 		environment_handler	\
+		array				\
 		init
 
 SRCS_DIR := srcs

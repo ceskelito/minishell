@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/06 12:42:34 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/06 12:46:02 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void add_variable(char ***env, char *key, char *value)
 		nmemb++;
 	*env = expand_array(ENV, *env, nmemb, 1);
 	if (!*env)
-		return (NULL);
+		return ;
 	*env[nmemb] = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
 	ft_sprintf(*env[nmemb], "%s=%s", key, value);
 	*env[nmemb + 1] = NULL;
@@ -124,8 +124,6 @@ char **env_handler(int mode, char *key, char *value)
 	static char	**env;
 	extern char	**environ;
 	char		**temp;
-	int			i;
-	int			j;
 
 	if (!env)
 		env = dup_array(ENV, environ);
