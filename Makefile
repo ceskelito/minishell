@@ -42,6 +42,7 @@ FILES = main 				\
 		heredoc				\
 		pipe				\
 		environment			\
+		environment_handler	\
 		init
 
 SRCS_DIR := srcs
