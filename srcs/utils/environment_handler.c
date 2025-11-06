@@ -1,7 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   environment_handler.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
+/*   Updated: 2025/11/06 12:42:34 by rceschel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 #include "environment.h"
 
+/**
+ * change_variable_value - Replace the value part of a "key=value" string.
+ *
+ * This helper preserves the key portion and rebuilds the string using the
+ * provided new value. The old string is released and a new one is allocated
+ * in the ENV arena.
+ *
+ * @variable  Existing "key=value" string to update.
+ * @new_value New value to assign to the key.
+ *
+ * Return: Nothing.
+ */
 static void	change_variable_value(char *variable, char *new_value)
 {
 	int		i;
@@ -22,6 +45,19 @@ static void	change_variable_value(char *variable, char *new_value)
 	free(tmp);
 }
 
+/**
+ * add_variable - Append a new "key=value" entry to the environment array.
+ *
+ * Ensures there is room for one more entry (plus the terminating NULL),
+ * builds the "key=value" string and inserts it at the end of the array.
+ * The @env pointer may be reallocated and updated in place.
+ *
+ * @env   Address of the environment array to extend.
+ * @key   Variable name to add.
+ * @value Value to assign to the new variable.
+ *
+ * Return: Nothing.
+ */
 static void add_variable(char ***env, char *key, char *value)
 {
     int nmemb;
@@ -37,6 +73,16 @@ static void add_variable(char ***env, char *key, char *value)
 	*env[nmemb + 1] = NULL;
 }
 
+/**
+ * get_variable - Find an entry by key in a "key=value" string array.
+ *
+ * Performs a linear search comparing the key up to the '=' separator.
+ *
+ * @env Array of "key=value" strings.
+ * @key Name to look up.
+ *
+ * Return: Address of the matching entry within @env on success, NULL on failure.
+ */
 static char **get_variable(char **env, char *key)
 {
     int i;
