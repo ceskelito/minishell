@@ -59,6 +59,32 @@ void	create_groups()
 	ezg_group_create(ENV);
 }
 
+static char	*prompt_set_home(char *directory, char *home_symbol)
+{
+	char	*home_path;
+	char	*new_directory;
+
+	if (!directory)
+		return (NULL);
+	home_path = ft_getenv("HOME");
+	if (!home_path)
+		return (directory);
+	if (ft_strnstr(directory, home_path, ft_strlen(home_path)))
+	{
+		/* allocate new string for prompt (home_symbol + rest of path) */
+		new_directory = ft_calloc(ft_strlen(home_symbol) +
+								ft_strlen(directory + ft_strlen(home_path)) +
+								1,
+								sizeof(char));
+		if (!new_directory)
+			return (directory);
+		ft_sprintf(new_directory, "%s%s", home_symbol, directory + ft_strlen(home_path));
+		free(directory);
+		return (new_directory);
+	}
+	return (directory);
+}
+
 static char    *get_prompt()
 {
     char    *working_directory;
@@ -68,6 +94,7 @@ static char    *get_prompt()
 
     user = ft_getenv("USER");
     working_directory = getcwd(NULL, 0);
+	working_directory = prompt_set_home(working_directory, HOME_SYMBOL);
 	if (!user)
 		user = "\0";
 	if (!working_directory)

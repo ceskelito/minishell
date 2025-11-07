@@ -27,7 +27,10 @@
 # define TOKEN		"tokenizing"
 # define ENV		"environment"
 
-// colors
+// prompt
+# ifndef HOME_SYMBOL
+#  define HOME_SYMBOL "~"
+# endif
 # define GREEN	"\33[32m"
 # define BLUE	"\33[34m"
 # define DEFAULT "\33[39m"
