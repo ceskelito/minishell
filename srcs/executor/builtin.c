@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/* ****************************************************get_entry********************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/06 12:42:42 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:44:41 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,55 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+static bool	is_entry_valid(char *entry)
+{
+	int	i;
+
+	if (!ft_isalpha(entry[0]))
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: export: `%s': not a valid identifier\n", entry);
+		return (false);
+	}
+	i = 0;
+	while (entry[i] && entry[i] != '=')
+	{	
+		if (!ft_isalnum(entry[i]))
+		{
+			ft_dprintf(STDERR_FILENO, "minishell: export: `%c': not a valid identifier\n", entry);
+			return (false);
+		}
+		i++;
+	}
+	if (!ft_strchr(entry, '='))
+			return (false);
+	return (true);
+}
+
+void	export(char **args)
+{
+	size_t	key_len;
+	int		i;
+	char	*key;
+	char	*value;
+	char	*entry;
+
+	i = 0;
+	while (i++, args[i])
+	{
+		entry = args[i];
+		if (!is_entry_valid(entry))
+			continue ;
+		key_len = 0;
+		while (entry[key_len] != '=')
+			key_len++;
+		key = ft_substr(entry, 0, key_len);
+		value = ft_strchr(entry, '=') + 1;
+		//ft_printf("key: %s\nval: %s\n", key, value);
+		ft_setenv(key, value);
+		free(key);
+	}
+}
 
 void	env()
 {

@@ -29,4 +29,5 @@ void	echo(char **args);
 void	cd(char **args);
 void	pwd(void);
 void	exit_shell(char **args);
+void	export(char **args);
 #endif

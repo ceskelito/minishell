@@ -150,6 +150,7 @@ int	main(void)
 		input = ezg_add(EXECUTING, readline(get_prompt()));
 		if (!input)
 			break ;
+		ft_setenv("PWD", getcwd(NULL, 0));
 		add_history(input);
 		process_command(input, &shell);
 		// ezg_cleanup();
