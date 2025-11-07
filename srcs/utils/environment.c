@@ -6,25 +6,26 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:42 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/06 12:46:22 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 14:34:39 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "environment.h"
 
-char **ft_getenv_array()
+char	**ft_getenv_array()
 {
 	return (env_handler(GET_ARRAY, NOKEY, NOVALUE));
 }
 
-void	ft_setenv(char *key, char *value)
+int		ft_setenv(char *key, char *value)
 {
 	if (!key)
-		return ;
+		return (-1);
 	if (!value)
 		value = "";
 	env_handler(SET, key, value);
+	return (0);
 }
 
 char	*ft_getenv(char *key)

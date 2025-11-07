@@ -203,7 +203,7 @@ char	*ft_getenv(char *key);
  * @key    Variable name to set.
  * @value  New value to assign.
  */
-void	ft_setenv(char *key, char *value);
+int	ft_setenv(char *key, char *value);
 
 /**
  * ft_getenv_array - Retrieve the environment array.
