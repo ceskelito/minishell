@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/07 14:45:39 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:11:20 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "environment.h"
 
 /**
- * change_entry_value - Safely replace value of an existing env entry.
+ * change_entry_value - Safely replace the value of an existing env entry.
  *
  * Preserves the key portion of the entry and change the value.
  * The old string is released and a new one is allocated in the ENV arena.
@@ -51,13 +51,13 @@ static void	change_entry_value(char **entry_ptr, char *new_value)
 /**
  * add_entry - Append a new "key=value" entry to the environment array.
  *
- * Ensures there is room for one more entry (plus the terminating NULL),
+ * Ensures space for the new entry plus the terminating NULL,
  * builds the "key=value" string and inserts it at the end of the array.
  * The @env pointer may be reallocated and updated in place.
  *
  * @env   Address of the environment array to extend.
- * @key   Variable name to add.
- * @value Value to assign to the new variable.
+ * @key   Variable name.
+ * @value Variable value.
  *
  * Return: Nothing.
  */
@@ -77,16 +77,17 @@ static void add_entry(char ***env, char *key, char *value)
 }
 
 /**
- * get_variable - Find an entry by key in a "key=value" string array.
+ * get_entry - Locate an entry by key.
  *
- * Performs a linear search comparing the key up to the '=' separator.
+ * Linear search comparing characters up to '='. Returns the address of the
+ * slot (&env[i]), not the string itself, to allow in-place modification.
  *
- * @env Array of "key=value" strings.
- * @key Name to look up.
+ * @env Environment array.
+ * @key Key to search (must be non-NULL).
  *
- * Return: Address of the matching entry within @env on success, NULL on failure.
+ * Return: &env[i] on success, NULL on failure.
  */
-static char **get_variable(char **env, char *key)
+static char **get_entry(char **env, char *key)
 {
     int i;
     int j;
@@ -105,21 +106,22 @@ static char **get_variable(char **env, char *key)
 }
 
 /**
- * env_handler - Internal environment handler for key=value string arrays.
+ * env_handler - Internal handler for the environment strings array.
  *
  * This function provides centralized management for environment variables
  * stored as a static array of "key=value" strings. It supports three modes:
  *   GET        - Search for an entry matching @key and return a pointer to it.
  *   SET        - Update the value of @key if it exists, otherwise append a new entry.
- *   GET_ARRAY  - Return a pointer to the full environment array.
+ *   GET_ARRAY  - Return the full environment array.
  *
  * @mode   Operation mode (GET, SET, or GET_ARRAY).
  * @key    Variable name to retrieve or modify. Ignored if mode is GET_ARRAY.
  * @value  New value to assign when using SET mode.
  *
  * Return: A pointer to:
- *         - The matching environment string (GET),
+ *         - The matching entry (GET),
  *         - The environment array (GET_ARRAY),
+ * 		   - NULL (SET),
  *         - NULL on error or if the key was not found.
  */
 char **env_handler(int mode, char *key, char *value)
@@ -132,7 +134,7 @@ char **env_handler(int mode, char *key, char *value)
 		env = dup_array(ENV, environ);
 	if (mode == GET)
 	{
-		return (get_variable(env, key));
+		return (get_entry(env, key));
 	}
 	else if (mode == SET)
 	{
