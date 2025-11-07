@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/07 11:18:04 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 13:27:31 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,36 @@
 #include "environment.h"
 
 /**
- * change_variable_value - Replace the value part of a "key=value" string.
+ * change_variable_value - Safely replace value of an existing env entry.
  *
- * This helper preserves the key portion and rebuilds the string using the
- * provided new value. The old string is released and a new one is allocated
- * in the ENV arena.
+ * Preserves the key portion of the entry and change the value.
+ * The old string is released and a new one is allocated in the ENV arena.
  *
- * @variable  Existing "key=value" string to update.
- * @new_value New value to assign to the key.
+ * @variable_ptr Pointer to an existing entry to update.
+ * @new_value New value to assign to the entry.
  *
  * Return: Nothing.
  */
-static void	change_variable_value(char *variable, char *new_value)
+static void	change_variable_value(char **variable_ptr, char *new_value)
 {
-	int		i;
-	char	**tmp;
+	char	*old;
+	char	*eq;
+	size_t	key_len;
+	char	*newvar;
 
-	tmp = ft_split(variable, '=');
-	if (!tmp || !tmp[0])
-		return ;
-	ezg_release(ENV, variable);
-	variable = ezg_calloc(ENV, sizeof(char), ft_strlen(tmp[0]) + ft_strlen(new_value) + 2);
-	ft_sprintf(variable, "%s=%s\0", tmp[0], new_value);
-	i = 0;
-	while (tmp[i])
-	{
-		free(tmp[i]);
-		tmp++;
-	}
-	free(tmp);
+	if (!variable_ptr || !*variable_ptr || !new_value)
+		return;
+	old = *variable_ptr;
+	eq = ft_strchr(old, '=');
+	key_len = eq ? (size_t)(eq - old) : ft_strlen(old);
+	newvar = ezg_calloc(ENV, sizeof(char), key_len + ft_strlen(new_value) + 2);
+	if (!newvar)
+		return;
+	ft_memcpy(newvar, old, key_len);
+	newvar[key_len] = '=';
+	ft_sprintf(newvar + key_len + 1, new_value);
+	ezg_release(ENV, old);
+	*variable_ptr = newvar;
 }
 
 /**
@@ -68,9 +69,9 @@ static void add_variable(char ***env, char *key, char *value)
 	*env = expand_array(ENV, *env, nmemb, 1);
 	if (!*env)
 		return ;
-	*env[nmemb] = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
-	ft_sprintf(*env[nmemb], "%s=%s", key, value);
-	*env[nmemb + 1] = NULL;
+	(*env)[nmemb] = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
+	ft_sprintf((*env)[nmemb], "%s=%s", key, value);
+	(*env)[nmemb + 1] = NULL;
 }
 
 /**
@@ -135,9 +136,9 @@ char **env_handler(int mode, char *key, char *value)
 	{
 		temp = env_handler(GET, key, NOVALUE);
 		if (temp)
-			change_variable_value(*temp, value);
-        else
-            add_variable(&env, key, value);
+			change_variable_value(temp, value);
+		else
+			add_variable(&env, key, value);
 	}
 	else if (mode == GET_ARRAY)
 	{
