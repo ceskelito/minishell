@@ -150,7 +150,6 @@ int	main(void)
 		input = ezg_add(EXECUTING, readline(get_prompt()));
 		if (!input)
 			break ;
-		ft_setenv("nuovavar", "ciao");
 		add_history(input);
 		process_command(input, &shell);
 		// ezg_cleanup();
