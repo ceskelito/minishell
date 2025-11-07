@@ -69,6 +69,17 @@ void	export(char **args)
 	}
 }
 
+void	unset(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (i++, args[i])
+	{
+		ft_unsetenv(args[i]);
+	}
+}
+
 void	env()
 {
 	char	**env_array;

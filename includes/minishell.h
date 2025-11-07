@@ -212,6 +212,7 @@ int	ft_setenv(char *key, char *value);
  *         representing the current environment.
  */
 char	**ft_getenv_array(void);
+void	ft_unsetenv(char *key);
 
 
 #endif

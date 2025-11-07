@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/07 17:52:05 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 18:31:38 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,38 @@ static void add_entry(char ***env, char *key, char *value)
 	(*env)[nmemb + 1] = NULL;
 }
 
+static void	remove_entry(char ***env, char *entry)
+{
+	char	**old_env;
+	char	**new_env;
+	int		nmemb;
+	int		i;
+
+	old_env = *env;
+    nmemb = 0;
+	while (old_env[nmemb])
+		nmemb++;
+	new_env = ezg_calloc(ENV, sizeof(char *), nmemb - 1);
+	if (!new_env)
+		return ;
+	i = 0;
+	while (old_env[i])
+	{
+		if (old_env[i] == entry)
+		{
+			free(old_env[i]);
+			i++;
+			continue;
+		}
+		new_env[i] = ft_strdup((*env)[i]);
+		ezg_add(ENV, new_env[i]);
+		i++;
+	}
+	free(old_env);
+	*env = new_env;
+}
+
+
 /**
  * get_entry - Locate an entry by key.
  *
@@ -128,25 +160,27 @@ char **env_handler(int mode, char *key, char *value)
 {
 	static char	**env;
 	extern char	**environ;
-	char		**temp;
+	char		**entry;
 
 	if (!env)
 		env = dup_array(ENV, environ);
 	if (mode == GET)
-	{
 		return (get_entry(env, key));
-	}
 	else if (mode == SET)
 	{
-		temp = env_handler(GET, key, NOVALUE);
-		if (temp)
-			change_entry_value(temp, value);
+		entry = get_entry(env, key);
+		if (entry)
+			change_entry_value(entry, value);
 		else
 			add_entry(&env, key, value);
 	}
-	else if (mode == GET_ARRAY)
+	else if (mode == UNSET)
 	{
-		return (env);
+		entry = get_entry(env, key);
+		if (entry)
+			remove_entry(&env, *entry);
 	}
+	else if (mode == GET_ARRAY)
+		return (env);
 	return (NULL);
 }

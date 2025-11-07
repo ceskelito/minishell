@@ -30,4 +30,5 @@ void	cd(char **args);
 void	pwd(void);
 void	exit_shell(char **args);
 void	export(char **args);
+void	unset(char **args);
 #endif

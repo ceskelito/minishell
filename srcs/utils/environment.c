@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:42 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/07 14:34:39 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 18:33:07 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,12 @@ char	*ft_getenv(char *key)
 	if (!tmp)
 		return (NULL);
 	return (ft_strchr(*tmp, '=') + 1);
+}
+
+void	ft_unsetenv(char *key)
+{
+	if (!key)
+		return ;
+	env_handler(UNSET, key, NOVALUE);
 }
 

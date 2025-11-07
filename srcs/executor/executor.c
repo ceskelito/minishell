@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/07 15:45:57 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 18:34:06 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static bool	execute_builtin(char **args)
 		exit_shell(args);
 	else if (!ft_strcmp(args[0], "export"))
 		export(args);
+	else if (!ft_strcmp(args[0], "unset"))
+		unset(args);	
 	else
 		return (false);
 	return (true);
