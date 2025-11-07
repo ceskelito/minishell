@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/07 15:11:20 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:52:05 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static void	change_entry_value(char **entry_ptr, char *new_value)
 	new_entry = ezg_calloc(ENV, sizeof(char), key_len + value_len + 2);
 	if (!new_entry)
 		return ;
-	ft_strlcpy(new_entry, old_entry, key_len);
+	ft_strlcpy(new_entry, old_entry, key_len + 1);
 	new_entry[key_len] = '=';
-	ft_strlcat(new_entry, new_value, value_len + 1);
+	ft_strlcat(&new_entry[key_len], new_value, value_len + 2);
 	ezg_release(ENV, old_entry);
 	*entry_ptr = new_entry;
 }
