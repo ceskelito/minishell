@@ -86,11 +86,11 @@ static char    *get_prompt()
     return (ezg_add(EXECUTING, prompt));
 }
 
-void	signal_handler(int signal)
+void	handle_sigint(int signal)
 {
-	extern unsigned long	rl_readline_state;
-
-	if (signal == SIGINT) // NEED TO SEE IF WE ARE IN A TTY
+	//extern unsigned long	rl_readline_state;
+	(void)signal;
+	if (isatty(STDIN_FILENO))
 	{
 		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
@@ -100,20 +100,21 @@ void	signal_handler(int signal)
 	}
 }
 
+void set_signal(int signum, void (*handler)(int)) {
+    struct sigaction sa;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sa.sa_handler = handler;
+    sigaction(signum, &sa, NULL);
+}
+
 int	main(void)
 {
-	//extern char	**environ;
 	t_shell				shell;
 	char				*input;
-	struct sigaction	sa;
 
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sa.sa_handler = signal_handler;
-	sigaction(SIGINT, &sa, NULL);
-	sa.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &sa, NULL);
-
+	set_signal(SIGINT, handle_sigint);
+	set_signal(SIGQUIT, SIG_IGN);
 	init_shell(&shell);
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
