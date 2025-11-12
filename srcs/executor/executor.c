@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/12 17:00:15 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:54:25 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,29 @@ static int	apply_redirs(t_redir *redirs)
 	return (0);
 }
 
+static void	close_pipe_fds(t_cmd *cmd, int cmd_to_parse)
+{
+	t_cmd	*curr_cmd;
+	t_redir	*curr_redir;
+	int 	num_of_parsed;
+
+	num_of_parsed = 0;
+	curr_cmd = cmd;
+	while (curr_cmd && (cmd_to_parse == -1 || num_of_parsed < cmd_to_parse))
+	{
+		curr_redir = curr_cmd->redirs;
+		while (curr_redir)
+		{
+			if (curr_redir->type & PIPE)
+				close(curr_redir->pipe_fd);
+			curr_redir = curr_redir->next;
+		}
+		curr_cmd = curr_cmd->next;
+		num_of_parsed++;
+	}
+	
+}
+
 static int	execute_cmd_in_child(t_cmd *cmd)
 {
 	pid_t	pid;
@@ -120,6 +143,7 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 		}
 		else if (resolve_command_location(cmd), cmd->location)
 		{
+			close_pipe_fds(cmd, -1);
 			execve(cmd->location, cmd->args, ft_getenv_array());
 			print_error(cmd->args[0], strerror(errno));
 			exit(127);
@@ -127,11 +151,7 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 	}
 	else if (pid > 0)
 	{
-		while(cmd->redirs && (cmd->redirs->type & PIPE))
-		{
-			close(cmd->redirs->pipe_fd);
-			cmd->redirs = cmd->redirs->next;
-		}
+		close_pipe_fds(cmd, 1);
 	}
 	else
 	{
