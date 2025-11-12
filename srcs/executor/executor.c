@@ -6,10 +6,11 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/12 16:03:59 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:00:15 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ezgalloc.h"
 #include "ft_dprintf.h"
 #include "ft_printf.h"
 #include "minishell.h"
@@ -20,6 +21,8 @@
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
+	#include <stdlib.h>
+	
 	if (s1 == NULL && s2 == NULL)
 		return (0);
 	if (s1 == NULL)
@@ -144,10 +147,25 @@ static inline void	reset_fd(int std_in, int std_out)
 	dup2(std_out, STDOUT_FILENO);
 }
 
+int	count_cmds(t_cmd *cmd_list)
+{
+	int	count;
+
+	count = 0;
+	while (cmd_list)
+	{
+		count++;
+		cmd_list = cmd_list->next;
+	}
+	return (count);
+}
+
 int	executor(t_shell *shell)
 {
 	t_cmd	*cmd;
-	pid_t	pid;
+	int		num_cmds;
+	int		i;
+	pid_t	*pid;
 	int		exit_status;
 
 	if (!shell || !shell->cmd_list)
@@ -161,26 +179,36 @@ int	executor(t_shell *shell)
 			exit_status = execute_builtin(cmd->args);
 			reset_fd(shell->std_in, shell->std_out);
 		}
-		else if (resolve_command_location(cmd), cmd->location)
+		else
 		{
-			pid = execute_cmd_in_child(cmd);
-			waitpid(pid, &exit_status, 0);
+			//pid[0] = execute_cmd_in_child(cmd);
+			waitpid(execute_cmd_in_child(cmd), &exit_status, 0);
 		}
-		set_exit_status(exit_status);
 		ezg_group_release(EXECUTING);
-		return (exit_status);
 	}
-	else {
+	else
+	{
+		num_cmds = count_cmds(shell->cmd_list);
+		ezg_group_create("pid");
+		pid = ezg_alloc("pid", sizeof(pid_t) * num_cmds);
 		setup_pipeline(shell->cmd_list);
-		while (cmd)
+		i = 0;
+		while (i < num_cmds)
 		{
-			pid = execute_cmd_in_child(cmd);
+			pid[i] = execute_cmd_in_child(cmd);
 			cmd = cmd->next;
+			ezg_group_release(EXECUTING);
+			i++;
 		}
-		waitpid(pid, &exit_status, 0);
+		i = 0;
+		while(i < num_cmds)
+		{
+			waitpid(pid[i], &exit_status, 0);
+			i++;
+		}
+		ezg_group_release("pid");
 	}
-	return 0;
-
-
+	set_exit_status(exit_status);
+	return (exit_status);
 }
 

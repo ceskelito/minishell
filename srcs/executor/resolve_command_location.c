@@ -94,11 +94,11 @@ void	resolve_command_location(t_cmd *cmd)
 	if (!slash)
 	{
 		cmd->location = lookup_for_command_in_path(cmd->args[0]);
-		if (!cmd->location)
+		/* if (!cmd->location)
 		{
 			print_error(cmd->args[0], "Command not found");
 			set_exit_status(127);
-		}
+		} */
 		return ;
 	}
 	cmd->location = cmd->args[0];
