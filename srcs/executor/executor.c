@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/12 17:54:25 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:01:35 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 	if (pid == 0)
 	{
 		apply_redirs(cmd->redirs);
+		close_pipe_fds(cmd->next, -1);
 		if (is_builtin(cmd->args[0]))
 		{
 			execute_builtin(cmd->args);
@@ -143,7 +144,6 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 		}
 		else if (resolve_command_location(cmd), cmd->location)
 		{
-			close_pipe_fds(cmd, -1);
 			execve(cmd->location, cmd->args, ft_getenv_array());
 			print_error(cmd->args[0], strerror(errno));
 			exit(127);
@@ -161,7 +161,7 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 	return (pid);
 }
 
-static inline void	reset_fd(int std_in, int std_out)
+static inline void	reset_redirs(int std_in, int std_out)
 {
 	dup2(std_in, STDIN_FILENO);
 	dup2(std_out, STDOUT_FILENO);
@@ -197,11 +197,10 @@ int	executor(t_shell *shell)
 		{
 			apply_redirs(cmd->redirs);
 			exit_status = execute_builtin(cmd->args);
-			reset_fd(shell->std_in, shell->std_out);
+			reset_redirs(shell->std_in, shell->std_out);
 		}
 		else
 		{
-			//pid[0] = execute_cmd_in_child(cmd);
 			waitpid(execute_cmd_in_child(cmd), &exit_status, 0);
 		}
 		ezg_group_release(EXECUTING);
