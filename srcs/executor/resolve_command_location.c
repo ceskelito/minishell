@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resolve_command_path.c                             :+:      :+:    :+:   */
+/*   resolve_command_location.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:52 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/06 12:42:55 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:46:35 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	free_path(char ***path)
  *
  * Note: This function does not handle commands that already contain a '/'.
  */
-static char	*lookup_command_path(char *cmd)
+static char	*lookup_for_command_in_path(char *cmd)
 {
 	char __attribute__	((cleanup(free_path)))	**path;
 	DIR											*dir;
@@ -72,7 +72,7 @@ static char	*lookup_command_path(char *cmd)
 }
 
 /**
- * resolve_command_path - Set the location and args[0] of a command
+ * resolve_command_location - Set the location and args[0] of a command
  *
  * @cmd: Pointer to the t_cmd structure representing the command
  *
@@ -86,14 +86,19 @@ static char	*lookup_command_path(char *cmd)
  *   - cmd->location is set to the result (newly allocated string or NULL if not found)
  */
 
-void	resolve_command_path(t_cmd *cmd)
+void	resolve_command_location(t_cmd *cmd)
 {
 	char	*slash;
 
 	slash = ft_strrchr(cmd->args[0], '/');
 	if (!slash)
 	{
-		cmd->location = lookup_command_path(cmd->args[0]);
+		cmd->location = lookup_for_command_in_path(cmd->args[0]);
+		if (!cmd->location)
+		{
+			print_error(cmd->args[0], "Command not found");
+			set_exit_status(127);
+		}
 		return ;
 	}
 	cmd->location = cmd->args[0];

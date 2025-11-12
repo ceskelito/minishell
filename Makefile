@@ -40,13 +40,14 @@ FILES = main 				\
 		shell_init			\
 		executor			\
 		builtin				\
-		resolve_command_path	\
+		resolve_command_location	\
 		heredoc				\
 		pipe				\
 		environment			\
 		environment_handler	\
 		array				\
-		init
+		init				\
+		general_utils		
 
 SRCS_DIR := srcs
 OBJS_DIR := objs

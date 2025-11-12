@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/07 18:34:06 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/12 16:03:59 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,15 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-static bool	execute_builtin(char **args)
+static bool	is_builtin(char *cmd)
+{
+	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
+		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "env")
+		|| !ft_strcmp(cmd, "exit") || !ft_strcmp(cmd, "export")
+		|| !ft_strcmp(cmd, "unset"));
+}
+
+static int	execute_builtin(char **args)
 {
 	if (!ft_strcmp(args[0], "echo"))
 		echo(args);
@@ -53,11 +61,11 @@ static bool	execute_builtin(char **args)
 	else if (!ft_strcmp(args[0], "unset"))
 		unset(args);	
 	else
-		return (false);
-	return (true);
+		return (1);
+	return (0);
 }
 
-static int	redir_fd(t_redir *redirs)
+static int	apply_redirs(t_redir *redirs)
 {
 	t_redir	*curr;
 	int		fd;
@@ -94,37 +102,40 @@ static int	redir_fd(t_redir *redirs)
 	return (0);
 }
 
-static int	execute_cmd(char *location, char **args, char **env)
+static int	execute_cmd_in_child(t_cmd *cmd)
 {
 	pid_t	pid;
-	int		status;
-	int		exit_code;
 
-	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(location, args, env);
-		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", args[0],
-			strerror(errno));
-		exit(127);
+		apply_redirs(cmd->redirs);
+		if (is_builtin(cmd->args[0]))
+		{
+			execute_builtin(cmd->args);
+			exit(get_exit_status());
+		}
+		else if (resolve_command_location(cmd), cmd->location)
+		{
+			execve(cmd->location, cmd->args, ft_getenv_array());
+			print_error(cmd->args[0], strerror(errno));
+			exit(127);
+		}
 	}
 	else if (pid > 0)
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			exit_code = WEXITSTATUS(status);
-		else
-			exit_code = 128 + WTERMSIG(status);
-		set_exit_status(exit_code);
+		while(cmd->redirs && (cmd->redirs->type & PIPE))
+		{
+			close(cmd->redirs->pipe_fd);
+			cmd->redirs = cmd->redirs->next;
+		}
 	}
 	else
 	{
 		perror("minishell");
-		exit_code = errno;
-		set_exit_status(exit_code);
+		set_exit_status(errno);
 	}
-	return (exit_code);
+	return (pid);
 }
 
 static inline void	reset_fd(int std_in, int std_out)
@@ -135,30 +146,41 @@ static inline void	reset_fd(int std_in, int std_out)
 
 int	executor(t_shell *shell)
 {
-	t_cmd		*cmd;
+	t_cmd	*cmd;
+	pid_t	pid;
+	int		exit_status;
 
+	if (!shell || !shell->cmd_list)
+		return (1);
 	cmd = shell->cmd_list;
-	while (cmd)
+	if (!cmd->pipe_output)
 	{
-		if (setup_pipe(cmd) != 0 || redir_fd(cmd->redirs) != 0)
-			break ;
-		if (execute_builtin(cmd->args))
-			set_exit_status(0);
-		else
+		if (is_builtin(cmd->args[0]))
 		{
-			resolve_command_path(cmd);
-			if (!cmd->location)
-			{
-				ft_dprintf(STDERR_FILENO,
-					"minishell: %s: Command not found\n", cmd->args[0]);
-				set_exit_status(127);
-			}
-			else
-				shell->exit_status = execute_cmd(cmd->location, cmd->args, ft_getenv_array());
+			apply_redirs(cmd->redirs);
+			exit_status = execute_builtin(cmd->args);
+			reset_fd(shell->std_in, shell->std_out);
 		}
-		reset_fd(shell->std_in, shell->std_out);
+		else if (resolve_command_location(cmd), cmd->location)
+		{
+			pid = execute_cmd_in_child(cmd);
+			waitpid(pid, &exit_status, 0);
+		}
+		set_exit_status(exit_status);
 		ezg_group_release(EXECUTING);
-		cmd = cmd->next;
+		return (exit_status);
 	}
-	return (0);
+	else {
+		setup_pipeline(shell->cmd_list);
+		while (cmd)
+		{
+			pid = execute_cmd_in_child(cmd);
+			cmd = cmd->next;
+		}
+		waitpid(pid, &exit_status, 0);
+	}
+	return 0;
+
+
 }
+

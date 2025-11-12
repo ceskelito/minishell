@@ -166,7 +166,7 @@ int				get_exit_status();
 /* Error handling */
 void			ft_error(char *str, int n);
 int				syntax_error(char *token);
-void			print_error(char *cmd, char *msg);
+int				print_error(char *msg, char *err);
 
 /* Memory utilities */
 void			ft_free_array(char **array);
