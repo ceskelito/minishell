@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:49 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/13 17:30:52 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:41:11 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int 	setup_pipe(t_redir *first, t_redir *second)
 	return (0);
 }
 
-int		setup_pipeline(t_cmd *cmd_list)
+int		open_pipeline_fds(t_cmd *cmd_list)
 {
 	t_cmd	*curr;
 

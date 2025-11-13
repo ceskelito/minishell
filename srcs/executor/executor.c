@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/13 17:31:11 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:51:18 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,22 +122,22 @@ static void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)
 	
 }
 
-static int	execute_cmd_in_child(t_cmd *cmd)
+static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid)
 {
 	pid_t	pid;
+	bool	is_child;
 
 	pid = fork();
-	static int num = 0;
-	num++;
-	if (pid == 0)
+	is_child = !pid;
+	if (is_child)
 	{
-		if (apply_redirs(cmd->redirs))
-			exit(get_exit_status());
+		if (apply_redirs(cmd->redirs) != 0)
+			exit(errno);
 		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (is_builtin(cmd->args[0]))
 		{
 			execute_builtin(cmd->args);
-			exit(get_exit_status());
+			exit(0);
 		}
 		else if (resolve_command_location(cmd), cmd->location)
 		{
@@ -145,18 +145,15 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 			print_error(cmd->args[0], strerror(errno));
 			exit(127);
 		}
+		exit(127); // 127 ????
 	}
 	else if (pid > 0)
-	{
 		close_pipe_fds(cmd, PIPE | HEREDOC, 1);
-		// close_pipe_fds(cmd, HEREDOC, -1);
-	}
 	else
 	{
 		perror("minishell");
 		set_exit_status(errno);
 	}
-	return (pid);
 }
 
 static inline void	reset_redirs(int std_in, int std_out)
@@ -188,33 +185,33 @@ int	executor(t_shell *shell)
 
 	if (!shell || !shell->cmd_list)
 		return (1);
-	setup_heredocs(shell->cmd_list);
 	cmd = shell->cmd_list;
+	setup_heredocs(cmd);
 	if (!cmd->pipe_output)
 	{
 		if (is_builtin(cmd->args[0]))
 		{
 			if (apply_redirs(cmd->redirs) != 0)
 				return (errno);
-			else
-				exit_status = execute_builtin(cmd->args);
+			exit_status = execute_builtin(cmd->args);
 			reset_redirs(shell->std_in, shell->std_out);
 		}
 		else
-			waitpid(execute_cmd_in_child(cmd), &exit_status, 0);
+		{
+			execute_cmd_in_child(cmd, pid);
+			waitpid(pid, &exit_status, 0);
+		}
 		ezg_group_release(EXECUTING);
 	}
 	else
 	{
-		num_cmds = count_cmds(shell->cmd_list);
-		ezg_group_create("pid");
-		pid = ezg_alloc("pid", sizeof(pid_t) * num_cmds);
-		setup_pipeline(shell->cmd_list);
-		
+		num_cmds = count_cmds(cmd);
+		pid = malloc(sizeof(pid_t) * num_cmds);
+		open_pipeline_fds(cmd);
 		i = 0;
 		while (i < num_cmds)
 		{
-			pid[i] = execute_cmd_in_child(cmd);
+			execute_cmd_in_child(cmd, &pid[i]);
 			cmd = cmd->next;
 			ezg_group_release(EXECUTING);
 			i++;
@@ -225,7 +222,7 @@ int	executor(t_shell *shell)
 			waitpid(pid[i], &exit_status, 0);
 			i++;
 		}
-		ezg_group_release("pid");
+		free(pid);
 	}
 	set_exit_status(exit_status);
 	return (exit_status);

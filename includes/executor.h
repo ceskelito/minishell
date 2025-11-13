@@ -23,7 +23,7 @@ void		resolve_command_location(t_cmd *cmd);
 // int			setup_heredoc(char *delimiter);
 void		setup_heredocs(t_cmd *cmd_list);
 void		setup_heredocs(t_cmd *cmd_list);
-int		    setup_pipeline(t_cmd *cmd_list);
+int		    open_pipeline_fds(t_cmd *cmd_list);
 
 /* Builtins */
 void	env(void);
