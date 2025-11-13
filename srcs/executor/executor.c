@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/13 17:51:18 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/13 18:36:17 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,10 @@ static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid)
 		exit(127); // 127 ????
 	}
 	else if (pid > 0)
+	{	
+		*saved_pid = pid;
 		close_pipe_fds(cmd, PIPE | HEREDOC, 1);
+	}
 	else
 	{
 		perror("minishell");
@@ -198,8 +201,10 @@ int	executor(t_shell *shell)
 		}
 		else
 		{
+			pid = malloc(sizeof(pid_t));
 			execute_cmd_in_child(cmd, pid);
-			waitpid(pid, &exit_status, 0);
+			waitpid(*pid, &exit_status, 0);
+			free(pid);
 		}
 		ezg_group_release(EXECUTING);
 	}
