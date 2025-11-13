@@ -72,6 +72,19 @@ static int set_cmd_args(t_cmd *cmd, t_token *token)
 	return (args_count);
 }
 
+static void	add_pipe_redir(t_cmd *cmd, t_token_type type)
+{
+	t_redir	*redir;
+
+	redir = ezg_calloc(GLOBAL, sizeof(t_redir), 1);
+	if (!redir)
+		return ;
+	redir->file = NULL;
+	redir->pipe_fd = -1;
+	redir->type = PIPE | type;
+	add_redir(cmd, redir);
+}
+
 t_cmd	*parse_tokens(t_token *tokens)
 {
 	t_cmd	*cmd_head;
@@ -104,7 +117,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 			curr_cmd->pipe_output = true;
 			if (!curr_token->next)
 				break;
-			else if (go_next_cmd(&curr_cmd) != 0)
+			add_pipe_redir(curr_cmd, OUT);
+			add_pipe_redir(curr_cmd->next, IN);
+			if (go_next_cmd(&curr_cmd) != 0)
 				return (NULL);
 		}
 		curr_token = curr_token->next;
