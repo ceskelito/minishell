@@ -118,9 +118,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 			if (!curr_token->next)
 				break;
 			add_pipe_redir(curr_cmd, OUT);
-			add_pipe_redir(curr_cmd->next, IN);
 			if (go_next_cmd(&curr_cmd) != 0)
 				return (NULL);
+			add_pipe_redir(curr_cmd, IN);
 		}
 		curr_token = curr_token->next;
 	}

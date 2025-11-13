@@ -6,26 +6,12 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:49 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/13 17:29:46 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:30:52 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "executor.h"
-#include <unistd.h>
-
-/* static void	add_pipe_redir(t_cmd *cmd, int fd, t_token_type type)
-{
-	t_redir	*redir;
-
-	redir = ezg_calloc(GLOBAL, sizeof(t_redir), 1);
-	if (!redir)
-		return ;
-	redir->file = NULL;
-	redir->pipe_fd = fd;
-	redir->type = PIPE | type;
-	add_redir(cmd, redir);
-} */
 
 static int 	setup_pipe(t_redir *first, t_redir *second)
 {
