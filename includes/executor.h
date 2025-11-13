@@ -20,7 +20,9 @@ t_token 	*create_test_tokens(t_token *token);
 int			executor(t_shell *shell);
 // char	    *get_location(char *cmd);
 void		resolve_command_location(t_cmd *cmd);
-int			setup_heredoc(char *delimiter);
+// int			setup_heredoc(char *delimiter);
+void		setup_heredocs(t_cmd *cmd_list);
+void		setup_heredocs(t_cmd *cmd_list);
 int		    setup_pipeline(t_cmd *cmd_list);
 
 /* Builtins */

@@ -17,7 +17,7 @@
 // Need to expand variables
 // Need to manage cases with EOF in quotes
 
-int	setup_heredoc(char *delimiter)
+static int	process_heredoc(char *delimiter)
 {
 	int		fd[2];
 	char	*input;
@@ -33,7 +33,7 @@ int	setup_heredoc(char *delimiter)
 		input = readline("> ");
 		if (!input)
 		{
-			perror("minishell: warning: heredoc terminated by EOF\n");
+			print_error("warning", "heredoc terminated by EOF\n");
 			break;
 		}
 		ezg_add(EXECUTING, input);
@@ -43,4 +43,25 @@ int	setup_heredoc(char *delimiter)
 	}
 	close(fd[1]);
 	return (fd[0]);
+}
+
+void	setup_heredocs(t_cmd *cmd_list)
+{
+	t_cmd	*curr;
+	t_redir	*curr_redir;
+
+	curr = cmd_list;
+	while(curr)
+	{
+		curr_redir = curr->redirs;
+		while(curr_redir)
+		{
+			if (curr_redir->type == (HEREDOC | IN))
+			{
+				curr_redir->pipe_fd = process_heredoc(curr_redir->file);
+			}
+			curr_redir = curr_redir->next;
+		}		
+		curr = curr->next;
+	}
 }

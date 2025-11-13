@@ -44,18 +44,18 @@ extern int	g_sig_status;
 /* Token types */
 typedef enum e_token_type
 {
-	WORD = 1 << 0,
-	PIPE = 1 << 1,
-	IN = 1 << 2,
-	OUT = 1 << 3,
-	APPEND = 1 << 4 | OUT,
-	HEREDOC = 1 << 5 | IN,
-	AND = 1 << 6,
-	OR = 1 << 7,
-	P_OPEN = 1 << 8,
-	P_CLOSE = 1 << 9,
-	BUILT = 1 << 10
-}	t_token_type;
+    WORD    = 1 << 0,
+    PIPE    = 1 << 1,
+    IN      = 1 << 2,
+    OUT     = 1 << 3,
+    APPEND  = (1 << 4) | OUT,
+    HEREDOC = (1 << 5) | IN,
+    AND     = 1 << 6,
+    OR      = 1 << 7,
+    P_OPEN  = 1 << 8,
+    P_CLOSE = 1 << 9,
+    BUILT   = 1 << 10
+} t_token_type;
 
 
 /* Token structure */

@@ -3,26 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/12 18:01:35 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:35:49 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ezgalloc.h"
-#include "ft_dprintf.h"
-#include "ft_printf.h"
 #include "minishell.h"
 #include "executor.h"
-#include <errno.h>
-#include <string.h>
-#include <unistd.h>
+#include <fcntl.h>
+
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#endif
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-	#include <stdlib.h>
-	
 	if (s1 == NULL && s2 == NULL)
 		return (0);
 	if (s1 == NULL)
@@ -72,28 +69,25 @@ static int	apply_redirs(t_redir *redirs)
 {
 	t_redir	*curr;
 	int		fd;
-
+	
 	curr = redirs;
 	while (curr)
 	{
 		fd = -1;
 		if (curr->type & PIPE)
 			fd = curr->pipe_fd;
-		else if (curr->type == HEREDOC)
-			fd = setup_heredoc(curr->file);
+		else if (curr->type & HEREDOC)
+			fd = curr->pipe_fd;
 		else if (curr->type == APPEND)
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0644);
 		else if (curr->type == OUT)
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
 		else if (curr->type == IN)
-			fd = open(curr->file, O_RDONLY);
+			fd = open(curr->file, O_RDONLY | O_CLOEXEC);
 		if (fd == -1)
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", curr->file,
-				strerror(errno));
-			set_exit_status(1);
-			curr = curr->next;
-			return (1);
+			print_error(curr->file, strerror(errno));
+			return (errno);
 		}
 		if (curr->type & IN)
 			dup2(fd, STDIN_FILENO);
@@ -105,7 +99,7 @@ static int	apply_redirs(t_redir *redirs)
 	return (0);
 }
 
-static void	close_pipe_fds(t_cmd *cmd, int cmd_to_parse)
+static void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)
 {
 	t_cmd	*curr_cmd;
 	t_redir	*curr_redir;
@@ -118,7 +112,7 @@ static void	close_pipe_fds(t_cmd *cmd, int cmd_to_parse)
 		curr_redir = curr_cmd->redirs;
 		while (curr_redir)
 		{
-			if (curr_redir->type & PIPE)
+			if (curr_redir->type & (redir_type))
 				close(curr_redir->pipe_fd);
 			curr_redir = curr_redir->next;
 		}
@@ -133,10 +127,13 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 	pid_t	pid;
 
 	pid = fork();
+	static int num = 0;
+	num++;
 	if (pid == 0)
 	{
-		apply_redirs(cmd->redirs);
-		close_pipe_fds(cmd->next, -1);
+		if (apply_redirs(cmd->redirs))
+			exit(get_exit_status());
+		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (is_builtin(cmd->args[0]))
 		{
 			execute_builtin(cmd->args);
@@ -151,7 +148,8 @@ static int	execute_cmd_in_child(t_cmd *cmd)
 	}
 	else if (pid > 0)
 	{
-		close_pipe_fds(cmd, 1);
+		close_pipe_fds(cmd, PIPE | HEREDOC, 1);
+		// close_pipe_fds(cmd, HEREDOC, -1);
 	}
 	else
 	{
@@ -190,19 +188,20 @@ int	executor(t_shell *shell)
 
 	if (!shell || !shell->cmd_list)
 		return (1);
+	setup_heredocs(shell->cmd_list);
 	cmd = shell->cmd_list;
 	if (!cmd->pipe_output)
 	{
 		if (is_builtin(cmd->args[0]))
 		{
-			apply_redirs(cmd->redirs);
-			exit_status = execute_builtin(cmd->args);
+			if (apply_redirs(cmd->redirs) != 0)
+				return (errno);
+			else
+				exit_status = execute_builtin(cmd->args);
 			reset_redirs(shell->std_in, shell->std_out);
 		}
 		else
-		{
 			waitpid(execute_cmd_in_child(cmd), &exit_status, 0);
-		}
 		ezg_group_release(EXECUTING);
 	}
 	else
@@ -211,6 +210,7 @@ int	executor(t_shell *shell)
 		ezg_group_create("pid");
 		pid = ezg_alloc("pid", sizeof(pid_t) * num_cmds);
 		setup_pipeline(shell->cmd_list);
+		
 		i = 0;
 		while (i < num_cmds)
 		{
