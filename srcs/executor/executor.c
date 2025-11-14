@@ -190,6 +190,7 @@ int executor(t_shell *shell)
 		set_exit_status(exit_status);
 		return (exit_status);
 	}
+	open_pipeline_fds(cmd);
 	num_cmds = count_cmds(cmd);
 	pid = malloc(sizeof(pid_t) * num_cmds);
 	i = 0;
