@@ -18,12 +18,18 @@
 
 t_token 	*create_test_tokens(t_token *token);
 int			executor(t_shell *shell);
-// char	    *get_location(char *cmd);
 void		resolve_command_location(t_cmd *cmd);
-// int			setup_heredoc(char *delimiter);
 void		setup_heredocs(t_cmd *cmd_list);
 void		setup_heredocs(t_cmd *cmd_list);
 int		    open_pipeline_fds(t_cmd *cmd_list);
+
+/* Exec functions*/
+void	execute_in_child(t_cmd *cmd, pid_t *pid,
+           	    int (*exec_cmd)(const char *, char *const [], char *const []));
+int     execute_builtin(const char *pathname, char * const argv[], char *const envp[]);
+void    execute_in_parent(t_shell *shell, t_cmd *cmd);
+
+
 
 /* Builtins */
 void	env(void);
