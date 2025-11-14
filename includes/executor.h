@@ -17,7 +17,7 @@
 # define T_EXIT "exit"
 
 t_token 	*create_test_tokens(t_token *token);
-int			executor(t_shell *shell);
+void		executor(t_shell *shell);
 void		resolve_command_location(t_cmd *cmd);
 void		setup_heredocs(t_cmd *cmd_list);
 void		setup_heredocs(t_cmd *cmd_list);

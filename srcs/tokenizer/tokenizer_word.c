@@ -103,6 +103,8 @@ static char	*expand_word_value(char *input, int len)
 		}
 		else if (input[i] == '\"')
 		{
+			//enlcosed_string = get_enclosed(input, '"', &i)
+			//expanded = expand_varibles(enclosed_string)
 			result = process_double_quote(input, &i, result);
 			if (!result)
 				return (NULL);

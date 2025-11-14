@@ -3,14 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   exec_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 14:16:30 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/14 14:21:19 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/14 16:31:28 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell"
+#include "minishell.h"
+#include "executor.h"
+
+static void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)
+{
+	t_cmd	*curr_cmd;
+	t_redir	*curr_redir;
+	int 	num_of_parsed;
+
+	num_of_parsed = 0;
+	curr_cmd = cmd;
+	while (curr_cmd && (cmd_to_parse == -1 || num_of_parsed < cmd_to_parse))
+	{
+		curr_redir = curr_cmd->redirs;
+		while (curr_redir)
+		{
+			if (curr_redir->type & (redir_type))
+				close(curr_redir->pipe_fd);
+			curr_redir = curr_redir->next;
+		}
+		curr_cmd = curr_cmd->next;
+		num_of_parsed++;
+	}
+}
+
+static int	apply_redirs(t_redir *redirs)
+{
+	t_redir	*curr;
+	int		fd;
+	
+	curr = redirs;
+	while (curr)
+	{
+		fd = -1;
+		if (curr->type & (PIPE | HEREDOC))
+			fd = curr->pipe_fd;
+		else if (curr->type == APPEND)
+			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0644);
+		else if (curr->type == OUT)
+			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
+		else if (curr->type == IN)
+			fd = open(curr->file, O_RDONLY | O_CLOEXEC);
+		if (fd == -1)
+			return (print_error(curr->file, strerror(errno)), errno);
+		if (curr->type & IN)
+			dup2(fd, STDIN_FILENO);
+		else
+			dup2(fd, STDOUT_FILENO);
+		close(fd);
+		curr = curr->next;
+	}
+	return (0);
+}
 
 void	execute_in_child(t_cmd *cmd, pid_t *pid,
            	    int (*exec_cmd)(const char *, char *const [], char *const []))
@@ -70,11 +122,14 @@ int     execute_builtin(const char *pathname, char * const argv[], char *const e
 
 void    execute_in_parent(t_shell *shell, t_cmd *cmd)
 {
-    if (apply_redirs(cmd->redirs))
+	int	exit_code;
+	if (apply_redirs(cmd->redirs))
 		exit_code = execute_builtin("parent", cmd->args, NULL);
 	else
 		exit_code = errno;
-	reset_redirs(shell->std_in, shell->std_out);
+	//reset_redirs(shell->std_in, shell->std_out);
+	dup2(shell->std_in, STDIN_FILENO);
+	dup2(shell->std_out, STDOUT_FILENO);
 	set_exit_status(exit_code);
 	ezg_group_release(EXECUTING);
 }
