@@ -4,6 +4,7 @@
 # include "libft.h"
 # include "ezgalloc.h" 
 
+#include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -162,6 +163,7 @@ void			shell_loop(t_shell *shell);
 void			cleanup_shell(t_shell *shell);
 void			set_exit_status(int value);
 int				get_exit_status();
+bool			is_builtin(char *cmd);
 
 /* Error handling */
 void			ft_error(char *str, int n);
