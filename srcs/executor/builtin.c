@@ -44,7 +44,7 @@ static bool	is_entry_valid(char *entry)
 	return (true);
 }
 
-void	export(char **args)
+void	export(char *const args[]) 
 {
 	size_t	key_len;
 	int		i;
@@ -69,7 +69,7 @@ void	export(char **args)
 	}
 }
 
-void	unset(char **args)
+void	unset(char *const args[]) 
 {
 	int	i;
 
@@ -95,7 +95,7 @@ void	env()
 	
 }
 
-void	echo(char **args) 
+void	echo(char *const args[])  
 {
 	int		i;
 	int		j;
@@ -129,7 +129,7 @@ void	pwd()
 	ft_printf("%s\n", getcwd(NULL, 0));
 }
 
-void	cd(char **args)
+void	cd(char *const args[]) 
 {
 	int		count;
 	char	*dir;
@@ -158,7 +158,7 @@ void	cd(char **args)
 			ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir, strerror(errno));
 }
 
-void	exit_shell(char **args)
+void	exit_shell(char *const args[]) 
 {
 	int	status;
 	int	i;

@@ -44,25 +44,31 @@ static bool	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "unset"));
 }
 
-static int	execute_builtin(char **args)
+static int	execute_builtin(const char *pathname, char * const argv[], char *const envp[])
 {
-	if (!ft_strcmp(args[0], "echo"))
-		echo(args);
-	else if (!ft_strcmp(args[0], "cd"))
-		cd(args);
-	else if (!ft_strcmp(args[0], "pwd"))
+	int	exit_value;
+	
+	(void)envp;
+	if (!ft_strcmp(argv[0], "echo"))
+		echo(argv);
+	else if (!ft_strcmp(argv[0], "cd"))
+		cd(argv);
+	else if (!ft_strcmp(argv[0], "pwd"))
 		pwd();
-	else if (!ft_strcmp(args[0], "env"))
+	else if (!ft_strcmp(argv[0], "env"))
 		env();
-	else if (!ft_strcmp(args[0], "exit"))
-		exit_shell(args);
-	else if (!ft_strcmp(args[0], "export"))
-		export(args);
-	else if (!ft_strcmp(args[0], "unset"))
-		unset(args);	
+	else if (!ft_strcmp(argv[0], "exit"))
+		exit_shell(argv);
+	else if (!ft_strcmp(argv[0], "export"))
+		export(argv);
+	else if (!ft_strcmp(argv[0], "unset"))
+		unset(argv);	
 	else
-		return (1);
-	return (0);
+		exit_value = 1;
+	exit_value = 0;
+	if (ft_strcmp(pathname, "child") != 0)
+		exit(exit_value);
+	return (exit_value);
 }
 
 static int	apply_redirs(t_redir *redirs)
@@ -122,7 +128,8 @@ static void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)
 	
 }
 
-static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid)
+static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid,
+           	                     int (*exec_cmd)(const char *, char *const [], char *const []))
 {
 	pid_t	pid;
 	bool	is_child;
@@ -136,7 +143,7 @@ static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid)
 		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (is_builtin(cmd->args[0]))
 		{
-			execute_builtin(cmd->args);
+			execute_builtin("child", cmd->args, NULL);
 			exit(0);
 		}
 		else if (resolve_command_location(cmd), cmd->location)
@@ -196,13 +203,13 @@ int	executor(t_shell *shell)
 		{
 			if (apply_redirs(cmd->redirs) != 0)
 				return (errno);
-			exit_status = execute_builtin(cmd->args);
+			exit_status = execute_builtin("parent", cmd->args, NULL);
 			reset_redirs(shell->std_in, shell->std_out);
 		}
 		else
 		{
 			pid = malloc(sizeof(pid_t));
-			execute_cmd_in_child(cmd, pid);
+			execute_cmd_in_child(cmd, pid, execve);
 			waitpid(*pid, &exit_status, 0);
 			free(pid);
 		}

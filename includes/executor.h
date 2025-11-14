@@ -27,10 +27,10 @@ int		    open_pipeline_fds(t_cmd *cmd_list);
 
 /* Builtins */
 void	env(void);
-void	echo(char **args);
-void	cd(char **args);
+void	echo(char *const args[]) ;
+void	cd(char *const args[]) ;
 void	pwd(void);
-void	exit_shell(char **args);
-void	export(char **args);
-void	unset(char **args);
+void	exit_shell(char *const args[]) ;
+void	export(char *const args[]) ;
+void	unset(char *const args[]) ;
 #endif
