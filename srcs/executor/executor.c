@@ -58,7 +58,7 @@ static int	execute_builtin(const char *pathname, char * const argv[], char *cons
 	else
 		exit_value = 1;
 	exit_value = 0;
-	if (ft_strcmp(pathname, "child") != 0)
+	if (ft_strcmp(pathname, "child") == 0)
 		exit(exit_value);
 	return (exit_value);
 }
@@ -204,7 +204,7 @@ int executor(t_shell *shell)
 	}
 	i = 0;
 	while (i < num_cmds)
-		waitpid(pid[i], &exit_status, 0);
+		waitpid(pid[i++], &exit_status, 0);
 	set_exit_status(exit_status);
 	return (exit_status);
 }
