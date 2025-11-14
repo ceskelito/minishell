@@ -36,14 +36,6 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-static bool	is_builtin(char *cmd)
-{
-	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
-		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "env")
-		|| !ft_strcmp(cmd, "exit") || !ft_strcmp(cmd, "export")
-		|| !ft_strcmp(cmd, "unset"));
-}
-
 static int	execute_builtin(const char *pathname, char * const argv[], char *const envp[])
 {
 	int	exit_value;
@@ -138,21 +130,13 @@ static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid,
 	is_child = !pid;
 	if (is_child)
 	{
+		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (apply_redirs(cmd->redirs) != 0)
 			exit(errno);
-		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
-		if (is_builtin(cmd->args[0]))
-		{
-			execute_builtin("child", cmd->args, NULL);
-			exit(0);
-		}
-		else if (resolve_command_location(cmd), cmd->location)
-		{
-			execve(cmd->location, cmd->args, ft_getenv_array());
-			print_error(cmd->args[0], strerror(errno));
-			exit(127);
-		}
-		exit(127); // 127 ????
+		if (resolve_command_location(cmd), cmd->location)
+			exec_cmd(cmd->location, cmd->args, ft_getenv_array());
+		print_error(cmd->args[0], strerror(errno));
+		exit(127);
 	}
 	else if (pid > 0)
 	{	
@@ -223,7 +207,10 @@ int	executor(t_shell *shell)
 		i = 0;
 		while (i < num_cmds)
 		{
-			execute_cmd_in_child(cmd, &pid[i]);
+			if (is_builtin(cmd->args[0]))
+				execute_cmd_in_child(cmd, &pid[i], execute_builtin);
+			else
+				execute_cmd_in_child(cmd, &pid[i], execve);
 			cmd = cmd->next;
 			ezg_group_release(EXECUTING);
 			i++;
