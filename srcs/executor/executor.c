@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/14 16:30:18 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/14 16:34:07 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,7 @@
 #define O_CLOEXEC 0
 #endif
 
-static inline void	reset_redirs(int std_in, int std_out)
-{
-	dup2(std_in, STDIN_FILENO);
-	dup2(std_out, STDOUT_FILENO);
-}
-
-int	count_cmds(t_cmd *cmd_list)
+static int	count_cmds(t_cmd *cmd_list)
 {
 	int	count;
 
