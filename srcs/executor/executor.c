@@ -120,14 +120,14 @@ static void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)
 	
 }
 
-static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid,
+static void	execute_in_child(t_cmd *cmd, pid_t *pid,
            	                     int (*exec_cmd)(const char *, char *const [], char *const []))
 {
-	pid_t	pid;
+	// pid_t	pid;
 	bool	is_child;
 
-	pid = fork();
-	is_child = !pid;
+	*pid = fork();
+	is_child = !(*pid);
 	if (is_child)
 	{
 		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
@@ -138,9 +138,9 @@ static void	execute_cmd_in_child(t_cmd *cmd, pid_t *saved_pid,
 		print_error(cmd->args[0], strerror(errno));
 		exit(127);
 	}
-	else if (pid > 0)
+	else if (*pid > 0)
 	{	
-		*saved_pid = pid;
+		// *saved_pid = pid;
 		close_pipe_fds(cmd, PIPE | HEREDOC, 1);
 	}
 	else
@@ -169,7 +169,48 @@ int	count_cmds(t_cmd *cmd_list)
 	return (count);
 }
 
-int	executor(t_shell *shell)
+int executor(t_shell *shell)
+{
+	t_cmd	*cmd;
+	int		num_cmds;
+	int		i;
+	pid_t	*pid;
+	int		exit_status;
+
+	if (!shell || !shell->cmd_list)
+		return (1);
+	cmd = shell->cmd_list;
+	setup_heredocs(cmd);
+	if (!cmd->pipe_output && is_builtin(cmd->args[0]))
+	{
+		if (apply_redirs(cmd->redirs) != 0)
+			return (errno);
+		exit_status = execute_builtin("parent", cmd->args, NULL);
+		reset_redirs(shell->std_in, shell->std_out);
+		set_exit_status(exit_status);
+		return (exit_status);
+	}
+	num_cmds = count_cmds(cmd);
+	pid = malloc(sizeof(pid_t) * num_cmds);
+	i = 0;
+	while (cmd)
+	{
+		if (is_builtin(cmd->args[0]))
+			execute_in_child(cmd, &pid[i++], execute_builtin);
+		else
+			execute_in_child(cmd, &pid[i++], execve);
+		ezg_group_release(EXECUTING);
+		cmd = cmd->next;
+	}
+	i = 0;
+	while (i < num_cmds)
+		waitpid(pid[i], &exit_status, 0);
+	set_exit_status(exit_status);
+	return (exit_status);
+}
+
+/*
+int	old_executor(t_shell *shell)
 {
 	t_cmd	*cmd;
 	int		num_cmds;
@@ -193,7 +234,7 @@ int	executor(t_shell *shell)
 		else
 		{
 			pid = malloc(sizeof(pid_t));
-			execute_cmd_in_child(cmd, pid, execve);
+			execute_in_child(cmd, pid, execve);
 			waitpid(*pid, &exit_status, 0);
 			free(pid);
 		}
@@ -208,9 +249,9 @@ int	executor(t_shell *shell)
 		while (i < num_cmds)
 		{
 			if (is_builtin(cmd->args[0]))
-				execute_cmd_in_child(cmd, &pid[i], execute_builtin);
+				execute_in_child(cmd, &pid[i], execute_builtin);
 			else
-				execute_cmd_in_child(cmd, &pid[i], execve);
+				execute_in_child(cmd, &pid[i], execve);
 			cmd = cmd->next;
 			ezg_group_release(EXECUTING);
 			i++;
@@ -226,4 +267,4 @@ int	executor(t_shell *shell)
 	set_exit_status(exit_status);
 	return (exit_status);
 }
-
+*/
