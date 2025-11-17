@@ -135,8 +135,6 @@ void set_signal(int signum, void (*handler)(int)) {
     sigaction(signum, &sa, NULL);
 }
 
-char    *get_expanded_string(char *old);
-
 int	main(void)
 {
 	t_shell				shell;
@@ -148,14 +146,14 @@ int	main(void)
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	
-	const char 	*string = "Sono $USER, nella cartella $PWD. non $EXIST";
-	char		*expanded;
-	expanded = get_expanded_string((char *)string);
-	ezg_add(EXECUTING, expanded);
-	printf("String:%s\nExpand:%s\n", string, expanded);
+	// const char 	*string = "Sono $USER, nella cartella $PWD. non $EXIST";
+	// char		*expanded;
+	// expanded = string_expand_dollars((char *)string);
+	// ezg_add(EXECUTING, expanded);
+	// printf("String:%s\nExpand:%s\n", string, expanded);
 	// char *str = ft_getenv("PWD");
 	// printf("%s\n", str);
-	return (0);
+	// return (0);
 	
 	while (1)
 	{
