@@ -34,7 +34,10 @@ static void	process_command(char *input, t_shell *shell)
 	debug_mode = is_debug_command(input);
 	cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
 	shell->tokens = tokenize_input(cmd);
-	shell->cmd_list = parse_tokens(shell->tokens);
+	token_expand_dollars_and_cat(&(shell->tokens));
+	//return (0);
+	//shell->cmd_list = parse_tokens(shell->tokens);
+	shell->cmd_list = NULL; //DEBUG
 	if (debug_mode)
 		print_debug_info(shell);
 	else
@@ -43,6 +46,7 @@ static void	process_command(char *input, t_shell *shell)
 		//printf("Command ready for execution\n");
 		executor(shell);
 	}
+	exit(0); //DEBUG
 	//cleanup_parsing(shell);
 	//ezg_group_delete(COMMAND);
 }

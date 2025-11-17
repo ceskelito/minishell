@@ -33,6 +33,7 @@ FILES = main 				\
 		tokenizer_word		\
 		tokenizer_utils		\
 		tokenizer_debug		\
+		tokenizer_expand_dollars \
 		parser				\
 		parser_redirs		\
 		parser_cleanup		\
@@ -48,7 +49,7 @@ FILES = main 				\
 		array				\
 		init				\
 		general_utils		\
-		expand_dollars
+		string_expand_dollars
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
