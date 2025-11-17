@@ -86,9 +86,8 @@ char    *get_expanded_string(char *old)
     int                                             i;
     int                                             new_len;
     char                                            *new;
-    // char                                            *temp;
-    // char __attribute__((cleanup(clean_array)))      **splitted;
-    char **splitted;
+    char                                            *temp;
+    char __attribute__((cleanup(clean_array)))      **splitted;
     
     if (!ft_strchr(old, '$'))
         return (old);
@@ -97,12 +96,14 @@ char    *get_expanded_string(char *old)
     i = 0;
     while (splitted[i])
     {
-        if (splitted[i][0] == '$' && splitted[i][1])
+        if (splitted[i][0] == '$' && splitted[i][1] && ft_isalpha(splitted[i][1]))
         {
-            // free(splitted[i]);
-            // temp = ft_getenv(&(splitted[i][1]));
-            splitted[i] = ft_getenv(&(splitted[i][1]));//ft_strdup(temp);
-            // temp = NULL;
+            temp = ft_getenv(&(splitted[i][1]));
+            free(splitted[i]);
+            if (!temp)
+                temp = "";
+            splitted[i] = ft_strdup(temp);
+            temp = NULL;
         }
         printf("split[%d] = %s\n", i, splitted[i]);//DEBUG
         new_len += ft_strlen(splitted[i]);

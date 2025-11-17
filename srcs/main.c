@@ -148,9 +148,10 @@ int	main(void)
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	
-	const char 	*string = "Sono $USER, nella cartella $PWD";
+	const char 	*string = "Sono $USER, nella cartella $PWD. non $EXIST";
 	char		*expanded;
 	expanded = get_expanded_string((char *)string);
+	ezg_add(EXECUTING, expanded);
 	printf("String:%s\nExpand:%s\n", string, expanded);
 	// char *str = ft_getenv("PWD");
 	// printf("%s\n", str);
