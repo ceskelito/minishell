@@ -37,9 +37,9 @@ int    token_expand_dollars_and_cat(t_token **token_list)
         {
             curr->value = string_expand_dollars(curr->value);
             ezg_add(TOKEN, curr->value);
+            if (!curr->value)
+                return (-1);
         }
-        if (!curr->value)
-            return (-1);
         curr = curr->next;
     }
 
