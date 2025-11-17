@@ -47,7 +47,8 @@ FILES = main 				\
 		environment_handler	\
 		array				\
 		init				\
-		general_utils		
+		general_utils		\
+		expand_dollars
 
 SRCS_DIR := srcs
 OBJS_DIR := objs

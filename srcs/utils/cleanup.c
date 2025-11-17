@@ -16,3 +16,18 @@ void	clean_char(char **c)
 {
 	free(*c);
 }
+
+void	clean_array(char ***s)
+{
+	int		i;
+	char	**array;
+
+	array = *s;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}

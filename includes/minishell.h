@@ -181,6 +181,10 @@ void			ft_putendl_fd(char *s, int fd);
 char			**dup_array(char *group, char **srcs);
 char			**expand_array(char *group, char **array, int nmemb, int increment);
 
+/* Automatic cleanup functions (for cleanup attribute) */
+void	clean_char(char **c);
+void	clean_array(char ***s);
+
 /* === Environment Variables Managing === */
 
 /**
