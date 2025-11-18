@@ -41,12 +41,12 @@ static int	count_word_length(char *word, bool *expand_dollar, bool *cat_to_next)
 		}
 		len++;
 	}
+		printf("word: %s\nat len: %s\n", word, word + len);
 	if (in_quote)
 	{
 		print_error("syntax error", "unclosed quote\n");
 		return (-1);
 	}
-	//printf("word: %s\nat len: %s\n", word, word + len);
 	if (word[len] && !ft_isspace(word[len]))
 		*cat_to_next = true;
 	return (len);
@@ -142,10 +142,40 @@ static char	*process_double_quote(char *input, int *i, char *result)
 	return (result);
 } */
 
+char *extract_word(char *input, char quote_char, int *len)
+{
+	int		i;
+	char	*value;
+
+	if (quote_char)
+		input++;
+	
+
+	i = 1; // Skip the opening quote
+	while (input[i] && input[i] != quote_char)
+		i++;
+	*len = i + 1; // Include the closing quote
+	value = ft_substr(input, 1, i - 1); // Extract the content inside quotes
+	ezg_add(GLOBAL, value);
+	return (value);
+}
+
 int	fill_word_token(t_token *token, char *input)
 {
 	int		len;
-	//char	*expanded;
+	int		gap;
+	char	*value;
+	
+	gap = 0;
+	while (ft_isspace(*input))
+	{	
+		gap++;
+		input++;
+	}
+	if (input[0] == '\'' || input[0] == '"')
+	{
+		value = extract_word();
+	}
 
 	len = count_word_length(input, &token->expand_dollar, &token->cat_to_next);
 	if (len == -1)
@@ -173,3 +203,38 @@ int	fill_word_token(t_token *token, char *input)
 	token->type = WORD;
 	return (len);
 }
+
+// int	fill_word_token(t_token *token, char *input)
+// {
+// 	int		len;
+// 	int		gap;
+// 	char	*value;
+// 	//char	*expanded;
+// 
+// /* 	value = extract_word_value(input, &len, &token->expand_dollar, &token->cat_to_next); */
+// 	len = count_word_length(input, &token->expand_dollar, &token->cat_to_next);
+// 	if (len == -1)
+// 		return (-1);
+// 	if (len == 0)
+// 	{
+// 		token->value = NULL;
+// 		token->type = WORD;
+// 		return (0);
+// 	}
+// 	//expanded = expand_word_value(input, len);
+// 	if (input[0] == '"' || input[0] == '\'')
+// 	{
+// 		input++;
+// 		len--;
+// 	}
+// 	token->value = ft_substr(input, 0, len);
+// 	ezg_add(GLOBAL, token->value);	
+// 	//printf("value: %s\nexpand: %d\nconcat:%d", token->value, token->expand_dollar, token->cat_to_next);
+// 	//exit(1);
+// 	/* if (!expanded)
+// 		return (-1); */
+// 	if (!token->value)
+// 		return (-1);
+// 	token->type = WORD;
+// 	return (len);
+// }
