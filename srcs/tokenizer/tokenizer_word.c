@@ -40,7 +40,6 @@ static int	process_word_surrounded(t_token *token, char *input)
 	int		gap;
 	int		len;
 	char	quote;
-	char	*result;
 
 	gap = 1;
 	len = 0;
@@ -65,7 +64,6 @@ int	process_word_nosurround(t_token *token, char *input)
 {
 	int		gap;
 	int		len;
-	char	*result;
 
 	gap = 0;
 	len = 0;
@@ -80,10 +78,8 @@ int	process_word_nosurround(t_token *token, char *input)
 
 int	fill_word_token(t_token *token, char *input)
 {
-	int		len;
 	int		gap;
 	int		spaces;
-	char	*value;
 
 	spaces = 0;
 	while (ft_isspace(*input))
