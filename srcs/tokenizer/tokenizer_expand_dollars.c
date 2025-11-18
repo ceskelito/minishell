@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_expand_dollars.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/17 20:06:08 by rceschel          #+#    #+#             */
+/*   Updated: 2025/11/17 20:06:36 by rceschel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -37,9 +49,9 @@ int    token_expand_dollars_and_cat(t_token **token_list)
         {
             curr->value = string_expand_dollars(curr->value);
             ezg_add(TOKEN, curr->value);
+            if (!curr->value)
+                return (-1);
         }
-        if (!curr->value)
-            return (-1);
         curr = curr->next;
     }
 

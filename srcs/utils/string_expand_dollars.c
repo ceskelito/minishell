@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_expand_dollars.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 17:15:36 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/17 17:59:23 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:06:25 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,7 @@ static int    count_char(char *s, char c)
     return (count);
 }
 
-// static void helper(char *str, char **split, int *i, int *n, int len)
-// {  
-//     split[*n] = ft_substr(str, *i, len);
-//     (*n)++;
-//     split[*n] = NULL;
-//     (*i) += len;
-// }
-
-static void fill_chunks(char **splitted, char *str)
+void fill_chunks(char **splitted, char *str)
 {
     int    i;
     int    len;
@@ -72,9 +64,8 @@ static char **ft_split_in_chunks(char *str, char delimiter)
     delimiter_count = count_char(str, delimiter);
     if (!delimiter_count)
     {
-        splitted = malloc(sizeof(char *) * 2);
+        splitted = ft_calloc(sizeof(char *), 2);
         splitted[0] = ft_strdup(str);
-        splitted[1] = NULL;
     }
     else
     {
@@ -92,6 +83,7 @@ char    *string_expand_dollars(char *old)
     char                                            *temp;
     char __attribute__((cleanup(clean_array)))      **splitted;
 
+    splitted = NULL;
     if (!ft_strchr(old, '$'))
         return (ft_strdup(old));
     splitted = ft_split_in_chunks(old, '$');

@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:27 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/06 12:42:28 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:50:13 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ void	clean_array(char ***s)
 
 	array = *s;
 	i = 0;
-	while (array[i])
+	while (array && array[i])
 	{
-		free(array[i]);
+		if (array[i]) 
+			free(array[i]);
 		i++;
 	}
-	free(array);
+	if (array)
+		free(array);
 }
