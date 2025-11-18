@@ -12,6 +12,11 @@
 
 #include <stdlib.h>
 
+void	clean_ptr(void *p)
+{
+    free(*(void**)p);
+}
+
 void	clean_char(char **c)
 {
 	free(*c);
