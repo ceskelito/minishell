@@ -19,8 +19,11 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 
 	if (in_quote)
 		token->expand_dollar = false;	
-	if (input[gap + 1] && !ft_isspace(input[gap + 1]))
+	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
+	{
+		ft_printf("from gap: -%s\n", input + gap);
 		token->cat_to_next = true;
+	}
 	if (len == 0)
 		result = ft_strdup("");
 	else
@@ -49,14 +52,15 @@ static int	process_word_surrounded(t_token *token, char *input)
 		len++;
 		gap++;
 	}
-	gap++;
 	if (input[gap] != quote)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: unexpected EOF while looking for matching `%c", quote);
+		ft_printf("GAP: %c\n", input[gap]);
+		ft_dprintf(STDERR_FILENO, "minishell: unexpected EOF while looking for matching `%c\n", quote);
 		print_error("syntax error", "unexpected end of file");
 		return (UNCLOSED_QUOTES);
 	}
 	set_token_value(token, input, gap, len, IN_QUOTES);
+	gap++;
 	return (gap);
 }
 
