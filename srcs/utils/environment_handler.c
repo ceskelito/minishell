@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/07 18:31:38 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 12:19:00 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,33 +79,24 @@ static void add_entry(char ***env, char *key, char *value)
 
 static void	remove_entry(char ***env, char *entry)
 {
-	char	**old_env;
-	char	**new_env;
-	int		nmemb;
-	int		i;
+    char	**arr;
+    int		i;
 
-	old_env = *env;
-    nmemb = 0;
-	while (old_env[nmemb])
-		nmemb++;
-	new_env = ezg_calloc(ENV, sizeof(char *), nmemb - 1);
-	if (!new_env)
-		return ;
-	i = 0;
-	while (old_env[i])
-	{
-		if (old_env[i] == entry)
-		{
-			free(old_env[i]);
-			i++;
-			continue;
-		}
-		new_env[i] = ft_strdup((*env)[i]);
-		ezg_add(ENV, new_env[i]);
-		i++;
-	}
-	free(old_env);
-	*env = new_env;
+    if (!env || !*env || !entry)
+        return ;
+    arr = *env;
+    i = 0;
+    while (arr[i] && arr[i] != entry)
+        i++;
+    if (!arr[i])
+        return ;
+    ezg_release(ENV, arr[i]);
+    while (arr[i + 1])
+    {
+        arr[i] = arr[i + 1];
+        i++;
+    }
+    arr[i] = NULL;
 }
 
 
@@ -154,7 +145,7 @@ static char **get_entry(char **env, char *key)
  * @value  New value to assign when using SET mode.
  *
  * Return: A pointer to:
- *         - The matching entry (GET),
+ *         - The matching entry (GET),	
  *         - The environment array (GET_ARRAY),
  * 		   - NULL (SET),
  *         - NULL on error or if the key was not found.
