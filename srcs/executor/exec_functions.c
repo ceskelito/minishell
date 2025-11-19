@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 14:16:30 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 11:08:24 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 11:34:27 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int     execute_builtin(const char *pathname, char * const argv[], char *const e
 void    execute_in_parent(t_shell *shell, t_cmd *cmd)
 {
 	int	exit_code;
-	if (apply_redirs(cmd->redirs))
+	if (apply_redirs(cmd->redirs) == 0)
 		exit_code = execute_builtin("parent", cmd->args, NULL);
 	else
 		exit_code = errno;
