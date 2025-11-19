@@ -5,7 +5,7 @@
 
 int	is_redir_token(t_token_type type)
 {
-	return (type & (APPEND | HEREDOC | IN | OUT));
+	return (type & (IN | OUT));
 }
 
 bool is_redirection_valid(t_token **token)

@@ -3,11 +3,11 @@
 /**
  * Checks if token is a redirection token
  */
-int	is_redir_token(t_token_type type)
+/* int	is_redir_token(t_token_type type)
 {
 	return (type == REDIR_IN_TOKEN || type == REDIR_OUT_TOKEN ||
 			type == REDIR_APPEND_TOKEN || type == HEREDOC_TOKEN);
-}
+} */
 
 /**
  * Parses a redirection and adds it to command

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 14:16:30 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/14 16:31:28 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 11:08:24 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,17 @@ static int	apply_redirs(t_redir *redirs)
 		fd = -1;
 		if (curr->type & (PIPE | HEREDOC))
 			fd = curr->pipe_fd;
-		else if (curr->type == APPEND)
+		else if (curr->type & APPEND)
 			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0644);
-		else if (curr->type == OUT)
+		else if (curr->type & OUT)
 			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
-		else if (curr->type == IN)
+		else if (curr->type & IN)
 			fd = open(curr->file, O_RDONLY | O_CLOEXEC);
 		if (fd == -1)
+		{
+			close(fd);
 			return (print_error(curr->file, strerror(errno)), errno);
+		}
 		if (curr->type & IN)
 			dup2(fd, STDIN_FILENO);
 		else

@@ -22,13 +22,13 @@ t_token_type	get_token_type(char *input)
 	if (input[0] == '|')
 		return (PIPE);
 	if (input[0] == '<' && input[1] == '<')
-		return (HEREDOC);
+		return (HEREDOC | IN);
 	if (input[0] == '<')
-		return (IN);
+		return (WORD | IN);
 	if (input[0] == '>' && input[1] == '>')
-		return (APPEND);
+		return (APPEND | OUT);
 	if (input[0] == '>')
-		return (OUT);
+		return (WORD | OUT);
 	if (input[0] == '&' && input[1] == '&')
 		return (AND);
 	if (input[0] == '(')
@@ -38,10 +38,14 @@ t_token_type	get_token_type(char *input)
 	return (WORD);
 }
 
+// enum {DOUBLE_CHAR_TOKENS = (OR | AND | HEREDOC | APPEND)};
+
 char	*get_operator_value(char *input, t_token_type type)
 {
-	if (type == OR || type == AND || type == HEREDOC || type == APPEND)
+	if (type & (OR | AND | HEREDOC | APPEND))
 		return (ezg_add(TOKEN, ft_substr(input, 0, 2)));
 	else
 		return (ezg_add(TOKEN, ft_substr(input, 0, 1)));
+	// return (ezg_add(TOKEN, ft_substr(input, 0, 1 + (type & DOUBLE_CHAR_TOKENS))));
+	
 }

@@ -8,10 +8,10 @@ static void	print_token_type_name(t_token_type type)
 		printf("PIPE");
 	else if (type & HEREDOC)
 		printf("HEREDOC");
-	else if (type & IN)
-		printf("IN");
 	else if (type & APPEND)
 		printf("APPEND");
+	else if (type & IN)
+		printf("IN");
 	else if (type & OUT)
 		printf("OUT");
 	else if (type & AND)

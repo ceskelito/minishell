@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/06 12:42:47 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 11:05:42 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	setup_heredocs(t_cmd *cmd_list)
 		curr_redir = curr->redirs;
 		while(curr_redir)
 		{
-			if (curr_redir->type == (HEREDOC | IN))
+			if (curr_redir->type & HEREDOC)
 			{
 				curr_redir->pipe_fd = process_heredoc(curr_redir->file);
 			}
