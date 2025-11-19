@@ -12,21 +12,33 @@
 
 #include "minishell.h"
 #include "executor.h"
-#include <stdbool.h>
 
 // Need to expand variables
 // Need to manage cases with EOF in quotes
+
+static bool	is_in_quote(char *str)
+{
+	if (!str)
+		return (false);
+	if (ft_strcmp(str, "") == 0)
+		return (true);
+	if (str[0] == '\'' || str[0] == '"')
+		return (true);
+	return (false);
+}
 
 static int	process_heredoc(char *delimiter)
 {
 	int		fd[2];
 	char	*input;
+	bool	expand;
 
 	if (pipe(fd) == -1)
 	{
 		perror("minishell");
 		return (-1);
 	}
+	expand = !is_in_quote(delimiter);
 	input = NULL;
 	while (true)
 	{
@@ -39,7 +51,10 @@ static int	process_heredoc(char *delimiter)
 		ezg_add(EXECUTING, input);
 		if (!ft_strcmp(input, delimiter))
 			break;
-		ft_dprintf(fd[1], "%s\n", input);
+		if (expand)
+			ft_dprintf(fd[1], "%s\n", string_expand_dollars(input));
+		else
+			ft_dprintf(fd[1], "%s\n", input);
 	}
 	close(fd[1]);
 	return (fd[0]);
