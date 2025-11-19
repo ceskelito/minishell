@@ -35,12 +35,12 @@ static void	process_command(char *input, t_shell *shell)
 	cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
 	shell->tokens = tokenize_input(cmd);
 	token_expand_dollars_and_cat(&(shell->tokens));
-	if (true) //DEBUG
+	/* if (true) //DEBUG
 	{
 		shell->cmd_list = NULL;
 		print_debug_info(shell);
 		return ;
-	}
+	} */
 	shell->cmd_list = parse_tokens(shell->tokens);
 	if (debug_mode)
 		print_debug_info(shell);

@@ -24,11 +24,11 @@ t_token_type	get_token_type(char *input)
 	if (input[0] == '<' && input[1] == '<')
 		return (HEREDOC | IN);
 	if (input[0] == '<')
-		return (WORD | IN);
+		return (IN);
 	if (input[0] == '>' && input[1] == '>')
 		return (APPEND | OUT);
 	if (input[0] == '>')
-		return (WORD | OUT);
+		return (OUT);
 	if (input[0] == '&' && input[1] == '&')
 		return (AND);
 	if (input[0] == '(')
