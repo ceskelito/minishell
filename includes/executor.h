@@ -17,20 +17,26 @@
 # define T_EXIT "exit"
 
 t_token 	*create_test_tokens(t_token *token);
-int			executor(t_shell *shell);
-// char	    *get_location(char *cmd);
+void		executor(t_shell *shell);
 void		resolve_command_location(t_cmd *cmd);
-// int			setup_heredoc(char *delimiter);
 void		setup_heredocs(t_cmd *cmd_list);
 void		setup_heredocs(t_cmd *cmd_list);
 int		    open_pipeline_fds(t_cmd *cmd_list);
 
+/* Exec functions*/
+void	execute_in_child(t_cmd *cmd, pid_t *pid,
+           	    int (*exec_cmd)(const char *, char *const [], char *const []));
+int     execute_builtin(const char *pathname, char * const argv[], char *const envp[]);
+void    execute_in_parent(t_shell *shell, t_cmd *cmd);
+
+
+
 /* Builtins */
 void	env(void);
-void	echo(char **args);
-void	cd(char **args);
+void	echo(char *const args[]) ;
+void	cd(char *const args[]) ;
 void	pwd(void);
-void	exit_shell(char **args);
-void	export(char **args);
-void	unset(char **args);
+void	exit_shell(char *const args[]) ;
+void	export(char *const args[]) ;
+void	unset(char *const args[]) ;
 #endif

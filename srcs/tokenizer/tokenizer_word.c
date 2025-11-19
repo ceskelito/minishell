@@ -19,7 +19,7 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 
 	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
 	{
-		ft_printf("from gap: -%s\n", input + gap);
+		ft_printf("from gap: -%s\n", input + gap); // DEBUG
 		token->cat_to_next = true;
 	}
 	if (len == 0)

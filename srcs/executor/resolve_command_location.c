@@ -93,6 +93,11 @@ void	resolve_command_location(t_cmd *cmd)
 	slash = ft_strrchr(cmd->args[0], '/');
 	if (!slash)
 	{
+		if (is_builtin(cmd->args[0]))
+		{
+			cmd->location = ft_strdup("child");
+			ezg_add(EXECUTING, cmd->location);
+		}
 		cmd->location = lookup_for_command_in_path(cmd->args[0]);
 		/* if (!cmd->location)
 		{
