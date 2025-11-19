@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 17:15:36 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/17 20:06:25 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 11:45:56 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,11 @@ char    *string_expand_dollars(char *old)
         new_len += ft_strlen(splitted[i]);
         i++;
     }
-    new = ft_calloc(new_len, sizeof(char));
+    new = ft_calloc(new_len + 1, sizeof(char));
     i = 0;
     while (splitted[i])
     {
-        ft_strlcat(new, splitted[i], new_len);
+        ft_strlcat(new, splitted[i], new_len + 1);
         i++;
     }
     return (new);
