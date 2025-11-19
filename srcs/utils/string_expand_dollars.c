@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 17:15:36 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 16:34:13 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:40:38 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ static void string_collapse_spaces(char **str)
     old = *str;
     new = ft_calloc(ft_strlen(old) + 1, sizeof(char));
     if (!new)
-        return;
+    {
+        *str = NULL;
+        return ;
+    }
     i = 0;
     j = 0;
     while (old[i])
@@ -101,7 +104,7 @@ static void string_collapse_spaces(char **str)
     }
     new[j] = '\0';
     free(old);
-    old = new;
+    *str = new;
 }
 
 char    *string_expand_dollars(char *str, bool collapse_spaces)
@@ -122,8 +125,8 @@ char    *string_expand_dollars(char *str, bool collapse_spaces)
     {
         if (splitted[i][0] == '$' && splitted[i][1] && ft_isalpha(splitted[i][1]))
         {
-            free(splitted[i]);
             temp = ft_getenv(&(splitted[i][1]));
+            free(splitted[i]);
             if (temp)
                 temp = ft_strdup(temp);
             else
