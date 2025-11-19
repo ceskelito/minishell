@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:39:49 by ceskelito         #+#    #+#             */
-/*   Updated: 2025/11/19 12:19:00 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 12:48:36 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,22 @@ static void	change_entry_value(char **entry_ptr, char *new_value)
  */
 static void add_entry(char ***env, char *key, char *value)
 {
-    int nmemb;
+    size_t	nmemb;
+	char	*kv;
 
+	if (!env || !*env || !key)
+        return;
+	kv = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
+	if (!kv)
+        return;
+	ft_sprintf(kv, "%s=%s", key, value);
     nmemb = 0;
 	while ((*env)[nmemb])
 		nmemb++;
 	*env = expand_array(ENV, *env, nmemb, 1);
 	if (!*env)
 		return ;
-	(*env)[nmemb] = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
-	ft_sprintf((*env)[nmemb], "%s=%s", key, value);
+	(*env)[nmemb] = kv;
 	(*env)[nmemb + 1] = NULL;
 }
 
