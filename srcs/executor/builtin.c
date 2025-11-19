@@ -139,7 +139,7 @@ void	cd(char *const args[])
 		count++;
 	if (count > 2)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: too many arguments\n");
+		print_error("cd", "too many arguments\n");
 		return ;
 	}
 	if (count == 1)
@@ -147,7 +147,7 @@ void	cd(char *const args[])
 		dir = ft_getenv("HOME");
 		if (!dir)
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
+			print_error("cd", "HOME not set\n");
 			return ;
 		}
 	}
@@ -158,7 +158,7 @@ void	cd(char *const args[])
 			ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir, strerror(errno));
 }
 
-void	exit_shell(char *const args[]) 
+void	exit_shell(char *const args[])
 {
 	int	status;
 	int	i;
@@ -166,7 +166,7 @@ void	exit_shell(char *const args[])
 	ft_printf("exit\n");
 
 	if (!args[1])
-		exit(EXIT_SUCCESS);
+		exit(EXIT_SUCCESS); // exit(exit_status) ??
 	
 	i = 0;
 	while (args[1][i])
