@@ -52,9 +52,3 @@ t_token	*tokenize_input(char *input)
 	}
 	return (tokens);
 }
-
-/* NOT USED
-int	is_special_in_word(char c)
-{
-	return (c == '$' || c == '\'' || c == '\"');
-} */

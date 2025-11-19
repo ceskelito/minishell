@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 11:05:42 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:31:31 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	process_heredoc(char *delimiter)
 		if (!ft_strcmp(input, delimiter))
 			break;
 		if (expand)
-			ft_dprintf(fd[1], "%s\n", string_expand_dollars(input));
+			ft_dprintf(fd[1], "%s\n", string_expand_dollars(input, false));
 		else
 			ft_dprintf(fd[1], "%s\n", input);
 	}

@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 20:06:08 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 10:34:05 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:08:14 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int    token_expand_dollars_and_cat(t_token **token_list)
     {
         if (curr->expand_dollar)
         {
-            curr->value = string_expand_dollars(curr->value);
+            curr->value = string_expand_dollars(curr->value, curr->collapse_spaces);
             ezg_add(TOKEN, curr->value);
             if (!curr->value)
                 return (-1);

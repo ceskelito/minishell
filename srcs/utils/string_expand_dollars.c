@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 17:15:36 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 11:45:56 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:34:13 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char **ft_split_in_chunks(char *str, char delimiter)
     delimiter_count = count_char(str, delimiter);
     if (!delimiter_count)
     {
-        splitted = ft_calloc(sizeof(char *), 2);
+        splitted = ft_calloc(2, sizeof(char *));
         splitted[0] = ft_strdup(str);
     }
     else
@@ -75,7 +75,36 @@ static char **ft_split_in_chunks(char *str, char delimiter)
     return (splitted);
 }
 
-char    *string_expand_dollars(char *old)
+static void string_collapse_spaces(char **str)
+{
+    char    *old;
+    char    *new;
+    size_t  i;
+    size_t  j;
+
+    old = *str;
+    new = ft_calloc(ft_strlen(old) + 1, sizeof(char));
+    if (!new)
+        return;
+    i = 0;
+    j = 0;
+    while (old[i])
+    {
+        if (ft_isspace(old[i]))
+        {
+            new[j++] = ' ';
+            while (ft_isspace(old[i]))
+                i++;
+        }
+        else
+            new[j++] = old[i++];
+    }
+    new[j] = '\0';
+    free(old);
+    old = new;
+}
+
+char    *string_expand_dollars(char *str, bool collapse_spaces)
 {
     int                                             i;
     int                                             new_len;
@@ -84,23 +113,26 @@ char    *string_expand_dollars(char *old)
     char __attribute__((cleanup(clean_array)))      **splitted;
 
     splitted = NULL;
-    if (!ft_strchr(old, '$'))
-        return (ft_strdup(old));
-    splitted = ft_split_in_chunks(old, '$');
+    if (!ft_strchr(str, '$'))
+        return (ft_strdup(str));
+    splitted = ft_split_in_chunks(str, '$');
     new_len = 0;
     i = 0;
     while (splitted[i])
     {
         if (splitted[i][0] == '$' && splitted[i][1] && ft_isalpha(splitted[i][1]))
         {
-            temp = ft_getenv(&(splitted[i][1]));
             free(splitted[i]);
-            if (!temp)
-                temp = "";
-            splitted[i] = ft_strdup(temp);
+            temp = ft_getenv(&(splitted[i][1]));
+            if (temp)
+                temp = ft_strdup(temp);
+            else
+                temp = ft_strdup("");
+            if (collapse_spaces)
+                string_collapse_spaces(&temp);
+            splitted[i] = temp;
             temp = NULL;
         }
-        // printf("split[%d] = %s\n", i, splitted[i]);//DEBUG
         new_len += ft_strlen(splitted[i]);
         i++;
     }

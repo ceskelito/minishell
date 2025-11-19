@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_word.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
+/*   Updated: 2025/11/19 16:07:37 by rceschel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 enum {NO_QUOTES = -2, UNCLOSED_QUOTES = -1};
@@ -17,11 +29,9 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 {
 	char	*result;
 
+	token->collapse_spaces = in_quote;
 	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
-	{
-		ft_printf("from gap: -%s\n", input + gap); // DEBUG
 		token->cat_to_next = true;
-	}
 	if (len == 0)
 		result = ft_strdup("");
 	else

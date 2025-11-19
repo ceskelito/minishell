@@ -65,6 +65,7 @@ typedef struct s_token
 	t_token_type	type;
 	bool			expand_dollar;
 	bool			cat_to_next;
+	bool			collapse_spaces;
 	struct s_token	*next;
 }	t_token;
 
@@ -121,7 +122,7 @@ int				fill_word_token(t_token *token, char *input);
 
 /* Tokenizer utilities */
 int			    token_expand_dollars_and_cat(t_token **token_list);
-char    		*string_expand_dollars(char *str);
+char    		*string_expand_dollars(char *str, bool collapse_spaces);
 void			handle_dollar_sign(char *input, int *i, char **result);
 char			*process_quotes(char *input, int *i, char *result);
 char			*ft_strjoin_char(char *s1, char c);
