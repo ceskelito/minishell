@@ -40,6 +40,7 @@ FILES = main 				\
 		parser_debug		\
 		shell_init			\
 		executor			\
+		exec_functions		\
 		builtin				\
 		resolve_command_location	\
 		heredoc				\
