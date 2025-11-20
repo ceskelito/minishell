@@ -1,99 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/07 15:44:41 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:29:01 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "ft_dprintf.h"
-#include "ft_lib.h"
-#include "ft_printf.h"
 #include "minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-static bool	is_entry_valid(char *entry)
-{
-	int	i;
-
-	if (!ft_isalpha(entry[0]))
-	{
-		ft_dprintf(STDERR_FILENO,
-			"minishell: export: `%s': not a valid identifier\n", entry);
-		return (false);
-	}
-	i = 0;
-	while (entry[i] && entry[i] != '=')
-	{
-		if (!ft_isalnum(entry[i]))
-		{
-			ft_dprintf(STDERR_FILENO,
-				"minishell: export: `%c': not a valid identifier\n", entry);
-			return (false);
-		}
-		i++;
-	}
-	if (!ft_strchr(entry, '='))
-		return (false);
-	return (true);
-}
-
-void	export(char *const args[])
-{
-	size_t	key_len;
-	int		i;
-	char	*key;
-	char	*value;
-	char	*entry;
-
-	i = 0;
-	while (i++, args[i])
-	{
-		entry = args[i];
-		if (!is_entry_valid(entry))
-			continue ;
-		key_len = 0;
-		while (entry[key_len] != '=')
-			key_len++;
-		key = ft_substr(entry, 0, key_len);
-		value = ft_strchr(entry, '=') + 1;
-		ft_setenv(key, value);
-		free(key);
-	}
-}
-
-void	unset(char *const args[])
-{
-	int	i;
-
-	i = 0;
-	while (i++, args[i])
-	{
-		ft_unsetenv(args[i]);
-	}
-}
-
-void	env(void)
-{
-	char	**env_array;
-	int		i;
-
-	env_array = ft_getenv_array();
-	i = 0;
-	while (env_array[i])
-	{
-		ft_printf("%s\n", env_array[i]);
-		i++;
-	}
-}
 
 void	echo(char *const args[])
 {
@@ -153,10 +71,9 @@ void	cd(char *const args[])
 	}
 	else
 		dir = args[1];
-	if (strcmp(dir, "") != 0)
-		if (chdir(dir) != 0)
-			ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir,
-				strerror(errno));
+	if (strcmp(dir, "") != 0 && chdir(dir) != 0)
+		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir,
+			strerror(errno));
 }
 
 void	exit_shell(char *const args[])
@@ -174,8 +91,7 @@ void	exit_shell(char *const args[])
 					|| args[1][i] == '-')))
 		{
 			ft_dprintf(STDERR_FILENO,
-				"minishell: exit: %s: numeric argument required\n",
-				args[1]);
+				"minishell: exit: %s: numeric argument required\n", args[1]);
 			exit(255);
 		}
 		i++;
@@ -183,8 +99,7 @@ void	exit_shell(char *const args[])
 	if (args[2])
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
-		set_exit_status(1);
-		return ;
+		return (set_exit_status(1));
 	}
 	status = ft_atoi(args[1]) % 256;
 	exit(status);
