@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "executor.h"
+#include "minishell.h"
 
 // Need to expand variables
 // Need to manage cases with EOF in quotes
@@ -46,11 +46,11 @@ static int	process_heredoc(char *delimiter)
 		if (!input)
 		{
 			print_error("warning", "heredoc terminated by EOF\n");
-			break;
+			break ;
 		}
 		ezg_add(EXECUTING, input);
 		if (!ft_strcmp(input, delimiter))
-			break;
+			break ;
 		if (expand)
 			ft_dprintf(fd[1], "%s\n", string_expand_dollars(input, false));
 		else
@@ -66,17 +66,17 @@ void	setup_heredocs(t_cmd *cmd_list)
 	t_redir	*curr_redir;
 
 	curr = cmd_list;
-	while(curr)
+	while (curr)
 	{
 		curr_redir = curr->redirs;
-		while(curr_redir)
+		while (curr_redir)
 		{
 			if (curr_redir->type & HEREDOC)
 			{
 				curr_redir->pipe_fd = process_heredoc(curr_redir->file);
 			}
 			curr_redir = curr_redir->next;
-		}		
+		}
 		curr = curr->next;
 	}
 }

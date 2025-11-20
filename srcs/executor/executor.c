@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "executor.h"
+#include "minishell.h"
 
 #ifndef O_CLOEXEC
-#define O_CLOEXEC 0
+# define O_CLOEXEC 0
 #endif
 
 static int	count_cmds(t_cmd *cmd_list)
@@ -30,7 +30,7 @@ static int	count_cmds(t_cmd *cmd_list)
 	return (count);
 }
 
-void executor(t_shell *shell)
+void	executor(t_shell *shell)
 {
 	t_cmd	*cmd;
 	pid_t	*pid;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resolve_command_location.c                             :+:      :+:    :+:   */
+/*   resolve_command_location.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,40 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ezgalloc.h"
-#include "ft_lib.h"
-#include "minishell.h"
 #include "executor.h"
+#include "minishell.h"
 #include <dirent.h>
 
-void	free_path(char ***path)
+/**
+ * search_in_dir - Search for a command inside a specific directory
+ *
+ * @dirpath: Path of the directory to search in
+ * @cmd:     Name of the command to look for
+ *
+ * Return: A newly allocated string containing the absolute path to the command
+ *         if found; NULL if the directory cannot be opened or the command is
+ *         not present.
+ */
+static char	*search_in_dir(char *dirpath, char *cmd)
 {
-	int	i;
+	DIR				*dir;
+	struct dirent	*entry;
 
-	i = 0;
-	if (!(*path))
-		return;
-	while((*path)[i])
-		free((*path)[i++]);
-	free(*path);
+	dir = opendir(dirpath);
+	if (!dir)
+		return (NULL);
+	entry = readdir(dir);
+	while (entry)
+	{
+		if (ft_strcmp(entry->d_name, cmd) == 0)
+		{
+			closedir(dir);
+			return (ft_strjoin_multi(3, dirpath, "/", cmd));
+		}
+		entry = readdir(dir);
+	}
+	closedir(dir);
+	return (NULL);
 }
 
 /**
@@ -34,39 +52,25 @@ void	free_path(char ***path)
  * @cmd: Name of the command to search for
  *
  * Return: A newly allocated string containing the absolute path of the command;
- *		   NULL if the command is not found or on failure.
+ *			NULL if the command is not found or on failure.
  *
  * Note: This function does not handle commands that already contain a '/'.
  */
 static char	*lookup_for_command_in_path(char *cmd)
 {
-	char __attribute__	((cleanup(free_path)))	**path;
-	DIR											*dir;
-	struct dirent 								*entry;
-	int											i;
+	int												i;
+	char											*cmd_path;
+	char __attribute__	((cleanup(clean_array)))	**path;
 
-	if (!cmd)
-		return (NULL);
 	path = ft_split(ft_getenv("PATH"), ':');
-	if (!path)
+	if (!cmd || !path)
 		return (NULL);
 	i = -1;
 	while (i++, path[i])
 	{
-		dir = opendir(path[i]);
-		if (!dir)
-			continue;
-		entry = readdir(dir);
-		while (entry)
-		{
-			if (ft_strcmp(entry->d_name, cmd) == 0)
-			{
-				closedir(dir);
-				return (ezg_add(EXECUTING, ft_strjoin_multi(3, path[i], "/", cmd)));
-			}
-			entry = readdir(dir);
-		}
-		closedir(dir);
+		cmd_path = search_in_dir(path[i], cmd);
+		if (cmd_path)
+			return (ezg_add(EXECUTING, cmd_path));
 	}
 	return (NULL);
 }
@@ -83,7 +87,9 @@ static char	*lookup_for_command_in_path(char *cmd)
  *
  * If cmd->args[0] does not contain '/':
  *   - lookup_command_path() is used to find the full path in $PATH
- *   - cmd->location is set to the result (newly allocated string or NULL if not found)
+ *  
+	- cmd->location is set to the result
+	(newly allocated string or NULL if not found)
  */
 
 void	resolve_command_location(t_cmd *cmd)
@@ -99,11 +105,6 @@ void	resolve_command_location(t_cmd *cmd)
 			ezg_add(EXECUTING, cmd->location);
 		}
 		cmd->location = lookup_for_command_in_path(cmd->args[0]);
-		/* if (!cmd->location)
-		{
-			print_error(cmd->args[0], "Command not found");
-			set_exit_status(127);
-		} */
 		return ;
 	}
 	cmd->location = cmd->args[0];

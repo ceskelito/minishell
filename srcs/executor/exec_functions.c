@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "executor.h"
+#include "minishell.h"
 
 static void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)
 {
 	t_cmd	*curr_cmd;
 	t_redir	*curr_redir;
-	int 	num_of_parsed;
+	int		num_of_parsed;
 
 	num_of_parsed = 0;
 	curr_cmd = cmd;
@@ -39,7 +39,7 @@ static int	apply_redirs(t_redir *redirs)
 {
 	t_redir	*curr;
 	int		fd;
-	
+
 	curr = redirs;
 	while (curr)
 	{
@@ -47,9 +47,11 @@ static int	apply_redirs(t_redir *redirs)
 		if (curr->type & (PIPE | HEREDOC))
 			fd = curr->pipe_fd;
 		else if (curr->type & APPEND)
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0644);
+			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC,
+					0644);
 		else if (curr->type & OUT)
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
+			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC,
+					0644);
 		else if (curr->type & IN)
 			fd = open(curr->file, O_RDONLY | O_CLOEXEC);
 		if (fd == -1)
@@ -67,8 +69,8 @@ static int	apply_redirs(t_redir *redirs)
 	return (0);
 }
 
-void	execute_in_child(t_cmd *cmd, pid_t *pid,
-           	    int (*exec_cmd)(const char *, char *const [], char *const []))
+void	execute_in_child(t_cmd *cmd, pid_t *pid, int (*exec_cmd)(const char *,
+			char *const[], char *const[]))
 {
 	bool	is_child;
 
@@ -85,10 +87,7 @@ void	execute_in_child(t_cmd *cmd, pid_t *pid,
 		exit(127);
 	}
 	else if (*pid > 0)
-	{	
-		// *saved_pid = pid;
 		close_pipe_fds(cmd, PIPE | HEREDOC, 1);
-	}
 	else
 	{
 		perror("minishell");
@@ -96,10 +95,11 @@ void	execute_in_child(t_cmd *cmd, pid_t *pid,
 	}
 }
 
-int     execute_builtin(const char *pathname, char * const argv[], char *const envp[])
+int	execute_builtin(const char *pathname, char *const argv[],
+		char *const envp[])
 {
 	int	exit_value;
-	
+
 	(void)envp;
 	if (!ft_strcmp(argv[0], "echo"))
 		echo(argv);
@@ -114,7 +114,7 @@ int     execute_builtin(const char *pathname, char * const argv[], char *const e
 	else if (!ft_strcmp(argv[0], "export"))
 		export(argv);
 	else if (!ft_strcmp(argv[0], "unset"))
-		unset(argv);	
+		unset(argv);
 	else
 		exit_value = 1;
 	exit_value = 0;
@@ -123,14 +123,14 @@ int     execute_builtin(const char *pathname, char * const argv[], char *const e
 	return (exit_value);
 }
 
-void    execute_in_parent(t_shell *shell, t_cmd *cmd)
+void	execute_in_parent(t_shell *shell, t_cmd *cmd)
 {
 	int	exit_code;
+
 	if (apply_redirs(cmd->redirs) == 0)
 		exit_code = execute_builtin("parent", cmd->args, NULL);
 	else
 		exit_code = errno;
-	//reset_redirs(shell->std_in, shell->std_out);
 	dup2(shell->std_in, STDIN_FILENO);
 	dup2(shell->std_out, STDOUT_FILENO);
 	set_exit_status(exit_code);

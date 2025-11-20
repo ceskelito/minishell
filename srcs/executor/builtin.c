@@ -1,4 +1,4 @@
-/* ****************************************************get_entry********************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
@@ -26,25 +26,27 @@ static bool	is_entry_valid(char *entry)
 
 	if (!ft_isalpha(entry[0]))
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: export: `%s': not a valid identifier\n", entry);
+		ft_dprintf(STDERR_FILENO,
+			"minishell: export: `%s': not a valid identifier\n", entry);
 		return (false);
 	}
 	i = 0;
 	while (entry[i] && entry[i] != '=')
-	{	
+	{
 		if (!ft_isalnum(entry[i]))
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: export: `%c': not a valid identifier\n", entry);
+			ft_dprintf(STDERR_FILENO,
+				"minishell: export: `%c': not a valid identifier\n", entry);
 			return (false);
 		}
 		i++;
 	}
 	if (!ft_strchr(entry, '='))
-			return (false);
+		return (false);
 	return (true);
 }
 
-void	export(char *const args[]) 
+void	export(char *const args[])
 {
 	size_t	key_len;
 	int		i;
@@ -63,13 +65,12 @@ void	export(char *const args[])
 			key_len++;
 		key = ft_substr(entry, 0, key_len);
 		value = ft_strchr(entry, '=') + 1;
-		//ft_printf("key: %s\nval: %s\n", key, value);
 		ft_setenv(key, value);
 		free(key);
 	}
 }
 
-void	unset(char *const args[]) 
+void	unset(char *const args[])
 {
 	int	i;
 
@@ -80,22 +81,21 @@ void	unset(char *const args[])
 	}
 }
 
-void	env()
+void	env(void)
 {
 	char	**env_array;
 	int		i;
 
 	env_array = ft_getenv_array();
 	i = 0;
-	while(env_array[i])
+	while (env_array[i])
 	{
 		ft_printf("%s\n", env_array[i]);
 		i++;
 	}
-	
 }
 
-void	echo(char *const args[])  
+void	echo(char *const args[])
 {
 	int		i;
 	int		j;
@@ -106,14 +106,14 @@ void	echo(char *const args[])
 	while (args[i] && args[i][0] == '-')
 	{
 		j = 1;
-    	while (args[i][j] == 'n')
+		while (args[i][j] == 'n')
 			j++;
-    	if (args[i][j] != '\0' || j == 1)
-			break;
-    	flag_n = true;
-    	i++;
-    }
-	while(args[i])
+		if (args[i][j] != '\0' || j == 1)
+			break ;
+		flag_n = true;
+		i++;
+	}
+	while (args[i])
 	{
 		ft_printf("%s", args[i]);
 		if (args[i + 1])
@@ -124,18 +124,18 @@ void	echo(char *const args[])
 		ft_printf("\n");
 }
 
-void	pwd()
-{	
+void	pwd(void)
+{
 	ft_printf("%s\n", getcwd(NULL, 0));
 }
 
-void	cd(char *const args[]) 
+void	cd(char *const args[])
 {
 	int		count;
 	char	*dir;
 
 	count = 0;
-	while(args[count])
+	while (args[count])
 		count++;
 	if (count > 2)
 	{
@@ -155,7 +155,8 @@ void	cd(char *const args[])
 		dir = args[1];
 	if (strcmp(dir, "") != 0)
 		if (chdir(dir) != 0)
-			ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir, strerror(errno));
+			ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir,
+				strerror(errno));
 }
 
 void	exit_shell(char *const args[])
@@ -164,28 +165,27 @@ void	exit_shell(char *const args[])
 	int	i;
 
 	ft_printf("exit\n");
-
 	if (!args[1])
-		exit(EXIT_SUCCESS); // exit(exit_status) ??
-	
+		exit(get_exit_status());
 	i = 0;
 	while (args[1][i])
 	{
-		if (!ft_isdigit(args[1][i]) && !(i == 0 && (args[1][i] == '+' || args[1][i] == '-')))
+		if (!ft_isdigit(args[1][i]) && !(i == 0 && (args[1][i] == '+'
+					|| args[1][i] == '-')))
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: exit: %s: numeric argument required\n", args[1]);
+			ft_dprintf(STDERR_FILENO,
+				"minishell: exit: %s: numeric argument required\n",
+				args[1]);
 			exit(255);
 		}
 		i++;
 	}
-
 	if (args[2])
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
-		//g_exit_status = 1; // Need to update exit status
-		return; // Like Bash, do not exit from the shell
+		set_exit_status(1);
+		return ;
 	}
-
 	status = ft_atoi(args[1]) % 256;
 	exit(status);
 }

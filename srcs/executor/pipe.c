@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "executor.h"
+#include "minishell.h"
 
-static int 	setup_pipe(t_redir *first, t_redir *second)
+static int	setup_pipe(t_redir *first, t_redir *second)
 {
-	int		fd[2];
+	int	fd[2];
 
 	if (pipe(fd) == -1)
 	{
@@ -33,7 +33,7 @@ static int 	setup_pipe(t_redir *first, t_redir *second)
 	return (0);
 }
 
-int		open_pipeline_fds(t_cmd *cmd_list)
+int	open_pipeline_fds(t_cmd *cmd_list)
 {
 	t_cmd	*curr;
 
