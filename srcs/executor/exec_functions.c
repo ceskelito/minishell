@@ -35,36 +35,36 @@ static void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)
 	}
 }
 
-static int	apply_redirs(t_redir *redirs)
+static int	open_redir(t_redir *r)
 {
-	t_redir	*curr;
+	if (r->type & (PIPE | HEREDOC))
+		return (r->pipe_fd);
+	if (r->type & APPEND)
+		return (open(r->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC,
+				0644));
+	if (r->type & OUT)
+		return (open(r->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC,
+				0644));
+	if (r->type & IN)
+		return (open(r->file, O_RDONLY | O_CLOEXEC));
+	return (-1);
+}
+
+static int	apply_redirs(t_redir *r)
+{
 	int		fd;
 
-	curr = redirs;
-	while (curr)
+	while (r)
 	{
-		fd = -1;
-		if (curr->type & (PIPE | HEREDOC))
-			fd = curr->pipe_fd;
-		else if (curr->type & APPEND)
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC,
-					0644);
-		else if (curr->type & OUT)
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC,
-					0644);
-		else if (curr->type & IN)
-			fd = open(curr->file, O_RDONLY | O_CLOEXEC);
+		fd = open_redir(r);
 		if (fd == -1)
-		{
-			close(fd);
-			return (print_error(curr->file, strerror(errno)), errno);
-		}
-		if (curr->type & IN)
+			return (print_error(r->file, strerror(errno)), errno);
+		if (r->type & IN)
 			dup2(fd, STDIN_FILENO);
 		else
 			dup2(fd, STDOUT_FILENO);
 		close(fd);
-		curr = curr->next;
+		r = r->next;
 	}
 	return (0);
 }
