@@ -114,8 +114,7 @@ char	*string_expand_dollars(char *str, bool collapse_spaces)
 	int												new_len;
 	char											*new;
 	char											*temp;
-	char											**splitted;
-	// char __attribute__((cleanup(clean_array)))		**splitted;
+	char __attribute__((cleanup(clean_array)))		**splitted;
 
 	splitted = NULL;
 	if (!ft_strchr(str, '$'))
@@ -136,7 +135,6 @@ char	*string_expand_dollars(char *str, bool collapse_spaces)
 			}
 			else
 			{
-				/* Environment variable name starts at index 1 */
 				temp = ft_getenv(&(splitted[i][1]));
 				free(splitted[i]);
 				if (temp)
@@ -159,10 +157,5 @@ char	*string_expand_dollars(char *str, bool collapse_spaces)
 		ft_strlcat(new, splitted[i], new_len + 1);
 		i++;
 	}
-	/* Cleanup chunks */
-	i = 0;
-	while (splitted[i])
-		free(splitted[i++]);
-	free(splitted);
 	return (new);
 }
