@@ -41,7 +41,8 @@ FILES = main 				\
 		shell_init			\
 		executor			\
 		redirections		\
-		builtin				\
+		builtin_1			\
+		builtin_2			\
 		resolve_command_location	\
 		heredoc				\
 		pipe				\
