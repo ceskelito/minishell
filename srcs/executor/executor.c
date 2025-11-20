@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/20 16:11:36 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:16:32 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static int	count_cmds(t_cmd *cmd_list)
 	return (count);
 }
 
-static void	execute_in_child(t_cmd *cmd, pid_t *pid, int (*exec_cmd)(const char *,
-			char *const[], char *const[]))
+static void	execute_in_child(t_cmd *cmd, pid_t *pid,
+	int (*exec_cmd)(const char *, char *const[], char *const[]))
 {
 	bool	is_child;
 
