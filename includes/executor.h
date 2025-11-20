@@ -24,12 +24,14 @@ void		setup_heredocs(t_cmd *cmd_list);
 int		    open_pipeline_fds(t_cmd *cmd_list);
 
 /* Exec functions*/
-void	execute_in_child(t_cmd *cmd, pid_t *pid,
+/* void	execute_in_child(t_cmd *cmd, pid_t *pid,
            	    int (*exec_cmd)(const char *, char *const [], char *const []));
 int     execute_builtin(const char *pathname, char * const argv[], char *const envp[]);
-void    execute_in_parent(t_shell *shell, t_cmd *cmd);
+void    execute_in_parent(t_shell *shell, t_cmd *cmd); */
 
-
+/* Redirections */
+int		apply_redirs(t_redir *r);
+void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse);
 
 /* Builtins */
 void	env(void);
