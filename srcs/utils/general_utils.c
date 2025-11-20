@@ -6,11 +6,24 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 20:06:21 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/17 20:06:22 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:41:43 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	count_cmds(t_cmd *cmd_list)
+{
+	int	count;
+
+	count = 0;
+	while (cmd_list)
+	{
+		count++;
+		cmd_list = cmd_list->next;
+	}
+	return (count);
+}
 
 int print_error(char *msg, char *err)
 {

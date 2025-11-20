@@ -165,6 +165,7 @@ void			cleanup_shell(t_shell *shell);
 void			set_exit_status(int value);
 int				get_exit_status();
 bool			is_builtin(char *cmd);
+int				count_cmds(t_cmd *cmd_list);
 
 /* Error handling */
 void			ft_error(char *str, int n);
