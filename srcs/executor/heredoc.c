@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 16:31:31 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:35:46 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,35 +27,39 @@ static bool	is_in_quote(char *str)
 	return (false);
 }
 
+static bool	get_heredoc_line(char *delimiter, int fd)
+{
+	char	*input;
+	bool	expand;
+
+	expand = !is_in_quote(delimiter);
+	input = readline("> ");
+	if (!input)
+	{
+		print_error("warning", "heredoc terminated by EOF\n");
+		return (false);
+	}
+	ezg_add(EXECUTING, input);
+	if (ft_strcmp(input, delimiter) == 0)
+		return (false);
+	if (expand)
+		ft_dprintf(fd, "%s\n", string_expand_dollars(input, false));
+	else
+		ft_dprintf(fd, "%s\n", input);
+	return (true);
+}
+
 static int	process_heredoc(char *delimiter)
 {
 	int		fd[2];
-	char	*input;
-	bool	expand;
 
 	if (pipe(fd) == -1)
 	{
 		perror("minishell");
 		return (-1);
 	}
-	expand = !is_in_quote(delimiter);
-	input = NULL;
-	while (true)
-	{
-		input = readline("> ");
-		if (!input)
-		{
-			print_error("warning", "heredoc terminated by EOF\n");
-			break ;
-		}
-		ezg_add(EXECUTING, input);
-		if (!ft_strcmp(input, delimiter))
-			break ;
-		if (expand)
-			ft_dprintf(fd[1], "%s\n", string_expand_dollars(input, false));
-		else
-			ft_dprintf(fd[1], "%s\n", input);
-	}
+	while (get_heredoc_line(delimiter, fd[1]))
+		;
 	close(fd[1]);
 	return (fd[0]);
 }
