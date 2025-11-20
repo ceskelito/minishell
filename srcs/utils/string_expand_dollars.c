@@ -35,41 +35,24 @@ void	fill_chunks(char **splitted, char *str)
 	int		i;
 	int		len;
 	int		n;
-	int		start;
 
 	i = 0;
 	n = 0;
-	while (str[i])
+	while (len = 0, str[i])
 	{
-		if (str[i] != '$')
+		while (str[i + len] && str[i + len] != '$')
+			len++;
+		if (len == 0 && str[i] == '$')
 		{
-			len = 0;
-			while (str[i + len] && str[i + len] != '$')
+			len = 1;
+			if (str[i + len] == '?')
 				len++;
-			if (len > 0)
-			{
-				splitted[n++] = ft_substr(str, i, len);
-				i += len;
-				continue;
-			}
-		}
-		/* Variable token starting with '$' */
-		if (str[i] == '$')
-		{
-			start = i;
-			i++; /* skip '$' */
-			if (str[i] == '?')
-				i++; /* special exit status */
 			else
-			{
-				len = 0;
 				while (str[i + len] && (ft_isalnum(str[i + len]) || str[i + len] == '_'))
 					len++;
-				i += len;
-			}
-			splitted[n++] = ft_substr(str, start, i - start);
-			continue;
 		}
+		splitted[n++] = ft_substr(str, i, len);
+		i += len;
 	}
 	splitted[n] = NULL;
 }
