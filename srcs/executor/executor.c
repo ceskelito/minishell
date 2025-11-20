@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/20 16:42:24 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:44:13 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 {
 	int		num_cmds;
 	int		i;
-	size_t	*pid;
+	pid_t	*pid;
 
 	num_cmds = count_cmds(cmd);
 	pid = malloc(sizeof(pid_t) * num_cmds);
@@ -105,15 +105,14 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	}
 	i = 0;
 	while (i < num_cmds)
-		waitpid(pid[i++], &exit_code, 0);
+		waitpid(pid[i++], exit_code, 0);
+	free(pid);
 }
 
 void	executor(t_shell *shell)
 {
 	t_cmd	*cmd;
-	pid_t	*pid;
 	int		exit_code;
-	int		i;
 
 	if (!shell || !shell->cmd_list)
 		return ;
@@ -127,5 +126,4 @@ void	executor(t_shell *shell)
 	open_pipeline_fds(cmd);
 	execute_pipeline(cmd, &exit_code);
 	set_exit_status(exit_code);
-	free(pid);
 }
