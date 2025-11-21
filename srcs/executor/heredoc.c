@@ -51,7 +51,7 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 
 static int	process_heredoc(char *delimiter)
 {
-	int		fd[2];
+	int	fd[2];
 
 	if (pipe(fd) == -1)
 	{

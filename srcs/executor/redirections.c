@@ -40,11 +40,9 @@ static int	open_redir(t_redir *r)
 	if (r->type & (PIPE | HEREDOC))
 		return (r->pipe_fd);
 	if (r->type & APPEND)
-		return (open(r->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC,
-				0644));
+		return (open(r->file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0644));
 	if (r->type & OUT)
-		return (open(r->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC,
-				0644));
+		return (open(r->file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644));
 	if (r->type & IN)
 		return (open(r->file, O_RDONLY | O_CLOEXEC));
 	return (-1);
@@ -52,7 +50,7 @@ static int	open_redir(t_redir *r)
 
 int	apply_redirs(t_redir *r)
 {
-	int		fd;
+	int	fd;
 
 	while (r)
 	{

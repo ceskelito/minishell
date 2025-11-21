@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:52 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/11 17:46:35 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/21 12:28:30 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*lookup_for_command_in_path(char *cmd)
 	{
 		cmd_path = search_in_dir(path[i], cmd);
 		if (cmd_path)
-			return (ezg_add(EXECUTING, cmd_path));
+			return (cmd_path);
 	}
 	return (NULL);
 }
@@ -87,27 +87,32 @@ static char	*lookup_for_command_in_path(char *cmd)
  *
  * If cmd->args[0] does not contain '/':
  *   - lookup_command_path() is used to find the full path in $PATH
- *  
+ *
 	- cmd->location is set to the result
 	(newly allocated string or NULL if not found)
  */
 
-void	resolve_command_location(t_cmd *cmd)
+bool	resolve_command_location(t_cmd *cmd)
 {
 	char	*slash;
+	bool	location_was_given;
 
 	slash = ft_strrchr(cmd->args[0], '/');
-	if (!slash)
+	if (slash)
 	{
-		if (is_builtin(cmd->args[0]))
-		{
-			cmd->location = ft_strdup("child");
-			ezg_add(EXECUTING, cmd->location);
-		}
-		cmd->location = lookup_for_command_in_path(cmd->args[0]);
-		return ;
+		location_was_given = true;
+		cmd->location = cmd->args[0];
+		cmd->args[0] = ft_strdup(slash + 1);
+		ezg_add(EXECUTING, cmd->args[0]);
 	}
-	cmd->location = cmd->args[0];
-	cmd->args[0] = ft_strdup(slash + 1);
-	ezg_add(EXECUTING, cmd->args[0]);
+	else
+	{
+		location_was_given = false;
+		if (is_builtin(cmd->args[0]))
+			cmd->location = ft_strdup("child");
+		else
+			cmd->location = lookup_for_command_in_path(cmd->args[0]);
+		ezg_add(EXECUTING, cmd->location);
+	}
+	return (location_was_given);
 }

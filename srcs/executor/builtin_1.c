@@ -90,8 +90,8 @@ void	exit_shell(char *const args[])
 		if (!ft_isdigit(args[1][i]) && !(i == 0 && (args[1][i] == '+'
 					|| args[1][i] == '-')))
 		{
-			ft_dprintf(STDERR_FILENO,
-				"minishell: exit: %s: numeric argument required\n", args[1]);
+			ft_dprintf(STDERR_FILENO, "minishell: exit:
+				%s: numeric argument required\n", args[1]);
 			exit(255);
 		}
 		i++;

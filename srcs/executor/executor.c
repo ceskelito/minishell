@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/20 16:44:13 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/21 12:33:04 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,21 @@
 static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 	int (*exec_cmd)(const char *, char *const[], char *const[]))
 {
-	bool	is_child;
+	bool	location_was_given;
 
 	*pid = fork();
-	is_child = !(*pid);
-	if (is_child)
+	if (*pid == 0)
 	{
 		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (apply_redirs(cmd->redirs) != 0)
 			exit(errno);
-		if (resolve_command_location(cmd), cmd->location)
+		location_was_given = resolve_command_location(cmd);
+		if (cmd->location)
 			exec_cmd(cmd->location, cmd->args, ft_getenv_array());
-		print_error(cmd->args[0], strerror(errno));
+		if (location_was_given)
+			print_error(cmd->args[0], strerror(errno));
+		else
+			print_error(cmd->args[0], "command not found");
 		exit(127);
 	}
 	else if (*pid > 0)
