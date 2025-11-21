@@ -110,6 +110,8 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 		waitpid(pid[i++], &status, 0);
 		if (WIFEXITED(status))
 			*exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			*exit_code = 128 + WTERMSIG(status);
 	}
 	free(pid);
 }
