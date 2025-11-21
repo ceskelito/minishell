@@ -107,11 +107,15 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	i = 0;
 	while (i < num_cmds)
 	{
-		waitpid(pid[i++], &status, 0);
-		if (WIFEXITED(status))
-			*exit_code = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			*exit_code = 128 + WTERMSIG(status);
+		waitpid(pid[i], &status, 0);
+		if (i == num_cmds - 1)
+		{
+			if (WIFEXITED(status))
+				*exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				*exit_code = 128 + WTERMSIG(status);
+		}
+		i++;
 	}
 	free(pid);
 }
