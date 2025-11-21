@@ -90,6 +90,7 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	int		num_cmds;
 	int		i;
 	pid_t	*pid;
+	int		status;
 
 	num_cmds = count_cmds(cmd);
 	pid = malloc(sizeof(pid_t) * num_cmds);
@@ -105,7 +106,11 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	}
 	i = 0;
 	while (i < num_cmds)
-		waitpid(pid[i++], exit_code, 0);
+	{
+		waitpid(pid[i++], &status, 0);
+		if (WIFEXITED(status))
+			*exit_code = WEXITSTATUS(status);
+	}
 	free(pid);
 }
 
