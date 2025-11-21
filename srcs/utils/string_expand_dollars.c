@@ -151,7 +151,10 @@ static void	apply_word_split(char **str)
 	src = *str;
 	new = ft_calloc(ft_strlen(src) + 1, sizeof(char));
 	if (!new)
-		return ((void)(*str = NULL));
+	{
+		*str = NULL;
+		return ;
+	}
 	dst = new;
 	if (ft_isspace(*src))
 		handle_space_sequence(&src, &dst, true);
@@ -275,8 +278,8 @@ static char	*join_chunks(char **chunks, int total_len)
 char	*string_expand_dollars(char *str, bool word_split)
 {
 	char __attribute__((cleanup(clean_array)))	**chunks;
-	int											len;
-	int											i;
+	int		len;
+	int		i;
 
 	chunks = NULL;
 	if (!ft_strchr(str, '$'))
