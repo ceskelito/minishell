@@ -103,6 +103,7 @@ void	resolve_command_location(t_cmd *cmd)
 		{
 			cmd->location = ft_strdup("child");
 			ezg_add(EXECUTING, cmd->location);
+			return ;
 		}
 		cmd->location = lookup_for_command_in_path(cmd->args[0]);
 		return ;
