@@ -47,6 +47,7 @@ static int	count_char(char *s, char c)
  * Splits the string into alternating chunks: text before '$' and 
  * variable expressions starting with '$'. Each variable chunk includes
  * the '$' character and the variable name (alphanumeric + '_') or '?'.
+ * All chunks are added to the garbage collector.
  */
 void	fill_chunks(char **splitted, char *str)
 {
@@ -153,7 +154,6 @@ static int	process_chunks(char **splitted)
 		if (splitted[i][0] == '$' && splitted[i][1])
 		{
 			temp = expand_variable(splitted[i]);
-			free(splitted[i]);
 			splitted[i] = temp;
 		}
 		total_len += ft_strlen(splitted[i]);
@@ -199,14 +199,16 @@ static char	*join_chunks(char **splitted, int total_len)
  */
 char	*string_expand_dollars(char *str, bool collapse_spaces)
 {
-	int												new_len;
-	char __attribute__((cleanup(clean_array)))		**splitted;
+	int		new_len;
+	char	**splitted;
+	char	*result;
 
 	(void)collapse_spaces;
-	splitted = NULL;
 	if (!ft_strchr(str, '$'))
 		return (ft_strdup(str));
 	splitted = ft_split_in_chunks(str, '$');
 	new_len = process_chunks(splitted);
-	return (join_chunks(splitted, new_len));
+	result = join_chunks(splitted, new_len);
+	free(splitted);
+	return (result);
 }

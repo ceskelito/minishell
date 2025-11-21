@@ -58,26 +58,64 @@ static t_token	*process_word(char *word, t_token **first, t_token *prev)
 }
 
 /**
+ * finalize_split_tokens - Finalize the last token in split chain
+ *
+ * @prev: Last token in the chain
+ * @next: Next token to link to
+ * @cat: cat_to_next flag value
+ *
+ * Sets the next pointer and cat_to_next flag on the last token.
+ */
+static void	finalize_split_tokens(t_token *prev, t_token *next, bool cat)
+{
+	if (prev)
+	{
+		prev->next = next;
+		prev->cat_to_next = cat;
+	}
+}
+
+/**
+ * validate_words - Validate and prepare words array for tokenization
+ *
+ * @words: Array of words from ft_split
+ *
+ * Return: words if valid, NULL if empty (after freeing if needed)
+ */
+static char	**validate_words(char **words)
+{
+	if (!words)
+		return (NULL);
+	if (!words[0])
+	{
+		free(words);
+		return (NULL);
+	}
+	return (words);
+}
+
+/**
  * split_into_tokens - Split expanded string into multiple word tokens
  *
  * @expanded: Expanded string that may contain spaces
  * @next_token: Next token in original list (to preserve link)
+ * @cat_to_next: Flag to set on the last created token
  *
  * Splits the expanded string by whitespace and creates a new token
  * for each word. Tokens are linked together and the last one points
- * to next_token.
+ * to next_token and inherits the cat_to_next flag.
  *
  * Return: Pointer to the first token of the new list, or NULL if no words
  */
-static t_token	*split_into_tokens(char *expanded, t_token *next_token)
+static t_token	*split_into_tokens(char *exp, t_token *next, bool cat)
 {
 	char	**words;
 	t_token	*first;
 	t_token	*prev;
 	int		i;
 
-	words = ft_split(expanded, ' ');
-	if (!words || !words[0])
+	words = validate_words(ft_split(exp, ' '));
+	if (!words)
 		return (NULL);
 	first = NULL;
 	prev = NULL;
@@ -88,8 +126,7 @@ static t_token	*split_into_tokens(char *expanded, t_token *next_token)
 			prev = process_word(words[i], &first, prev);
 		i++;
 	}
-	if (prev)
-		prev->next = next_token;
+	finalize_split_tokens(prev, next, cat);
 	free(words);
 	return (first);
 }
@@ -149,7 +186,7 @@ static t_token	*expand_and_split_token(t_token **curr)
 		return (NULL);
 	if (!(*curr)->collapse_spaces && ft_strchr(expanded, ' '))
 	{
-		split = split_into_tokens(expanded, (*curr)->next);
+		split = split_into_tokens(expanded, (*curr)->next, (*curr)->cat_to_next);
 		if (split)
 		{
 			last = split;
