@@ -1,4 +1,4 @@
-/* ************************************************************************* */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   string_expand_dollars.c                            :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 17:15:36 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 16:40:38 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/21 14:00:00 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,14 @@
 #include "ft_lib.h"
 #include "minishell.h"
 
-static int	count_char(char *s, char c)
+/**
+ * count_delimiter - Count occurrences of a specific character in a string
+ * @s: The string to search
+ * @c: The character to count
+ *
+ * Return: Number of times character c appears in string s
+ */
+static int	count_delimiter(char *s, char c)
 {
 	int		i;
 	int		count;
@@ -25,12 +32,50 @@ static int	count_char(char *s, char c)
 	{
 		if (s[i] == c)
 			count++;
-		i++;        
+		i++;
 	}
 	return (count);
 }
 
-void	fill_chunks(char **splitted, char *str)
+/**
+ * get_chunk_len - Calculate length of next chunk (text or variable)
+ * @str: String starting at current position
+ * @i: Current position in string
+ *
+ * Return: Length of the chunk (either up to next $ or variable name length)
+ */
+static int	get_chunk_len(char *str, int i)
+{
+	int		len;
+
+	len = 0;
+	if (str[i] != '$')
+	{
+		while (str[i + len] && str[i + len] != '$')
+			len++;
+	}
+	else
+	{
+		len = 1;
+		if (str[i + len] == '?')
+			len++;
+		else
+			while (str[i + len] && (ft_isalnum(str[i + len])
+					|| str[i + len] == '_'))
+				len++;
+	}
+	return (len);
+}
+
+/**
+ * fill_chunks - Split string into chunks separated by $ delimiter
+ * @splitted: Array to store the chunks
+ * @str: String to split
+ *
+ * Splits the string into chunks where each chunk is either text before $
+ * or a variable reference starting with $
+ */
+static void	fill_chunks(char **splitted, char *str)
 {
 	int		i;
 	int		len;
@@ -38,124 +83,213 @@ void	fill_chunks(char **splitted, char *str)
 
 	i = 0;
 	n = 0;
-	while (len = 0, str[i])
+	while (str[i])
 	{
-		while (str[i + len] && str[i + len] != '$')
-			len++;
-		if (len == 0 && str[i] == '$')
-		{
-			len = 1;
-			if (str[i + len] == '?')
-				len++;
-			else
-				while (str[i + len] && (ft_isalnum(str[i + len]) || str[i + len] == '_'))
-					len++;
-		}
+		len = get_chunk_len(str, i);
 		splitted[n++] = ft_substr(str, i, len);
 		i += len;
 	}
 	splitted[n] = NULL;
 }
 
-static char	**ft_split_in_chunks(char *str, char delimiter)
+/**
+ * split_by_dollar - Split string into chunks at $ boundaries
+ * @str: String to split
+ *
+ * Return: NULL-terminated array of string chunks
+ */
+static char	**split_by_dollar(char *str)
 {
-	int		delimiter_count;
+	int		count;
 	char	**splitted;
 
-	delimiter_count = count_char(str, delimiter);
-	if (!delimiter_count)
+	count = count_delimiter(str, '$');
+	if (!count)
 	{
 		splitted = ft_calloc(2, sizeof(char *));
 		splitted[0] = ft_strdup(str);
 	}
 	else
 	{
-		splitted = ft_calloc(delimiter_count * 2 + 1, sizeof(char *));
+		splitted = ft_calloc(count * 2 + 1, sizeof(char *));
 		fill_chunks(splitted, str);
 	}
 	return (splitted);
 }
 
-static void	string_collapse_spaces(char **str)
+/**
+ * handle_space_sequence - Process a sequence of spaces for word splitting
+ * @s: Input string pointer to update
+ * @d: Output string pointer to update
+ * @leading: Whether this is at the start of string
+ *
+ * Converts multiple consecutive spaces to single space marker.
+ * Preserves one space at start/end if present.
+ */
+static void	handle_space_sequence(char **s, char **d, bool leading)
 {
-	char	*old;
-	char	*new;
-	int		i;
-	int		j;
+	while (ft_isspace(**s))
+		(*s)++;
+	if (!leading || **s)
+		*((*d)++) = ' ';
+}
 
-	old = *str;
-	new = ft_calloc(ft_strlen(old) + 1, sizeof(char));
+/**
+ * apply_word_split - Apply bash word splitting to expanded variable
+ * @str: String pointer to process and replace
+ *
+ * When word splitting is enabled, collapses multiple spaces to single spaces
+ * while preserving markers for leading/trailing spaces. This prepares the
+ * string for later splitting into multiple tokens.
+ */
+static void	apply_word_split(char **str)
+{
+	char	*src;
+	char	*dst;
+	char	*new;
+
+	src = *str;
+	new = ft_calloc(ft_strlen(src) + 1, sizeof(char));
 	if (!new)
+		return ((void)(*str = NULL));
+	dst = new;
+	if (ft_isspace(*src))
+		handle_space_sequence(&src, &dst, true);
+	while (*src)
 	{
-		*str = NULL;
-		return ;
-	}
-	i = 0;
-	j = 0;
-	while (old[i])
-	{
-		if (ft_isspace(old[i]))
-		{
-			new[j++] = ' ';
-			while (ft_isspace(old[i]))
-				i++;
-		}
+		if (ft_isspace(*src))
+			handle_space_sequence(&src, &dst, false);
 		else
-			new[j++] = old[i++];
+			*dst++ = *src++;
 	}
-	new[j] = '\0';
-	free(old);
+	*dst = '\0';
+	free(*str);
 	*str = new;
 }
 
-char	*string_expand_dollars(char *str, bool collapse_spaces)
+/**
+ * expand_exit_status - Expand $? to current exit status value
+ *
+ * Return: String representation of exit status (allocated)
+ */
+static char	*expand_exit_status(void)
 {
-	int												i;
-	int												new_len;
-	char											*new;
-	char											*temp;
-	char __attribute__((cleanup(clean_array)))		**splitted;
+	return (ft_itoa(get_exit_status()));
+}
 
-	splitted = NULL;
+/**
+ * expand_variable - Expand environment variable reference
+ * @var_name: Name of the variable (without $)
+ * @word_split: Whether to apply word splitting
+ *
+ * Return: Expanded variable value (allocated), empty string if not found
+ */
+static char	*expand_variable(char *var_name, bool word_split)
+{
+	char	*value;
+	char	*result;
+
+	value = ft_getenv(var_name);
+	if (value)
+		result = ft_strdup(value);
+	else
+		result = ft_strdup("");
+	if (word_split && result)
+		apply_word_split(&result);
+	return (result);
+}
+
+/**
+ * expand_chunk - Expand a single chunk if it's a variable reference
+ * @chunk: Pointer to chunk string to expand
+ * @word_split: Whether to apply word splitting to variables
+ *
+ * If chunk starts with $, replaces it with expanded value.
+ * Otherwise leaves chunk unchanged.
+ */
+static void	expand_chunk(char **chunk, bool word_split)
+{
+	char	*expanded;
+
+	if (!*chunk || (*chunk)[0] != '$' || !(*chunk)[1])
+		return ;
+	if ((*chunk)[1] == '?')
+		expanded = expand_exit_status();
+	else
+		expanded = expand_variable(&(*chunk)[1], word_split);
+	free(*chunk);
+	*chunk = expanded;
+}
+
+/**
+ * calculate_length - Calculate total length of all chunks
+ * @chunks: NULL-terminated array of strings
+ *
+ * Return: Sum of lengths of all chunks
+ */
+static int	calculate_length(char **chunks)
+{
+	int		total;
+	int		i;
+
+	total = 0;
+	i = 0;
+	while (chunks[i])
+		total += ft_strlen(chunks[i++]);
+	return (total);
+}
+
+/**
+ * join_chunks - Concatenate all chunks into single string
+ * @chunks: NULL-terminated array of string chunks
+ * @total_len: Total length needed for result
+ *
+ * Return: Newly allocated concatenated string
+ */
+static char	*join_chunks(char **chunks, int total_len)
+{
+	char	*result;
+	int		i;
+
+	result = ft_calloc(total_len + 1, sizeof(char));
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (chunks[i])
+		ft_strlcat(result, chunks[i++], total_len + 1);
+	return (result);
+}
+
+/**
+ * string_expand_dollars - Expand dollar variables in a string
+ * @str: Input string potentially containing $VAR or $? references
+ * @word_split: If true, apply word splitting to expanded variables
+ *
+ * Processes string to expand all $VAR references to their values and
+ * $? to the last exit status. When word_split is true, applies bash-style
+ * word splitting: collapses multiple spaces to single spaces and marks
+ * boundaries for later tokenization while preserving leading/trailing space.
+ *
+ * Return: Newly allocated string with expansions applied, or NULL on error
+ */
+char	*string_expand_dollars(char *str, bool word_split)
+{
+	char __attribute__((cleanup(clean_array)))	**chunks;
+	int											len;
+	int											i;
+
+	chunks = NULL;
 	if (!ft_strchr(str, '$'))
 		return (ft_strdup(str));
-	splitted = ft_split_in_chunks(str, '$');
-	new_len = 0;
+	chunks = split_by_dollar(str);
+	if (!chunks)
+		return (NULL);
 	i = 0;
-	i = 0;
-	while (splitted[i])
+	while (chunks[i])
 	{
-		if (splitted[i][0] == '$' && splitted[i][1])
-		{
-			if (splitted[i][1] == '?')
-			{
-				temp = ft_itoa(get_exit_status());
-				free(splitted[i]);
-				splitted[i] = temp;
-			}
-			else
-			{
-				temp = ft_getenv(&(splitted[i][1]));
-				free(splitted[i]);
-				if (temp)
-					temp = ft_strdup(temp);
-				else
-					temp = ft_strdup("");
-				if (collapse_spaces)
-					string_collapse_spaces(&temp);
-				splitted[i] = temp;
-				temp = NULL;
-			}
-		}
-		new_len += ft_strlen(splitted[i]);
+		expand_chunk(&chunks[i], word_split);
 		i++;
 	}
-	new = ft_calloc(new_len + 1, sizeof(char));
-	i = 0;
-	while (splitted[i])
-	{
-		ft_strlcat(new, splitted[i], new_len + 1);
-		i++;
-	}
-	return (new);
+	len = calculate_length(chunks);
+	return (join_chunks(chunks, len));
 }
