@@ -18,7 +18,7 @@
 
 t_token 	*create_test_tokens(t_token *token);
 void		executor(t_shell *shell);
-void		resolve_command_location(t_cmd *cmd);
+bool		resolve_command_location(t_cmd *cmd);
 void		setup_heredocs(t_cmd *cmd_list);
 void		setup_heredocs(t_cmd *cmd_list);
 int		    open_pipeline_fds(t_cmd *cmd_list);
