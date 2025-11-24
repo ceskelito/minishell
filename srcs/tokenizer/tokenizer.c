@@ -10,7 +10,7 @@ static int	fill_operator_token(t_token *token, char *input)
 	return (ft_strlen(token->value));
 }
 
-static t_token	*new_token()
+t_token	*new_token()
 {
 	t_token *new;
 

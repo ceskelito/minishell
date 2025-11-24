@@ -6,11 +6,12 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/24 12:35:48 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:01:31 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
 
 static const int	UNCLOSED_QUOTES = -1;
 static const bool	IN_QUOTES = true;
@@ -26,12 +27,61 @@ static inline bool isspecial(char c)
 	return (ft_strchr("|<>", c));
 }
 
+static inline bool ft_hasspace(char *str)
+{
+	int i;
+
+	i = 0;
+	while(str && str[i])
+	{
+		if (ft_isspace(str[i]))
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+t_token	*new_token();
+
+static t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
+{
+	int		i;
+	char	**split;
+	t_token	*curr;
+
+	split = ft_split_func(input, ft_isspace);
+	if (!split)
+	{
+		perror("minishell");
+		exit(errno);
+	}
+	i = 0;
+	while (split[i])
+	{
+		if (i == 0)
+			curr = token;
+		else
+		{
+			curr->next = new_token();
+			curr = curr->next;
+		}
+		curr->type = WORD;
+		curr->value = split[i];
+		ezg_add(TOKEN, curr->value);
+		i++;
+	}
+	curr->cat_to_next = cat_to_next;
+	free(split);
+	return (token);
+}
+
 static void	set_token_value(t_token *token, char *input, int gap, int len, bool in_quote)
 {
 	char	*result;
+	bool	cat_to_next;
 
 	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
-		token->cat_to_next = true;
+		cat_to_next = true;
 	if (len == 0)
 		result = ft_strdup("");
 	else if (input[0] != '\'')
@@ -44,7 +94,13 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 		exit(errno);
 	}
 	ezg_add(TOKEN, result);
-	token->value = result;
+	if (!in_quote && ft_hasspace(result))
+		token_split_words(token, result, cat_to_next);
+	else
+	{
+		token->cat_to_next = cat_to_next;
+		token->value = result;
+	}
 	
 }
 

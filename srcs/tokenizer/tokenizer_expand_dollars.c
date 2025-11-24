@@ -24,7 +24,7 @@ int     token_cat_to_next(t_token **token)
 
     curr = *token;
     next = curr->next;
-    if (!next || !curr->cat_to_next || curr->type != next->type)
+    if (!curr || !next || !curr->cat_to_next || curr->type != next->type)
         return (-1);
     new_value = ezg_calloc(TOKEN, sizeof(char),
                     ft_strlen(curr->value) + ft_strlen(next->value) + 1);
