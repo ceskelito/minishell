@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/24 17:01:31 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:24:11 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 	char	*result;
 	bool	cat_to_next;
 
+	cat_to_next = false;
 	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
 		cat_to_next = true;
 	if (len == 0)
