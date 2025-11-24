@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_expand_dollars.c                         :+:      :+:    :+:   */
+/*   tokenizer_concatenate.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 20:06:08 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/24 17:18:14 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:27:00 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * This function will not free any memory, beacuse i attended that
  * the tokens are saved in the TOKEN list of garbage (from libezalloc)
 */
-int     token_cat_to_next(t_token **token)
+static int     token_cat_to_next(t_token **token)
 {
     t_token    *curr;
     t_token    *next;
@@ -38,24 +38,10 @@ int     token_cat_to_next(t_token **token)
     return (0);
 }
 
-int    token_expand_dollars_and_cat(t_token **token_list)
+int    concatenate_tokens(t_token **token_list)
 {
     t_token    *curr;
 
-    /* curr = *token_list;
-    while (curr)
-    {
-        if (curr->expand_dollar)
-        {
-            curr->value = string_expand_dollars(curr->value);
-            ezg_add(TOKEN, curr->value);
-            if (!curr->value)
-                return (-1);
-        }
-        curr = curr->next;
-    } */
-
-    // Maybe from here can be a different function
     curr = *token_list;
     while (curr)
     {

@@ -33,7 +33,7 @@ FILES = main 				\
 		tokenizer_word		\
 		tokenizer_utils		\
 		tokenizer_debug		\
-		tokenizer_expand_dollars \
+		tokenizer_concatenate \
 		parser				\
 		parser_redirs		\
 		parser_cleanup		\

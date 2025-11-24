@@ -34,7 +34,7 @@ static void	process_command(char *input, t_shell *shell)
 	debug_mode = is_debug_command(input);
 	cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
 	shell->tokens = tokenize_input(cmd);
-	token_expand_dollars_and_cat(&(shell->tokens));
+	concatenate_tokens(&(shell->tokens));
 	/* if (true) //DEBUG
 	{
 		shell->cmd_list = NULL;

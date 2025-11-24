@@ -121,7 +121,7 @@ t_token_type	get_token_type(char *input);
 int				fill_word_token(t_token *token, char *input);
 
 /* Tokenizer utilities */
-int			    token_expand_dollars_and_cat(t_token **token_list);
+int			    concatenate_tokens(t_token **token_list);
 char    		*string_expand_dollars(char *str);
 void			handle_dollar_sign(char *input, int *i, char **result);
 char			*process_quotes(char *input, int *i, char *result);
