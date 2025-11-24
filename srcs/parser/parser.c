@@ -2,9 +2,9 @@
 #include "minishell.h"
 
 /* Set @curr_cmd to his next. */
-static int	go_next_cmd(t_cmd **curr_cmd)
-{
-	(*curr_cmd)->next = ezg_calloc(COMMAND, sizeof(t_cmd), 1);;
+static int go_next_cmd(t_cmd **curr_cmd) {
+	(*curr_cmd)->next = ezg_calloc(COMMAND, sizeof(t_cmd), 1);
+	;
 	if (!(*curr_cmd)->next)
 		return (-1);
 	(*curr_cmd) = (*curr_cmd)->next;
@@ -21,17 +21,15 @@ static int	go_next_cmd(t_cmd **curr_cmd)
 
  Return: The number of consecutive WORD tokens.
  */
-static int	token_count_args(t_token *token)
-{
+static int token_count_args(t_token *token) {
 	t_token *tmp;
-	int		argc;
-	
+	int argc;
+
 	argc = 0;
 	tmp = token;
-	while (tmp && tmp->type & WORD)
-	{
+	while (tmp && tmp->type & WORD) {
 		tmp = tmp->next;
-		argc ++;
+		argc++;
 	}
 	return (argc);
 }
@@ -49,18 +47,16 @@ static int	token_count_args(t_token *token)
 
  Return: The number of arguments set on success, or -1 on allocation failure.
  */
-static int set_cmd_args(t_cmd *cmd, t_token *token)
-{
-	int	i;
-	int	args_count;
+static int set_cmd_args(t_cmd *cmd, t_token *token) {
+	int i;
+	int args_count;
 
 	args_count = token_count_args(token);
 	cmd->args = ezg_calloc(COMMAND, sizeof(char *), args_count + 1);
 	if (!cmd->args)
 		return (-1);
 	i = 0;
-	while (i < args_count)
-	{
+	while (i < args_count) {
 		cmd->args[i] = ft_strdup(token->value);
 		if (!cmd->args[i])
 			return (-1);
@@ -72,24 +68,22 @@ static int set_cmd_args(t_cmd *cmd, t_token *token)
 	return (args_count);
 }
 
-static void	add_pipe_redir(t_cmd *cmd, t_token_type type)
-{
-	t_redir	*redir;
+static void add_pipe_redir(t_cmd *cmd, t_token_type type) {
+	t_redir *redir;
 
 	redir = ezg_calloc(GLOBAL, sizeof(t_redir), 1);
 	if (!redir)
-		return ;
+		return;
 	redir->file = NULL;
 	redir->pipe_fd = -1;
 	redir->type = PIPE | type;
 	add_redir(cmd, redir);
 }
 
-t_cmd	*parse_tokens(t_token *tokens)
-{
-	t_cmd	*cmd_head;
-	t_cmd	*curr_cmd;
-	t_token	*curr_token;
+t_cmd *parse_tokens(t_token *tokens) {
+	t_cmd *cmd_head;
+	t_cmd *curr_cmd;
+	t_token *curr_token;
 
 	if (!tokens)
 		return (NULL);
@@ -98,25 +92,23 @@ t_cmd	*parse_tokens(t_token *tokens)
 		return (NULL);
 	curr_cmd = cmd_head;
 	curr_token = tokens;
-	while (curr_token)
-	{
-		if (curr_token->type & WORD)
-		{
+	while (curr_token) {
+		if (curr_token->type & WORD) {
 			if (set_cmd_args(curr_cmd, curr_token) == -1)
 				return (NULL);
 			while (curr_token->next && curr_token->next->type & WORD)
 				curr_token = curr_token->next;
-		}
-		else if (is_redir_token(curr_token->type))
-		{
+		} else if (is_redir_token(curr_token->type)) {
 			if (parse_redirection(curr_cmd, &curr_token) != 0)
 				return (NULL);
-		}
-		else if (curr_token->type & PIPE)
-		{
+		} else if (curr_token->type & PIPE) {
+			if (!curr_token->next || !(curr_token->next->type & WORD)) {
+				ft_dprintf(STDERR_FILENO,
+						   "minishell: syntax error: unexpected end of pipe\n");
+				return (NULL);
+			}
+
 			curr_cmd->pipe_output = true;
-			if (!curr_token->next)
-				break;
 			add_pipe_redir(curr_cmd, OUT);
 			if (go_next_cmd(&curr_cmd) != 0)
 				return (NULL);
