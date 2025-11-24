@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/20 16:35:46 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/24 12:21:17 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 	if (ft_strcmp(input, delimiter) == 0)
 		return (false);
 	if (expand)
-		ft_dprintf(fd, "%s\n", string_expand_dollars(input, false));
+		ft_dprintf(fd, "%s\n", string_expand_dollars(input));
 	else
 		ft_dprintf(fd, "%s\n", input);
 	return (true);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_expand_dollars.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 20:06:08 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 16:08:14 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/24 12:21:30 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,18 @@ int    token_expand_dollars_and_cat(t_token **token_list)
 {
     t_token    *curr;
 
-    curr = *token_list;
+    /* curr = *token_list;
     while (curr)
     {
         if (curr->expand_dollar)
         {
-            curr->value = string_expand_dollars(curr->value, curr->collapse_spaces);
+            curr->value = string_expand_dollars(curr->value);
             ezg_add(TOKEN, curr->value);
             if (!curr->value)
                 return (-1);
         }
         curr = curr->next;
-    }
+    } */
 
     // Maybe from here can be a different function
     curr = *token_list;

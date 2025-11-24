@@ -52,6 +52,10 @@ void	fill_chunks(char **splitted, char *str)
 					len++;
 		}
 		splitted[n++] = ft_substr(str, i, len);
+		if (!splitted[n - 1])
+        {
+            splitted[n - 1] = ft_strdup("");
+        }
 		i += len;
 	}
 	splitted[n] = NULL;
@@ -67,6 +71,7 @@ static char	**ft_split_in_chunks(char *str, char delimiter)
 	{
 		splitted = ft_calloc(2, sizeof(char *));
 		splitted[0] = ft_strdup(str);
+		splitted[1] = NULL;
 	}
 	else
 	{
@@ -76,45 +81,14 @@ static char	**ft_split_in_chunks(char *str, char delimiter)
 	return (splitted);
 }
 
-static void	string_collapse_spaces(char **str)
-{
-	char	*old;
-	char	*new;
-	int		i;
-	int		j;
-
-	old = *str;
-	new = ft_calloc(ft_strlen(old) + 1, sizeof(char));
-	if (!new)
-	{
-		*str = NULL;
-		return ;
-	}
-	i = 0;
-	j = 0;
-	while (old[i])
-	{
-		if (ft_isspace(old[i]))
-		{
-			new[j++] = ' ';
-			while (ft_isspace(old[i]))
-				i++;
-		}
-		else
-			new[j++] = old[i++];
-	}
-	new[j] = '\0';
-	free(old);
-	*str = new;
-}
-
-char	*string_expand_dollars(char *str, bool collapse_spaces)
+char	*string_expand_dollars(char *str)
 {
 	int												i;
 	int												new_len;
 	char											*new;
 	char											*temp;
 	char __attribute__((cleanup(clean_array)))		**splitted;
+	// char											**splitted;
 
 	splitted = NULL;
 	if (!ft_strchr(str, '$'))
@@ -141,8 +115,8 @@ char	*string_expand_dollars(char *str, bool collapse_spaces)
 					temp = ft_strdup(temp);
 				else
 					temp = ft_strdup("");
-				if (collapse_spaces)
-					string_collapse_spaces(&temp);
+				/* if (collapse_spaces)
+					string_collapse_spaces(&temp); */
 				splitted[i] = temp;
 				temp = NULL;
 			}

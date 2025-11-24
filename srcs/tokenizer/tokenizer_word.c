@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_word.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/19 16:07:37 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/24 12:35:48 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-enum {NO_QUOTES = -2, UNCLOSED_QUOTES = -1};
-enum {IN_QUOTES = true, OUT_QUOTES = false};
+static const int	UNCLOSED_QUOTES = -1;
+static const bool	IN_QUOTES = true;
+static const bool	OUT_QUOTES = false;
 
 static inline bool	isquote(char c)
 {
@@ -29,11 +30,12 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 {
 	char	*result;
 
-	token->collapse_spaces = in_quote;
 	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
 		token->cat_to_next = true;
 	if (len == 0)
 		result = ft_strdup("");
+	else if (input[0] != '\'')
+		result = string_expand_dollars(ft_substr(input, in_quote, len));
 	else
 		result = ft_substr(input, in_quote, len);
 	if (!result)
@@ -55,8 +57,6 @@ static int	process_word_surrounded(t_token *token, char *input)
 	gap = 1;
 	len = 0;
 	quote = input[0];
-	if (quote == '\'')
-		token->expand_dollar = false;
 	while (input[gap] && input[gap] != quote)
 	{
 		len++;
@@ -100,6 +100,8 @@ int	fill_word_token(t_token *token, char *input)
 		spaces++;
 		input++;
 	}
+	if (!input)
+		return (spaces);
 	gap = 0;
 	if (isquote(input[0]))
 		gap = process_word_surrounded(token, input);

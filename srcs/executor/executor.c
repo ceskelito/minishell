@@ -85,7 +85,7 @@ static void	execute_in_parent(t_shell *shell, t_cmd *cmd)
 	dup2(shell->std_in, STDIN_FILENO);
 	dup2(shell->std_out, STDOUT_FILENO);
 	set_exit_status(exit_code);
-	ezg_group_release(EXECUTING);
+	ezg_group_release(EXECUTING); //DEBUG - decomment before push
 }
 
 static void	execute_pipeline(t_cmd *cmd, int *exit_code)
