@@ -1,5 +1,6 @@
 #include "executor.h"
 #include "ezgalloc.h"
+#include "ft_lib.h"
 #include "minishell.h"
 #include <signal.h>
 #include <unistd.h>
@@ -34,6 +35,8 @@ static void	process_command(char *input, t_shell *shell)
 	debug_mode = is_debug_command(input);
 	if (debug_mode)
 		cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
+	else
+		cmd = input;
 	shell->tokens = tokenize_input(cmd);
 	concatenate_tokens(&(shell->tokens));
 	shell->cmd_list = parse_tokens(shell->tokens);
@@ -135,6 +138,7 @@ int	main(void)
 {
 	t_shell				shell;
 	char				*input;
+	char				*cwd;
 
 	set_signal(SIGINT, handle_sigint);
 	set_signal(SIGQUIT, SIG_IGN);
@@ -142,26 +146,19 @@ int	main(void)
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	
-	// const char 	*string = "Sono $USER, nella cartella $PWD. non $EXIST";
-	// char		*expanded;
-	// expanded = string_expand_dollars((char *)string);
-	// ezg_add(EXECUTING, expanded);
-	// printf("String:%s\nExpand:%s\n", string, expanded);
-	// char *str = ft_getenv("PWD");
-	// printf("%s\n", str);
-	// return (0);
-	
 	while (1)
 	{
 		input = ezg_add(EXECUTING, readline(get_prompt()));
 		if (!input)
 			break ;
-		ft_setenv("PWD", getcwd(NULL, 0));
+		cwd = getcwd(NULL, 0);
+		if (!cwd)
+			return (perror("minishell"), errno);
+		if (ft_strcmp(cwd, ft_getenv("PWD")) != 0)
+			ft_setenv("PWD", cwd);
+		free(cwd);
 		add_history(input);
 		process_command(input, &shell);
-		// ezg_cleanup();
 	}
-	//cleanup_shell(&shell);
-	// printf("\nGoodbye!\n");
 	return (0);
 }

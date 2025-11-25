@@ -1,0 +1,1049 @@
+==94788== Memcheck, a memory error detector
+==94788== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==94788== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==94788== Command: ./minishell
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10AEAF: tokenize_input (tokenizer.c:32)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10ADCB: tokenize_input (tokenizer.c:34)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10ADE9: tokenize_input (tokenizer.c:36)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10AE0F: tokenize_input (tokenizer.c:39)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BE6A: fill_word_token (tokenizer_word.c:158)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Conditional jump or move depends on uninitialised value(s)
+==94788==    at 0x10BE80: fill_word_token (tokenizer_word.c:163)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BE92: fill_word_token (tokenizer_word.c:166)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BDB3: process_word_nosurround (tokenizer_word.c:143)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BDC7: process_word_nosurround (tokenizer_word.c:143)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BDE8: process_word_nosurround (tokenizer_word.c:143)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BE06: process_word_nosurround (tokenizer_word.c:143)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BB84: set_token_value (tokenizer_word.c:84)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10BBCF: set_token_value (tokenizer_word.c:88)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Conditional jump or move depends on uninitialised value(s)
+==94788==    at 0x10E8F8: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Conditional jump or move depends on uninitialised value(s)
+==94788==    at 0x10E779: ft_strlen (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10E919: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10E787: ft_strlen (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10E919: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Conditional jump or move depends on uninitialised value(s)
+==94788==    at 0x10E779: ft_strlen (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10E952: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10E787: ft_strlen (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10E952: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+==94788== Use of uninitialised value of size 8
+==94788==    at 0x10E9C8: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788==  Uninitialised value was created by a stack allocation
+==94788==    at 0x1093C6: process_command (main.c:30)
+==94788== 
+minishell: В: command not found
+==94789== 
+==94789== HEAP SUMMARY:
+==94789==     in use at exit: 212,729 bytes in 386 blocks
+==94789==   total heap usage: 624 allocs, 238 frees, 602,746 bytes allocated
+==94789== 
+==94789== 4 bytes in 1 blocks are still reachable in loss record 3 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x10DE4F: ft_strdup (in /nfs/homes/rceschel/minishell/minishell)
+==94789==    by 0x10DB02: string_expand_dollars (string_expand_dollars.c:77)
+==94789==    by 0x10BBF5: set_token_value (tokenizer_word.c:89)
+==94789==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94789==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94789==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94789==    by 0x10940A: process_command (main.c:37)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 4 bytes in 1 blocks are still reachable in loss record 4 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x10DE4F: ft_strdup (in /nfs/homes/rceschel/minishell/minishell)
+==94789==    by 0x10C027: set_cmd_args (parser.c:60)
+==94789==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94789==    by 0x109432: process_command (main.c:39)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 4 bytes in 1 blocks are still reachable in loss record 5 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x10A276: execute_pipeline (executor.c:98)
+==94789==    by 0x10A416: executor (executor.c:130)
+==94789==    by 0x109458: process_command (main.c:42)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 4 bytes in 1 blocks are definitely lost in loss record 6 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x10DDEC: ft_calloc (in /nfs/homes/rceschel/minishell/minishell)
+==94789==    by 0x10E98A: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94789==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94789==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94789==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94789==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94789==    by 0x10940A: process_command (main.c:37)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 7 bytes in 1 blocks are still reachable in loss record 7 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x1124C1: internal_strdup (strings.c:77)
+==94789==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10947B: create_groups (main.c:51)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 8 bytes in 1 blocks are still reachable in loss record 8 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x1124C1: internal_strdup (strings.c:77)
+==94789==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x109487: create_groups (main.c:52)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 8 bytes in 1 blocks are still reachable in loss record 9 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x1124C1: internal_strdup (strings.c:77)
+==94789==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x109493: create_groups (main.c:53)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 11 bytes in 1 blocks are still reachable in loss record 12 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x1124C1: internal_strdup (strings.c:77)
+==94789==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10946F: create_groups (main.c:50)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 12 bytes in 1 blocks are still reachable in loss record 13 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x1124C1: internal_strdup (strings.c:77)
+==94789==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10949F: create_groups (main.c:54)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 18 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10946F: create_groups (main.c:50)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 19 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10947B: create_groups (main.c:51)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 20 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x109487: create_groups (main.c:52)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 21 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x109493: create_groups (main.c:53)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 22 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10949F: create_groups (main.c:54)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 23 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112089: new_node_helper (helpers.c:50)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10C9DE: dup_array (array.c:38)
+==94789==    by 0x10D250: env_handler (environment_handler.c:164)
+==94789==    by 0x10CD00: ft_getenv (environment.c:35)
+==94789==    by 0x1095E7: get_prompt (main.c:92)
+==94789==    by 0x109826: main (main.c:156)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 24 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94789==    by 0x1096D6: get_prompt (main.c:109)
+==94789==    by 0x109826: main (main.c:156)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 26 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94789==    by 0x10983D: main (main.c:156)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 27 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112089: new_node_helper (helpers.c:50)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10CDEE: change_entry_value (environment_handler.c:42)
+==94789==    by 0x10D2B2: env_handler (environment_handler.c:171)
+==94789==    by 0x10CCD3: ft_setenv (environment.c:27)
+==94789==    by 0x109866: main (main.c:159)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 28 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112089: new_node_helper (helpers.c:50)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10AD6C: new_token (tokenizer.c:17)
+==94789==    by 0x10ADFD: tokenize_input (tokenizer.c:38)
+==94789==    by 0x10940A: process_command (main.c:37)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 29 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94789==    by 0x10BC4B: set_token_value (tokenizer_word.c:97)
+==94789==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94789==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94789==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94789==    by 0x10940A: process_command (main.c:37)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 30 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112089: new_node_helper (helpers.c:50)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10C167: parse_tokens (parser.c:90)
+==94789==    by 0x109432: process_command (main.c:39)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 31 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112053: new_node_helper (helpers.c:44)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10BFDD: set_cmd_args (parser.c:55)
+==94789==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94789==    by 0x109432: process_command (main.c:39)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 32 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112089: new_node_helper (helpers.c:50)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10BFDD: set_cmd_args (parser.c:55)
+==94789==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94789==    by 0x109432: process_command (main.c:39)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 16 bytes in 1 blocks are still reachable in loss record 33 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94789==    by 0x10C071: set_cmd_args (parser.c:63)
+==94789==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94789==    by 0x109432: process_command (main.c:39)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 24 bytes in 1 blocks are still reachable in loss record 38 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112053: new_node_helper (helpers.c:44)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10AD6C: new_token (tokenizer.c:17)
+==94789==    by 0x10ADFD: tokenize_input (tokenizer.c:38)
+==94789==    by 0x10940A: process_command (main.c:37)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 30 bytes in 1 blocks are definitely lost in loss record 39 of 105
+==94789==    at 0x484DCD3: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x49DC82C: getcwd (getcwd.c:86)
+==94789==    by 0x109857: main (main.c:159)
+==94789== 
+==94789== 32 bytes in 1 blocks are still reachable in loss record 40 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10946F: create_groups (main.c:50)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 32 bytes in 1 blocks are still reachable in loss record 41 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10947B: create_groups (main.c:51)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 32 bytes in 1 blocks are still reachable in loss record 42 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x109487: create_groups (main.c:52)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 32 bytes in 1 blocks are still reachable in loss record 43 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x109493: create_groups (main.c:53)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 32 bytes in 1 blocks are still reachable in loss record 44 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94789==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94789==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94789==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94789==    by 0x10949F: create_groups (main.c:54)
+==94789==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94789==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94789==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94789== 
+==94789== 34 bytes in 1 blocks are still reachable in loss record 46 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112053: new_node_helper (helpers.c:44)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10CDEE: change_entry_value (environment_handler.c:42)
+==94789==    by 0x10D2B2: env_handler (environment_handler.c:171)
+==94789==    by 0x10CCD3: ft_setenv (environment.c:27)
+==94789==    by 0x109866: main (main.c:159)
+==94789== 
+==94789== 35 bytes in 1 blocks are still reachable in loss record 47 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112610: internal_calloc (memory.c:31)
+==94789==    by 0x11215F: strjoin (error_message_handler.c:29)
+==94789==    by 0x112215: error_handler (error_message_handler.c:49)
+==94789==    by 0x112291: set_error (error_message_handler.c:65)
+==94789==    by 0x112922: allocation_handler (global_allocation_handler.c:121)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94789==    by 0x10AC1B: resolve_command_location (resolve_command_location.c:115)
+==94789==    by 0x109F8E: execute_in_child (executor.c:31)
+==94789==    by 0x10A300: execute_pipeline (executor.c:105)
+==94789==    by 0x10A416: executor (executor.c:130)
+==94789== 
+==94789== 40 bytes in 1 blocks are still reachable in loss record 48 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112053: new_node_helper (helpers.c:44)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10C167: parse_tokens (parser.c:90)
+==94789==    by 0x109432: process_command (main.c:39)
+==94789==    by 0x109885: main (main.c:161)
+==94789== 
+==94789== 43 bytes in 1 blocks are still reachable in loss record 49 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x109661: get_prompt (main.c:102)
+==94789==    by 0x109826: main (main.c:156)
+==94789== 
+==94789== 512 bytes in 1 blocks are still reachable in loss record 62 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x112053: new_node_helper (helpers.c:44)
+==94789==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94789==    by 0x10C9DE: dup_array (array.c:38)
+==94789==    by 0x10D250: env_handler (environment_handler.c:164)
+==94789==    by 0x10CD00: ft_getenv (environment.c:35)
+==94789==    by 0x1095E7: get_prompt (main.c:92)
+==94789==    by 0x109826: main (main.c:156)
+==94789== 
+==94789== 992 bytes in 62 blocks are still reachable in loss record 67 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94789==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94789==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94789==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94789==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94789==    by 0x10CA49: dup_array (array.c:43)
+==94789==    by 0x10D250: env_handler (environment_handler.c:164)
+==94789==    by 0x10CD00: ft_getenv (environment.c:35)
+==94789==    by 0x1095E7: get_prompt (main.c:92)
+==94789==    by 0x109826: main (main.c:156)
+==94789== 
+==94789== 2,257 bytes in 62 blocks are still reachable in loss record 80 of 105
+==94789==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94789==    by 0x10DE4F: ft_strdup (in /nfs/homes/rceschel/minishell/minishell)
+==94789==    by 0x10CA20: dup_array (array.c:42)
+==94789==    by 0x10D250: env_handler (environment_handler.c:164)
+==94789==    by 0x10CD00: ft_getenv (environment.c:35)
+==94789==    by 0x1095E7: get_prompt (main.c:92)
+==94789==    by 0x109826: main (main.c:156)
+==94789== 
+==94789== LEAK SUMMARY:
+==94789==    definitely lost: 34 bytes in 2 blocks
+==94789==    indirectly lost: 0 bytes in 0 blocks
+==94789==      possibly lost: 0 bytes in 0 blocks
+==94789==    still reachable: 4,395 bytes in 158 blocks
+==94789==         suppressed: 208,300 bytes in 226 blocks
+==94789== 
+==94789== For lists of detected and suppressed errors, rerun with: -s
+==94789== ERROR SUMMARY: 45 errors from 21 contexts (suppressed: 0 from 0)
+==94788== 
+==94788== HEAP SUMMARY:
+==94788==     in use at exit: 212,706 bytes in 383 blocks
+==94788==   total heap usage: 617 allocs, 234 frees, 245,929 bytes allocated
+==94788== 
+==94788== 4 bytes in 1 blocks are still reachable in loss record 2 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x10DE4F: ft_strdup (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10DB02: string_expand_dollars (string_expand_dollars.c:77)
+==94788==    by 0x10BBF5: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 4 bytes in 1 blocks are still reachable in loss record 3 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x10DE4F: ft_strdup (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10C027: set_cmd_args (parser.c:60)
+==94788==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94788==    by 0x109432: process_command (main.c:39)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 4 bytes in 1 blocks are definitely lost in loss record 4 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x10DDEC: ft_calloc (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10E98A: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10BBED: set_token_value (tokenizer_word.c:89)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 7 bytes in 1 blocks are still reachable in loss record 5 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x1124C1: internal_strdup (strings.c:77)
+==94788==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10947B: create_groups (main.c:51)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 8 bytes in 1 blocks are still reachable in loss record 6 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x1124C1: internal_strdup (strings.c:77)
+==94788==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x109487: create_groups (main.c:52)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 8 bytes in 1 blocks are still reachable in loss record 7 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x1124C1: internal_strdup (strings.c:77)
+==94788==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x109493: create_groups (main.c:53)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 11 bytes in 1 blocks are still reachable in loss record 10 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x1124C1: internal_strdup (strings.c:77)
+==94788==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10946F: create_groups (main.c:50)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 12 bytes in 1 blocks are still reachable in loss record 11 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x1124C1: internal_strdup (strings.c:77)
+==94788==    by 0x111D62: safe_new_group (groups_handler.c:63)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10949F: create_groups (main.c:54)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 16 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10946F: create_groups (main.c:50)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 17 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10947B: create_groups (main.c:51)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 18 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x109487: create_groups (main.c:52)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 19 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x109493: create_groups (main.c:53)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 20 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111DA7: safe_new_group (groups_handler.c:67)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10949F: create_groups (main.c:54)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 21 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112089: new_node_helper (helpers.c:50)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10C9DE: dup_array (array.c:38)
+==94788==    by 0x10D250: env_handler (environment_handler.c:164)
+==94788==    by 0x10CD00: ft_getenv (environment.c:35)
+==94788==    by 0x1095E7: get_prompt (main.c:92)
+==94788==    by 0x109826: main (main.c:156)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 22 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94788==    by 0x1096D6: get_prompt (main.c:109)
+==94788==    by 0x109826: main (main.c:156)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 24 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112089: new_node_helper (helpers.c:50)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10CDEE: change_entry_value (environment_handler.c:42)
+==94788==    by 0x10D2B2: env_handler (environment_handler.c:171)
+==94788==    by 0x10CCD3: ft_setenv (environment.c:27)
+==94788==    by 0x109866: main (main.c:159)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 25 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112089: new_node_helper (helpers.c:50)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10AD6C: new_token (tokenizer.c:17)
+==94788==    by 0x10ADFD: tokenize_input (tokenizer.c:38)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 26 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94788==    by 0x10BC4B: set_token_value (tokenizer_word.c:97)
+==94788==    by 0x10BE3A: process_word_nosurround (tokenizer_word.c:148)
+==94788==    by 0x10BECD: fill_word_token (tokenizer_word.c:169)
+==94788==    by 0x10AE64: tokenize_input (tokenizer.c:45)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 27 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112089: new_node_helper (helpers.c:50)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10C167: parse_tokens (parser.c:90)
+==94788==    by 0x109432: process_command (main.c:39)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 28 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112053: new_node_helper (helpers.c:44)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10BFDD: set_cmd_args (parser.c:55)
+==94788==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94788==    by 0x109432: process_command (main.c:39)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 29 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112089: new_node_helper (helpers.c:50)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10BFDD: set_cmd_args (parser.c:55)
+==94788==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94788==    by 0x109432: process_command (main.c:39)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 16 bytes in 1 blocks are still reachable in loss record 30 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94788==    by 0x10C071: set_cmd_args (parser.c:63)
+==94788==    by 0x10C1B2: parse_tokens (parser.c:97)
+==94788==    by 0x109432: process_command (main.c:39)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 24 bytes in 1 blocks are still reachable in loss record 35 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112053: new_node_helper (helpers.c:44)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10AD6C: new_token (tokenizer.c:17)
+==94788==    by 0x10ADFD: tokenize_input (tokenizer.c:38)
+==94788==    by 0x10940A: process_command (main.c:37)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 30 bytes in 1 blocks are definitely lost in loss record 36 of 102
+==94788==    at 0x484DCD3: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x49DC82C: getcwd (getcwd.c:86)
+==94788==    by 0x109857: main (main.c:159)
+==94788== 
+==94788== 32 bytes in 1 blocks are still reachable in loss record 37 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10946F: create_groups (main.c:50)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 32 bytes in 1 blocks are still reachable in loss record 38 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10947B: create_groups (main.c:51)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 32 bytes in 1 blocks are still reachable in loss record 39 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x109487: create_groups (main.c:52)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 32 bytes in 1 blocks are still reachable in loss record 40 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x109493: create_groups (main.c:53)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 32 bytes in 1 blocks are still reachable in loss record 41 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x111D36: safe_new_group (groups_handler.c:60)
+==94788==    by 0x111FB7: create_group_helper (helpers.c:26)
+==94788==    by 0x111EA2: ezg_alloc_handler (groups_handler.c:96)
+==94788==    by 0x111B40: ezg_group_create (ezgalloc_helper.c:23)
+==94788==    by 0x10949F: create_groups (main.c:54)
+==94788==    by 0x48F0EBA: call_init (libc-start.c:145)
+==94788==    by 0x48F0EBA: __libc_start_main@@GLIBC_2.34 (libc-start.c:379)
+==94788==    by 0x109254: (below main) (in /nfs/homes/rceschel/minishell/minishell)
+==94788== 
+==94788== 34 bytes in 1 blocks are still reachable in loss record 43 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112053: new_node_helper (helpers.c:44)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10CDEE: change_entry_value (environment_handler.c:42)
+==94788==    by 0x10D2B2: env_handler (environment_handler.c:171)
+==94788==    by 0x10CCD3: ft_setenv (environment.c:27)
+==94788==    by 0x109866: main (main.c:159)
+==94788== 
+==94788== 35 bytes in 1 blocks are still reachable in loss record 44 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112610: internal_calloc (memory.c:31)
+==94788==    by 0x11215F: strjoin (error_message_handler.c:29)
+==94788==    by 0x112215: error_handler (error_message_handler.c:49)
+==94788==    by 0x112291: set_error (error_message_handler.c:65)
+==94788==    by 0x112922: allocation_handler (global_allocation_handler.c:121)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94788==    by 0x10983D: main (main.c:156)
+==94788== 
+==94788== 40 bytes in 1 blocks are still reachable in loss record 45 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112053: new_node_helper (helpers.c:44)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10C167: parse_tokens (parser.c:90)
+==94788==    by 0x109432: process_command (main.c:39)
+==94788==    by 0x109885: main (main.c:161)
+==94788== 
+==94788== 43 bytes in 1 blocks are still reachable in loss record 46 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x109661: get_prompt (main.c:102)
+==94788==    by 0x109826: main (main.c:156)
+==94788== 
+==94788== 512 bytes in 1 blocks are still reachable in loss record 59 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x112053: new_node_helper (helpers.c:44)
+==94788==    by 0x1128EB: allocation_handler (global_allocation_handler.c:116)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111A51: ezg_calloc (ezgalloc.c:30)
+==94788==    by 0x10C9DE: dup_array (array.c:38)
+==94788==    by 0x10D250: env_handler (environment_handler.c:164)
+==94788==    by 0x10CD00: ft_getenv (environment.c:35)
+==94788==    by 0x1095E7: get_prompt (main.c:92)
+==94788==    by 0x109826: main (main.c:156)
+==94788== 
+==94788== 992 bytes in 62 blocks are still reachable in loss record 64 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x11265D: new_node (global_allocation_handler.c:21)
+==94788==    by 0x1126D2: safe_new_node (global_allocation_handler.c:39)
+==94788==    by 0x112906: allocation_handler (global_allocation_handler.c:119)
+==94788==    by 0x111F4D: ezg_alloc_handler (groups_handler.c:108)
+==94788==    by 0x111AA7: ezg_add (ezgalloc.c:37)
+==94788==    by 0x10CA49: dup_array (array.c:43)
+==94788==    by 0x10D250: env_handler (environment_handler.c:164)
+==94788==    by 0x10CD00: ft_getenv (environment.c:35)
+==94788==    by 0x1095E7: get_prompt (main.c:92)
+==94788==    by 0x109826: main (main.c:156)
+==94788== 
+==94788== 2,257 bytes in 62 blocks are still reachable in loss record 77 of 102
+==94788==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==94788==    by 0x10DE4F: ft_strdup (in /nfs/homes/rceschel/minishell/minishell)
+==94788==    by 0x10CA20: dup_array (array.c:42)
+==94788==    by 0x10D250: env_handler (environment_handler.c:164)
+==94788==    by 0x10CD00: ft_getenv (environment.c:35)
+==94788==    by 0x1095E7: get_prompt (main.c:92)
+==94788==    by 0x109826: main (main.c:156)
+==94788== 
+==94788== LEAK SUMMARY:
+==94788==    definitely lost: 34 bytes in 2 blocks
+==94788==    indirectly lost: 0 bytes in 0 blocks
+==94788==      possibly lost: 0 bytes in 0 blocks
+==94788==    still reachable: 4,375 bytes in 156 blocks
+==94788==         suppressed: 208,297 bytes in 225 blocks
+==94788== 
+==94788== For lists of detected and suppressed errors, rerun with: -s
+==94788== ERROR SUMMARY: 45 errors from 21 contexts (suppressed: 0 from 0)

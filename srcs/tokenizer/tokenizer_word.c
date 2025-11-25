@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/25 15:37:49 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:22:43 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 	if (!in_quote && ft_hasspace(result))
 	{
 		token_split_words(token, result, cat_to_next);
-		free(result);
+		//free(result);
 	}
 	else
 	{
