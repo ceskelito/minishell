@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/25 16:22:43 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:54:54 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
 
 static void	set_token_value(t_token *token, char *input, int gap, int len, bool in_quote)
 {
+	char	*tmp;
 	char	*result;
 	bool	cat_to_next;
 
@@ -86,7 +87,11 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 	if (len == 0)
 		result = ft_strdup("");
 	else if (input[0] != '\'')
-		result = string_expand_dollars(ft_substr(input, in_quote, len));
+	{
+		tmp = ft_substr(input, in_quote, len);
+		result = string_expand_dollars(tmp);
+		free(tmp);
+	}	
 	else
 		result = ft_substr(input, in_quote, len);
 	if (!result)
