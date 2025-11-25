@@ -1,0 +1,54 @@
+==65957==
+==65957== HEAP SUMMARY:
+==65957==     in use at exit: 215,660 bytes in 563 blocks
+==65957==   total heap usage: 923 allocs, 360 frees, 296,746 bytes allocated
+==65957==
+==65957== 8 bytes in 2 blocks are definitely lost in loss record 13 of 132
+==65957==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==65957==    by 0x10DDBC: ft_calloc (in /nfs/homes/rceschel/minishell/minishell)
+==65957==    by 0x10E95A: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==65957==    by 0x10BBCC: set_token_value (tokenizer_word.c:89)
+==65957==    by 0x10BD43: process_word_surrounded (tokenizer_word.c:128)
+==65957==    by 0x10BE88: fill_word_token (tokenizer_word.c:164)
+==65957==    by 0x10AE43: tokenize_input (tokenizer.c:45)
+==65957==    by 0x109404: process_command (main.c:36)
+==65957==    by 0x109880: main (main.c:172)
+==65957==
+==65957== 11 bytes in 3 blocks are definitely lost in loss record 17 of 132
+==65957==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==65957==    by 0x10DE1F: ft_strdup (in /nfs/homes/rceschel/minishell/minishell)
+==65957==    by 0x10DAD5: string_expand_dollars (string_expand_dollars.c:77)
+==65957==    by 0x10A53C: get_heredoc_line (heredoc.c:46)
+==65957==    by 0x10A5CD: process_heredoc (heredoc.c:61)
+==65957==    by 0x10A639: setup_heredocs (heredoc.c:80)
+==65957==    by 0x10A3BC: executor (executor.c:123)
+==65957==    by 0x109454: process_command (main.c:51)
+==65957==    by 0x109880: main (main.c:172)
+==65957==
+==65957== 69 bytes in 14 blocks are definitely lost in loss record 67 of 132
+==65957==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==65957==    by 0x10DDBC: ft_calloc (in /nfs/homes/rceschel/minishell/minishell)
+==65957==    by 0x10E95A: ft_substr (in /nfs/homes/rceschel/minishell/minishell)
+==65957==    by 0x10BBCC: set_token_value (tokenizer_word.c:89)
+==65957==    by 0x10BE0D: process_word_nosurround (tokenizer_word.c:145)
+==65957==    by 0x10BEA0: fill_word_token (tokenizer_word.c:166)
+==65957==    by 0x10AE43: tokenize_input (tokenizer.c:45)
+==65957==    by 0x109404: process_command (main.c:36)
+==65957==    by 0x109880: main (main.c:172)
+==65957==
+==65957== 210 bytes in 7 blocks are definitely lost in loss record 83 of 132
+==65957==    at 0x484DCD3: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==65957==    by 0x49DC82C: getcwd (getcwd.c:86)
+==65957==    by 0x109852: main (main.c:170)
+==65957==
+==65957== LEAK SUMMARY:
+==65957==    definitely lost: 298 bytes in 26 blocks
+==65957==    indirectly lost: 0 bytes in 0 blocks
+==65957==      possibly lost: 0 bytes in 0 blocks
+==65957==    still reachable: 215,362 bytes in 537 blocks
+==65957==         suppressed: 0 bytes in 0 blocks
+==65957== Reachable blocks (those to which a pointer was found) are not shown.
+==65957== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==65957==
+==65957== For lists of detected and suppressed errors, rerun with: -s
+==65957== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)

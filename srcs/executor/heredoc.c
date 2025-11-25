@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/24 12:21:17 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/25 15:40:21 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,13 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 	if (ft_strcmp(input, delimiter) == 0)
 		return (false);
 	if (expand)
-		ft_dprintf(fd, "%s\n", string_expand_dollars(input));
-	else
-		ft_dprintf(fd, "%s\n", input);
+		input = ezg_add(EXECUTING, string_expand_dollars(input));
+	if (input == NULL)
+	{
+		perror("minishell");
+		exit(errno);
+	}
+	ft_dprintf(fd, "%s\n", input);
 	return (true);
 }
 

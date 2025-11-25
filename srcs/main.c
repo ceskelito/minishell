@@ -32,26 +32,14 @@ static void	process_command(char *input, t_shell *shell)
 	int		debug_mode;
 
 	debug_mode = is_debug_command(input);
-	cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
+	if (debug_mode)
+		cmd = extract_command(input); // cmd = input -- extract is only for debug ppourposes
 	shell->tokens = tokenize_input(cmd);
 	concatenate_tokens(&(shell->tokens));
-	/* if (true) //DEBUG
-	{
-		shell->cmd_list = NULL;
-		print_debug_info(shell);
-		return ;
-	} */
 	shell->cmd_list = parse_tokens(shell->tokens);
 	if (debug_mode)
 		print_debug_info(shell);
-	else
-	{
-		/* TODO: executor будет здесь */
-		//printf("Command ready for execution\n");
-		executor(shell);
-	}
-	//cleanup_parsing(shell);
-	//ezg_group_delete(COMMAND);
+	executor(shell);
 }
 
 void __attribute__((destructor)) ezg_cleanup();
@@ -66,13 +54,15 @@ void	create_groups()
 	ezg_group_create(ENV);
 }
 
-static char	*prompt_set_home(char *directory, char *home_symbol)
+static char	*prompt_getcwd(char *home_symbol)
 {
 	char	*home_path;
 	char	*new_directory;
+	char	*directory;
 
+	directory = getcwd(NULL, 0);
 	if (!directory)
-		return (NULL);
+		return (perror("minishell"), NULL);
 	home_path = ft_getenv("HOME");
 	if (!home_path)
 		return (directory);
@@ -100,8 +90,7 @@ static char    *get_prompt()
     size_t  prompt_len;
 
     user = ft_getenv("USER");
-    working_directory = getcwd(NULL, 0);
-	working_directory = prompt_set_home(working_directory, HOME_SYMBOL);
+	working_directory = prompt_getcwd(HOME_SYMBOL);
 	if (!user)
 		user = "\0";
 	if (!working_directory)
