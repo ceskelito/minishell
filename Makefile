@@ -51,7 +51,8 @@ FILES = main 				\
 		array				\
 		init				\
 		general_utils		\
-		string_expand_dollars
+		string_expand_dollars	\
+		split_in_chunks
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
