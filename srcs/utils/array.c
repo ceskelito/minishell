@@ -13,7 +13,8 @@
 #include "minishell.h"
 
 /** CHANGE DESRIPTION !!!
- * dup_array - Duplicate the system environment into the ezgalloc-managed ENV group.
+ * dup_array
+	- Duplicate the system environment into the ezgalloc-managed ENV group.
  *
  * This function copies all entries from the provided @environ array into
  * a new NULL-terminated array allocated under the ezgalloc group ENV.
@@ -42,16 +43,18 @@ char	**dup_array(char *group, char **srcs)
 		ezg_add(group, env[i]);
 		i++;
 	}
-    env[i] = NULL;
+	env[i] = NULL;
 	return (env);
 }
 
 /**
- * expand_array - Expand or shrink a dynamically allocated NULL-terminated array of strings.
+ * expand_array
+	- Expand or shrink a dynamically allocated NULL-terminated array of strings.
  *
  * This function reallocates the given array by the specified increment.
  * If @increment is positive, the array is expanded; if negative, it is reduced.
- * If the resulting size is zero or negative, the entire array and its contents are released.
+ * If the resulting size is zero or negative,
+	the entire array and its contents are released.
  *
  * @group      Identifier of the ezgalloc memory group used for allocation.
  * @array      Pointer to the NULL-terminated array to be modified.
@@ -63,7 +66,7 @@ char	**dup_array(char *group, char **srcs)
  */
 char	**expand_array(char *group, char **array, int nmemb, int increment)
 {
-	char	**new;
+	char **new;
 
 	if (!array)
 		return (NULL);

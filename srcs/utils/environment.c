@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "environment.h"
+#include "minishell.h"
 
-char	**ft_getenv_array()
+char	**ft_getenv_array(void)
 {
 	return (env_handler(GET_ARRAY, NOKEY, NOVALUE));
 }
 
-int		ft_setenv(char *key, char *value)
+int	ft_setenv(char *key, char *value)
 {
 	if (!key)
 		return (-1);
@@ -44,4 +44,3 @@ void	ft_unsetenv(char *key)
 		return ;
 	env_handler(UNSET, key, NOVALUE);
 }
-

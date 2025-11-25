@@ -14,7 +14,7 @@
 
 void	clean_ptr(void *p)
 {
-    free(*(void**)p);
+	free(*(void **)p);
 }
 
 void	clean_char(char **c)
@@ -31,7 +31,7 @@ void	clean_array(char ***s)
 	i = 0;
 	while (array && array[i])
 	{
-		if (array[i]) 
+		if (array[i])
 			free(array[i]);
 		i++;
 	}

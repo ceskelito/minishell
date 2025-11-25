@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "environment.h"
 #include "ft_lib.h"
 #include "minishell.h"
-#include "environment.h"
 
 /**
  * change_entry_value - Safely replace the value of an existing env entry.
@@ -62,18 +62,18 @@ static void	change_entry_value(char **entry_ptr, char *new_value)
  *
  * Return: Nothing.
  */
-static void add_entry(char ***env, char *key, char *value)
+static void	add_entry(char ***env, char *key, char *value)
 {
-    size_t	nmemb;
+	size_t	nmemb;
 	char	*kv;
 
 	if (!env || !*env || !key)
-        return;
+		return ;
 	kv = ezg_calloc(ENV, sizeof(char), ft_strlen(key) + ft_strlen(value) + 2);
 	if (!kv)
-        return;
+		return ;
 	ft_sprintf(kv, "%s=%s", key, value);
-    nmemb = 0;
+	nmemb = 0;
 	while ((*env)[nmemb])
 		nmemb++;
 	*env = expand_array(ENV, *env, nmemb, 1);
@@ -85,26 +85,25 @@ static void add_entry(char ***env, char *key, char *value)
 
 static void	remove_entry(char ***env, char *entry)
 {
-    char	**arr;
-    int		i;
+	char	**arr;
+	int		i;
 
-    if (!env || !*env || !entry)
-        return ;
-    arr = *env;
-    i = 0;
-    while (arr[i] && arr[i] != entry)
-        i++;
-    if (!arr[i])
-        return ;
-    ezg_release(ENV, arr[i]);
-    while (arr[i + 1])
-    {
-        arr[i] = arr[i + 1];
-        i++;
-    }
-    arr[i] = NULL;
+	if (!env || !*env || !entry)
+		return ;
+	arr = *env;
+	i = 0;
+	while (arr[i] && arr[i] != entry)
+		i++;
+	if (!arr[i])
+		return ;
+	ezg_release(ENV, arr[i]);
+	while (arr[i + 1])
+	{
+		arr[i] = arr[i + 1];
+		i++;
+	}
+	arr[i] = NULL;
 }
-
 
 /**
  * get_entry - Locate an entry by key.
@@ -117,17 +116,17 @@ static void	remove_entry(char ***env, char *entry)
  *
  * Return: &env[i] on success, NULL on failure.
  */
-static char **get_entry(char **env, char *key)
+static char	**get_entry(char **env, char *key)
 {
-    int i;
-    int j;
+	int	i;
+	int	j;
 
-    i = 0;
+	i = 0;
 	while (env && env[i])
 	{
 		j = 0;
 		// while (ft_isspace(*key))
-			// key++;
+		// key++;
 		while (key[j] && env[i][j] && key[j] == env[i][j])
 			j++;
 		if ((!key[j] /*|| ft_isspace(key[j])*/) && env[i][j] == '=')
@@ -143,7 +142,8 @@ static char **get_entry(char **env, char *key)
  * This function provides centralized management for environment variables
  * stored as a static array of "key=value" strings. It supports three modes:
  *   GET        - Search for an entry matching @key and return a pointer to it.
- *   SET        - Update the value of @key if it exists, otherwise append a new entry.
+ *   SET        - Update the value of @key if it exists,
+	otherwise append a new entry.
  *   GET_ARRAY  - Return the full environment array.
  *
  * @mode   Operation mode (GET, SET, or GET_ARRAY).
@@ -151,12 +151,12 @@ static char **get_entry(char **env, char *key)
  * @value  New value to assign when using SET mode.
  *
  * Return: A pointer to:
- *         - The matching entry (GET),	
+ *         - The matching entry (GET),
  *         - The environment array (GET_ARRAY),
- * 		   - NULL (SET),
+ * 			- NULL (SET),
  *         - NULL on error or if the key was not found.
  */
-char **env_handler(int mode, char *key, char *value)
+char	**env_handler(int mode, char *key, char *value)
 {
 	static char	**env;
 	extern char	**environ;

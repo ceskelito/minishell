@@ -16,7 +16,7 @@ typedef enum e_operation
 {
 	SET,
 	GET
-} t_operation;
+}			t_operation;
 
 static int	handle_exit_status(t_operation operation, int new_value)
 {
@@ -29,7 +29,7 @@ static int	handle_exit_status(t_operation operation, int new_value)
 	return (return_value);
 }
 
-int		get_exit_status()
+int	get_exit_status(void)
 {
 	return (handle_exit_status(GET, 0));
 }

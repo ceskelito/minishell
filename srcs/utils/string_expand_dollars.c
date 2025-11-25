@@ -16,8 +16,8 @@
 
 static int	count_char(char *s, char c)
 {
-	int		i;
-	int		count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -25,16 +25,16 @@ static int	count_char(char *s, char c)
 	{
 		if (s[i] == c)
 			count++;
-		i++;        
+		i++;
 	}
 	return (count);
 }
 
 void	fill_chunks(char **splitted, char *str)
 {
-	int		i;
-	int		len;
-	int		n;
+	int	i;
+	int	len;
+	int	n;
 
 	i = 0;
 	n = 0;
@@ -48,14 +48,15 @@ void	fill_chunks(char **splitted, char *str)
 			if (str[i + len] == '?')
 				len++;
 			else
-				while (str[i + len] && (ft_isalnum(str[i + len]) || str[i + len] == '_'))
+				while (str[i + len] && (ft_isalnum(str[i + len]) || str[i
+						+ len] == '_'))
 					len++;
 		}
 		splitted[n++] = ft_substr(str, i, len);
 		if (!splitted[n - 1])
-        {
-            splitted[n - 1] = ft_strdup("");
-        }
+		{
+			splitted[n - 1] = ft_strdup("");
+		}
 		i += len;
 	}
 	splitted[n] = NULL;
@@ -83,13 +84,13 @@ static char	**ft_split_in_chunks(char *str, char delimiter)
 
 char	*string_expand_dollars(char *str)
 {
-	int												i;
-	int												new_len;
-	char											*new;
-	char											*temp;
-	char __attribute__((cleanup(clean_array)))		**splitted;
-	// char											**splitted;
+	int		i;
+	int		new_len;
+	char	*new;
+	char	*temp;
 
+	char __attribute__((cleanup(clean_array))) * *splitted;
+	// char											**splitted;
 	splitted = NULL;
 	if (!ft_strchr(str, '$'))
 		return (ft_strdup(str));
