@@ -23,42 +23,53 @@ LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
 ## PROJECT FILES & DIRS ##
 #────────────────────────#
 
-FILES = main 				\
-		ft_strjoin_char		\
+## MAIN
+FILES = main
+
+## EXECUTOR
+FILES += builtin_1		\
+		builtin_2		\
+		executor		\
+		heredoc			\
+		pipe			\
+		redirections	\
+		resolve_command_location
+
+## TOKENIZER
+FILES += ft_strjoin_char		\
+		tokenizer				\
+		tokenizer_concatenate	\
+		tokenizer_debug			\
+		tokenizer_dollar		\
+		tokenizer_quotes		\
+		tokenizer_utils			\
+		tokenizer_word
+
+## PARSER
+FILES += parser			\
+		parser_cleanup	\
+		parser_debug	\
+		parser_redirs	\
+		parser_utils	\
+		shell_init 
+
+## UTILS
+FILES += array				\
 		cleanup				\
-		exit_status			\
-		tokenizer			\
-		tokenizer_dollar	\
-		tokenizer_quotes	\
-		tokenizer_word		\
-		tokenizer_utils		\
-		tokenizer_debug		\
-		tokenizer_concatenate \
-		parser				\
-		parser_redirs		\
-		parser_cleanup		\
-		parser_debug		\
-		shell_init			\
-		executor			\
-		redirections		\
-		builtin_1			\
-		builtin_2			\
-		resolve_command_location	\
-		heredoc				\
-		pipe				\
-		environment			\
-		environment_handler	\
-		array				\
-		init				\
-		general_utils		\
-		string_expand_dollars	\
-		split_in_chunks
+		environment 		\
+		environment 		\
+		environment_handler \
+		exit_status 		\
+		general_utils 		\
+		init 				\
+		split_in_chunks 	\
+		string_expand_dollars
+
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
 
 vpath %.c	$(SRCS_DIR) \
-			:$(SRCS_DIR)/main \
 			:$(SRCS_DIR)/tokenizer \
 			:$(SRCS_DIR)/parser \
 			:$(SRCS_DIR)/executor \
@@ -84,7 +95,8 @@ LIBRARIES 	= $(LIBFT) $(LIBEZ)
 #──────────────#
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
+	@$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
+	@echo "Compiling objects..."
 
 all: $(NAME)
 
