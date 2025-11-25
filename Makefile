@@ -50,7 +50,6 @@ FILES += parser			\
 		parser_cleanup	\
 		parser_debug	\
 		parser_redirs	\
-		parser_utils	\
 		shell_init 
 
 ## UTILS
