@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/20 16:29:01 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/25 16:33:42 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,13 @@ void	echo(char *const args[])
 
 void	pwd(void)
 {
-	ft_printf("%s\n", getcwd(NULL, 0));
+	char __attribute__	((cleanup(clean_char)))	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		perror("minishell: pwd");
+	else
+		ft_printf("%s\n", cwd);
 }
 
 void	cd(char *const args[])
