@@ -95,12 +95,13 @@ LIBRARIES 	= $(LIBFT) $(LIBEZ)
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
-	@echo "Compiling objects..."
+	@echo "Compiling $<"
 
-all: $(NAME)
+all: $(NAME) last_print
 
 $(NAME): $(OBJS) $(LIBRARIES)
-	$(CC) $^ $(LIB_FLAGS) -o $@ 
+	@$(CC) $^ $(LIB_FLAGS) -o $@ 
+	@echo "Linkng Objects"
 
 $(OBJS_DIR):
 	$(MKDIR) $@
@@ -124,6 +125,31 @@ compile_flags.txt: Makefile
 	$(call write_flags,$(INC_FLAGS),$@)
 	$(call write_flags,$(LIB_FLAGS),$@)
 
+last_print:
+	@echo "▖  ▖  ▘      ▘  ▄▖  ▌       ▜   ▜     ";
+	@echo "▛▖▞▌  ▌  ▛▌  ▌  ▚   ▛▌  █▌  ▐   ▐     ";
+	@echo "▌▝ ▌  ▌  ▌▌  ▌  ▄▌  ▌▌  ▙▖  ▐▖  ▐▖    ";
+	@echo "                                      ";
+	@echo "                 ▘▜    ▌              ";
+	@echo "        ▛▘▛▌▛▛▌▛▌▌▐ █▌▛▌              ";
+	@echo "        ▙▖▙▌▌▌▌▙▌▌▐▖▙▖▙▌              ";
+	@echo "               ▌                      ";
+
+# last_print:
+# 	@echo "███╗   ███╗    ██╗    ███╗   ██╗    ██╗    ███████╗    ██╗  ██╗    ███████╗    ██╗         ██╗             ";
+# 	@echo "████╗ ████║    ██║    ████╗  ██║    ██║    ██╔════╝    ██║  ██║    ██╔════╝    ██║         ██║             ";
+# 	@echo "██╔████╔██║    ██║    ██╔██╗ ██║    ██║    ███████╗    ███████║    █████╗      ██║         ██║             ";
+# 	@echo "██║╚██╔╝██║    ██║    ██║╚██╗██║    ██║    ╚════██║    ██╔══██║    ██╔══╝      ██║         ██║             ";
+# 	@echo "██║ ╚═╝ ██║    ██║    ██║ ╚████║    ██║    ███████║    ██║  ██║    ███████╗    ███████╗    ███████╗        ";
+# 	@echo "╚═╝     ╚═╝    ╚═╝    ╚═╝  ╚═══╝    ╚═╝    ╚══════╝    ╚═╝  ╚═╝    ╚══════╝    ╚══════╝    ╚══════╝        ";
+# 	@echo "                                                                                                           ";
+# 	@echo "                 ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗██╗     ███████╗██████╗                             ";
+# 	@echo "                ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║██║     ██╔════╝██╔══██╗                            ";
+# 	@echo "                ██║     ██║   ██║██╔████╔██║██████╔╝██║██║     █████╗  ██║  ██║                            ";
+# 	@echo "                ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║██║     ██╔══╝  ██║  ██║                            ";
+# 	@echo "                ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ██║███████╗███████╗██████╔╝                            ";
+# 	@echo "                 ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝╚═════╝                             ";
+#	@echo "                                                                                                           ";
 #───────────────#
 ## CLEAN RULES ##
 #───────────────#
@@ -149,4 +175,4 @@ deepfclean: fclean
 
 deepre: deepfclean all
 
-.PHONY: all clean fclean re deepclean deepfclean deepre
+.PHONY: all clean fclean re deepclean deepfclean deepre last_print
