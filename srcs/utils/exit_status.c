@@ -12,13 +12,10 @@
 
 #include "minishell.h"
 
-typedef enum e_operation
-{
-	SET,
-	GET
-}			t_operation;
+#define SET 1
+#define GET 2
 
-static int	handle_exit_status(t_operation operation, int new_value)
+static int	handle_exit_status(int operation, int new_value)
 {
 	static int	return_value;
 

@@ -38,8 +38,9 @@ void	fill_chunks(char **splitted, char *str)
 
 	i = 0;
 	n = 0;
-	while (len = 0, str[i])
+	while (str[i])
 	{
+		len = 0;
 		while (str[i + len] && str[i + len] != '$')
 			len++;
 		if (len == 0 && str[i] == '$')
@@ -48,8 +49,8 @@ void	fill_chunks(char **splitted, char *str)
 			if (str[i + len] == '?')
 				len++;
 			else
-				while (str[i + len] && (ft_isalnum(str[i + len]) || str[i
-						+ len] == '_'))
+				while (str[i + len] && (ft_isalnum(str[i + len])
+						|| str[i + len] == '_'))
 					len++;
 		}
 		splitted[n++] = ft_substr(str, i, len);
@@ -84,13 +85,12 @@ static char	**ft_split_in_chunks(char *str, char delimiter)
 
 char	*string_expand_dollars(char *str)
 {
-	int		i;
-	int		new_len;
-	char	*new;
-	char	*temp;
+	int												i;
+	int												new_len;
+	char											*new;
+	char											*temp;
+	char __attribute__	((cleanup(clean_array)))	**splitted;
 
-	char __attribute__((cleanup(clean_array))) * *splitted;
-	// char											**splitted;
 	splitted = NULL;
 	if (!ft_strchr(str, '$'))
 		return (ft_strdup(str));
@@ -116,8 +116,6 @@ char	*string_expand_dollars(char *str)
 					temp = ft_strdup(temp);
 				else
 					temp = ft_strdup("");
-				/* if (collapse_spaces)
-					string_collapse_spaces(&temp); */
 				splitted[i] = temp;
 				temp = NULL;
 			}

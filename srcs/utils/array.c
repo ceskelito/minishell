@@ -66,7 +66,7 @@ char	**dup_array(char *group, char **srcs)
  */
 char	**expand_array(char *group, char **array, int nmemb, int increment)
 {
-	char **new;
+	char	**new;
 
 	if (!array)
 		return (NULL);

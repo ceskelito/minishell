@@ -125,11 +125,9 @@ static char	**get_entry(char **env, char *key)
 	while (env && env[i])
 	{
 		j = 0;
-		// while (ft_isspace(*key))
-		// key++;
 		while (key[j] && env[i][j] && key[j] == env[i][j])
 			j++;
-		if ((!key[j] /*|| ft_isspace(key[j])*/) && env[i][j] == '=')
+		if (!key[j] && env[i][j] == '=')
 			return (&env[i]);
 		i++;
 	}
