@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/21 12:33:04 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/26 17:11:51 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,19 @@
 # define O_CLOEXEC 0
 #endif
 
+void set_signal(int signum, void (*handler)(int));
+void	handle_sigint(int signal);
+
 static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 	int (*exec_cmd)(const char *, char *const[], char *const[]))
 {
 	bool	location_was_given;
 
 	*pid = fork();
+	set_signal(SIGINT, SIG_IGN);
 	if (*pid == 0)
 	{
+		set_signal(SIGINT, handle_sigint);
 		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (apply_redirs(cmd->redirs) != 0)
 			exit(errno);
@@ -109,6 +114,8 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	i = 0;
 	while (i < num_cmds)
 		waitpid(pid[i++], exit_code, 0);
+	set_signal(SIGINT, handle_sigint);
+
 	free(pid);
 }
 
