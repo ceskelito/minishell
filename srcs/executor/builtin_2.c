@@ -39,6 +39,7 @@ static bool	is_entry_valid(char *entry)
 	return (true);
 }
 
+void    print_export();
 void	export(char *const args[])
 {
 	size_t	key_len;
@@ -47,6 +48,11 @@ void	export(char *const args[])
 	char	*value;
 	char	*entry;
 
+	if (!args || !args[1])
+	{
+		print_export();
+		return ;
+	}
 	i = 0;
 	while (i++, args[i])
 	{

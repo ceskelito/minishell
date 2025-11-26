@@ -29,6 +29,7 @@ FILES = main
 ## EXECUTOR
 FILES += builtin_1		\
 		builtin_2		\
+		builtin_3		\
 		executor		\
 		heredoc			\
 		pipe			\
