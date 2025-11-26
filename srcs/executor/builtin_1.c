@@ -6,11 +6,12 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/25 16:33:42 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/26 16:06:32 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "ezgalloc.h"
 #include "minishell.h"
 
 void	echo(char *const args[])
@@ -88,8 +89,12 @@ void	exit_shell(char *const args[])
 	int	i;
 
 	ft_printf("exit\n");
+	status = get_exit_status();
 	if (!args[1])
-		exit(get_exit_status());
+	{
+		ezg_cleanup();
+		exit(status);
+	}
 	i = 0;
 	while (args[1][i])
 	{
@@ -98,6 +103,7 @@ void	exit_shell(char *const args[])
 		{
 			ft_dprintf(STDERR_FILENO,
 				"minishell: exit: %s: numeric argument required\n", args[1]);
+			ezg_cleanup();
 			exit(255);
 		}
 		i++;
@@ -108,5 +114,6 @@ void	exit_shell(char *const args[])
 		return (set_exit_status(1));
 	}
 	status = ft_atoi(args[1]) % 256;
+	ezg_cleanup();
 	exit(status);
 }
