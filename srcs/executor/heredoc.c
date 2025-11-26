@@ -6,12 +6,13 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/25 15:40:21 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/26 16:14:24 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "minishell.h"
+#include <stdlib.h>
 
 // Need to expand variables
 // Need to manage cases with EOF in quotes
@@ -47,7 +48,8 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 	if (input == NULL)
 	{
 		perror("minishell");
-		exit(errno);
+		set_exit_status(errno);
+		exit_shell(NULL);
 	}
 	ft_dprintf(fd, "%s\n", input);
 	return (true);

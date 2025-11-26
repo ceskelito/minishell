@@ -3,6 +3,7 @@
 #include "ft_lib.h"
 #include "minishell.h"
 #include <signal.h>
+#include <stdio.h>
 #include <unistd.h>
 
 int	g_sig_status = 0;
@@ -45,7 +46,7 @@ static void	process_command(char *input, t_shell *shell)
 	executor(shell);
 }
 
-void __attribute__((destructor)) ezg_cleanup();
+/* void __attribute__((destructor)) ezg_cleanup(); */
 void __attribute__((constructor)) create_groups();
 
 void	create_groups()
@@ -153,12 +154,16 @@ int	main(void)
 			break ;
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
-			return (perror("minishell"), errno);
+		{
+			perror("minishell");
+			set_exit_status(errno);
+			break;
+		}
 		if (ft_strcmp(cwd, ft_getenv("PWD")) != 0)
 			ft_setenv("PWD", cwd);
 		free(cwd);
 		add_history(input);
 		process_command(input, &shell);
 	}
-	return (0);
+	exit_shell(NULL);
 }

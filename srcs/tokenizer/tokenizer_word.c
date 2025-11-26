@@ -6,11 +6,12 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/25 16:54:54 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/26 16:16:35 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "executor.h"
 #include <stdlib.h>
 
 static const int	UNCLOSED_QUOTES = -1;
@@ -53,7 +54,8 @@ static t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
 	if (!split)
 	{
 		perror("minishell");
-		exit(errno);
+		set_exit_status(errno);
+		exit_shell(NULL);
 	}
 	i = 0;
 	while (split[i])
@@ -97,7 +99,8 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 	if (!result)
 	{
 		perror("minishell:");
-		exit(errno);
+		set_exit_status(errno);
+		exit_shell(NULL);
 	}
 	ezg_add(TOKEN, result);
 	if (!in_quote && ft_hasspace(result))
