@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/26 16:06:32 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/26 16:18:06 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	exit_shell(char *const args[])
 
 	ft_printf("exit\n");
 	status = get_exit_status();
-	if (!args[1])
+	if (!args || !args[1])
 	{
 		ezg_cleanup();
 		exit(status);
