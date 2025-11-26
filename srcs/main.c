@@ -46,7 +46,6 @@ static void	process_command(char *input, t_shell *shell)
 	executor(shell);
 }
 
-/* void __attribute__((destructor)) ezg_cleanup(); */
 void __attribute__((constructor)) create_groups();
 
 void	create_groups()
