@@ -27,7 +27,7 @@ LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
 FILES = main
 
 ## EXECUTOR
-FILES += builtin_1		\
+FILES += echo-cd-pwd-exit.c	\
 		env-unset		\
 		export		\
 		executor		\
