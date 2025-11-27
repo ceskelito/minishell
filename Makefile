@@ -28,8 +28,8 @@ FILES = main
 
 ## EXECUTOR
 FILES += builtin_1		\
-		builtin_2		\
-		builtin_3		\
+		env-unset		\
+		export		\
 		executor		\
 		heredoc			\
 		pipe			\
@@ -73,6 +73,7 @@ vpath %.c	$(SRCS_DIR) \
 			:$(SRCS_DIR)/tokenizer \
 			:$(SRCS_DIR)/parser \
 			:$(SRCS_DIR)/executor \
+			:$(SRCS_DIR)/executor/builtins \
 			:$(SRCS_DIR)/utils
 
 SRCS := $(addsuffix .c, $(FILES))
