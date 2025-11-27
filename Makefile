@@ -27,9 +27,9 @@ LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
 FILES = main
 
 ## EXECUTOR
-FILES += echo-cd-pwd-exit.c	\
+FILES += echo-cd-pwd-exit	\
 		env-unset		\
-		export		\
+		export			\
 		executor		\
 		heredoc			\
 		pipe			\
