@@ -22,9 +22,9 @@ static char    *ft_strchrcpy(char *dest, char *src, char c)
         dest[i] = '\0';
         return (dest);    
 }
-#include <string.h>
 
-void sort_strings(char *array[]) {
+static void sort_strings(char *array[])
+{
     char *temp;
     int i = 0;
     int size;
@@ -49,26 +49,23 @@ void sort_strings(char *array[]) {
 
 void    print_export()
 {
-    char    **dest;
-    char    *key;
-    char    *value;
-    int    i;
+    char __attribute__  ((cleanup(clean_array)))    **dest;
+    char                                            *key;
+    char                                            *value;
+    int                                             i;
 
-    dest = NULL;
-	dest = dup_array(EXECUTING, ft_getenv_array());
+	dest = dup_array(NULL, ft_getenv_array());
 	if (!dest)
 	    return ;
     sort_strings(dest);
     i = 0;
     while (dest[i])
     {
-        ft_printf("declare -x ");
         key = ft_calloc(sizeof(char), ft_strlen(dest[i]));
         ft_strchrcpy(key, dest[i], '=');
-        ft_printf("%s\"", key);
-        free(key);
         value = ft_strchr(dest[i], '=');
-        printf("%s\"\n", value + 1);
+        printf("declare -x \"%s%s\"\n", key, value + 1);
+        free(key);
         i++;
     }
 }
