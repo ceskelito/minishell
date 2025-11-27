@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/26 17:11:51 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/27 12:08:02 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define O_CLOEXEC 0
 #endif
 
-void set_signal(int signum, void (*handler)(int));
+void	set_signal(int signum, void (*handler)(int));
 void	handle_sigint(int signal);
 
 static void	execute_in_child(t_cmd *cmd, pid_t *pid,
@@ -90,7 +90,7 @@ static void	execute_in_parent(t_shell *shell, t_cmd *cmd)
 	dup2(shell->std_in, STDIN_FILENO);
 	dup2(shell->std_out, STDOUT_FILENO);
 	set_exit_status(exit_code);
-	ezg_group_release(EXECUTING); //DEBUG - decomment before push
+	ezg_group_release(EXECUTING);
 }
 
 static void	execute_pipeline(t_cmd *cmd, int *exit_code)
@@ -115,7 +115,6 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	while (i < num_cmds)
 		waitpid(pid[i++], exit_code, 0);
 	set_signal(SIGINT, handle_sigint);
-
 	free(pid);
 }
 
