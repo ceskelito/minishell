@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 18:26:13 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/17 20:05:26 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/27 11:27:56 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
  * @environ  Pointer to the system environment array (NULL-terminated).
  *
  * Return: None.
+ * 
+ * @group can be null
  */
 char	**dup_array(char *group, char **srcs)
 {
@@ -35,7 +37,8 @@ char	**dup_array(char *group, char **srcs)
 	nmemb = 0;
 	while (srcs[nmemb])
 		nmemb++;
-	env = ezg_calloc(group, sizeof(char *), nmemb + 1);
+	env = ft_calloc(nmemb + 1, sizeof(char *));
+	ezg_add(group, env);
 	i = 0;
 	while (srcs[i])
 	{
