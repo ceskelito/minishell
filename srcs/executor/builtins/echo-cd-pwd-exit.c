@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_1.c                                        :+:      :+:    :+:   */
+/*   echo-cd-pwd-exit.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/27 12:01:28 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:19:17 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,11 @@ void	exit_shell(char *const args[])
 	i = 0;
 	while (args[1][i])
 	{
-		if (!ft_isdigit(args[1][i]) && !(i == 0 && (args[1][i] == '+' || args[1][i] == '-')))
+		if (!ft_isdigit(args[1][i]) &&
+			!(i == 0 && (args[1][i] == '+' || args[1][i] == '-')))
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: exit: %s: numeric argument required\n", args[1]);
+			ft_dprintf(STDERR_FILENO,
+				"minishell: exit: %s: numeric argument required\n", args[1]);
 			ezg_cleanup();
 			exit(255);
 		}

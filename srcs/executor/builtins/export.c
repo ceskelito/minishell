@@ -6,23 +6,23 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:50:13 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/27 11:50:16 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:17:58 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "executor.h"
+#include "minishell.h"
 
-static char *ft_strdup_prevchr(char *entry, char delimiter)
+static char	*ft_strdup_prevchr(char *entry, char delimiter)
 {
-    size_t  key_len;
-    char    *key;
+	size_t	key_len;
+	char	*key;
 
-    key_len = 0;
+	key_len = 0;
 	while (entry[key_len] != delimiter)
 		key_len++;
 	key = ft_substr(entry, 0, key_len);
-    return (key);
+	return (key);
 }
 
 static bool	is_entry_valid(char *entry)
@@ -51,50 +51,54 @@ static bool	is_entry_valid(char *entry)
 	return (true);
 }
 
-static void sort_strings(char *array[])
+static void	sort_strings(char *array[])
 {
-    char *temp;
-    int i = 0;
-    int size;
+	char	*temp;
+	int		i;
+	int		size;
+	int		j;
 
-    size = 0;
+	i = 0;
+	size = 0;
 	while (array && array[size])
-	    size++;
-    while (i < size - 1) {
-        int j = i + 1;
-        
-        while (j < size) {
-            if (ft_strcmp(array[i], array[j]) > 0) {
-                temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-            }
-            j++;
-        }
-        i++;
-    }
+		size++;
+	while (i < size - 1)
+	{
+		j = i + 1;
+		while (j < size)
+		{
+			if (ft_strcmp(array[i], array[j]) > 0)
+			{
+				temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
 }
 
-void    print_export()
+void	print_export(void)
 {
-    char __attribute__  ((cleanup(clean_array)))    **dest;
-    char                                            *key;
-    char                                            *value;
-    int                                             i;
+	char											*key;
+	char											*value;
+	int												i;
+	char __attribute__	((cleanup(clean_array)))	**dest;
 
 	dest = dup_array(NULL, ft_getenv_array());
 	if (!dest)
-	    return ;
-    sort_strings(dest);
-    i = 0;
-    while (dest[i])
-    {
-        key = ft_strdup_prevchr(dest[i], '=');
-        value = ft_strchr(dest[i], '=');
-        printf("declare -x \"%s%s\"\n", key, value + 1);
-        free(key);
-        i++;
-    }
+		return ;
+	sort_strings(dest);
+	i = 0;
+	while (dest[i])
+	{
+		key = ft_strdup_prevchr(dest[i], '=');
+		value = ft_strchr(dest[i], '=');
+		printf("declare -x \"%s%s\"\n", key, value + 1);
+		free(key);
+		i++;
+	}
 }
 
 void	export(char *const args[])
