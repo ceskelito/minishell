@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/27 12:08:02 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:21:20 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 	bool	location_was_given;
 
 	*pid = fork();
-	set_signal(SIGINT, SIG_IGN);
 	if (*pid == 0)
 	{
 		set_signal(SIGINT, handle_sigint);
@@ -102,6 +101,7 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	num_cmds = count_cmds(cmd);
 	pid = malloc(sizeof(pid_t) * num_cmds);
 	i = 0;
+	set_signal(SIGINT, SIG_IGN);
 	while (cmd)
 	{
 		if (is_builtin(cmd->args[0]))
