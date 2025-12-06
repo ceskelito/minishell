@@ -24,12 +24,11 @@ t_token	*tokenize_input(char *input)
 {
 	t_token			*tokens;
 	t_token			*new;
-	t_token			*prev;
+	bool			is_heredoc_delimiter;
 	int				token_gap;
 	int				i;
 
 	tokens = NULL;
-	prev = NULL;
 	i = 0;
 	while (input[i])
 	{
@@ -42,7 +41,7 @@ t_token	*tokenize_input(char *input)
 		{
 			token_gap = fill_operator_token(new, &input[i]);
 		}
-		else if (prev && (prev->type & HEREDOC))
+		else if (is_heredoc_delimiter)
 		{
 			token_gap = fill_eof_token(new, &input[i]);
 		}
@@ -53,7 +52,7 @@ t_token	*tokenize_input(char *input)
 		if (token_gap == -1 || !new->value)
 			return (NULL);
 		add_token(&tokens, new);
-		prev = new;
+		is_heredoc_delimiter = (new->type & HEREDOC);
 		new = NULL;
 		i += token_gap;
 	}
