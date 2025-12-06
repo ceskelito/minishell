@@ -209,7 +209,6 @@ int fill_eof_token(t_token *new, char *input)
 		print_error("syntax error", "unexpected end of file");
 		return (-1);
 	}
-	new = ezg_add(TOKEN, new_token());
 	new->value = ezg_calloc(TOKEN, gap + 1, sizeof(char));
 	ft_strlcat(new->value, input, gap + 1);
 	if (!new->value)

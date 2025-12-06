@@ -29,6 +29,7 @@ t_token	*tokenize_input(char *input)
 	int				i;
 
 	tokens = NULL;
+	prev = NULL;
 	i = 0;
 	while (input[i])
 	{
@@ -41,7 +42,7 @@ t_token	*tokenize_input(char *input)
 		{
 			token_gap = fill_operator_token(new, &input[i]);
 		}
-		else if (prev->type & HEREDOC)
+		else if (prev && (prev->type & HEREDOC))
 		{
 			token_gap = fill_eof_token(new, &input[i]);
 		}
