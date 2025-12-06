@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/06 13:59:35 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/06 14:34:43 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,6 @@ int fill_eof_token(t_token *new, char *input)
 		print_error("syntax error", "unexpected end of file");
 		return (-1);
 	}
-	new = ezg_add(TOKEN, new_token());
 	new->value = ezg_calloc(TOKEN, gap + 1, sizeof(char));
 	ft_strlcat(new->value, input, gap + 1);
 	if (!new->value)
