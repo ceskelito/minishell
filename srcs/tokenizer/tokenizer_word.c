@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/26 16:16:35 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/06 13:59:35 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ static inline bool	isquote(char c)
 
 static inline bool isspecial(char c)
 {
-	return (ft_strchr("|<>", c));
+	if (c == '|' || c == '<' || c == '>')
+		return (true);
+	return (false);
 }
 
 static inline bool ft_hasspace(char *str)
@@ -148,7 +150,7 @@ int	process_word_nosurround(t_token *token, char *input)
 
 	gap = 0;
 	len = 0;
-	while (input[gap] && !( isquote(input[gap]) || ft_isspace(input[gap]) || isspecial(input[gap]) ))
+	while (input[gap] && !(isquote(input[gap]) || ft_isspace(input[gap]) || isspecial(input[gap])))
 	{
 		len++;
 		gap++;
@@ -179,4 +181,45 @@ int	fill_word_token(t_token *token, char *input)
 		return (gap);
 	token->type = WORD;
 	return (gap + spaces);
+}
+
+int fill_eof_token(t_token *new, char *input)
+{
+	int		i;
+	int		gap;
+	char	quote;
+
+
+	i = 0;
+	gap = 0;
+	quote = 0;
+	while(input[i] && !ft_isspace(input[i])
+		&& !ft_strchr("|<>", input[i]))
+	{
+		if (quote == 0 && (input[i] == '\'' || input[i] == '"'))
+			quote = input[i];
+		else if (input[i] == quote)
+			quote = 0;
+		i++;
+		gap++;
+	}
+	if (quote != 0)
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: unexpected EOF while looking for matching `%c\n", quote);
+		print_error("syntax error", "unexpected end of file");
+		return (-1);
+	}
+	new = ezg_add(TOKEN, new_token());
+	new->value = ezg_calloc(TOKEN, gap + 1, sizeof(char));
+	ft_strlcat(new->value, input, gap + 1);
+	if (!new->value)
+	{
+		perror("minishell:");
+		set_exit_status(errno);
+		exit_shell(NULL);
+	}
+	new->expand_dollar = false;
+	new->type = WORD;
+	new->cat_to_next = false;
+	return (gap);
 }

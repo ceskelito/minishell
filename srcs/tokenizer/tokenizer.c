@@ -24,6 +24,7 @@ t_token	*tokenize_input(char *input)
 {
 	t_token			*tokens;
 	t_token			*new;
+	t_token			*prev;
 	int				token_gap;
 	int				i;
 
@@ -36,17 +37,22 @@ t_token	*tokenize_input(char *input)
 		if (!input[i])
 			break;
 		new = new_token();
-		if (ft_strchr("|<>&()", input[i]))
+		if (ft_strchr("|<>", input[i]))
 		{
-			token_gap = fill_operator_token(new, input + i);
+			token_gap = fill_operator_token(new, &input[i]);
+		}
+		else if (prev->type & HEREDOC)
+		{
+			token_gap = fill_eof_token(new, &input[i]);
 		}
 		else
 		{
-			token_gap = fill_word_token(new, input + i);
+			token_gap = fill_word_token(new, &input[i]);
 		}
 		if (token_gap == -1 || !new->value)
 			return (NULL);
 		add_token(&tokens, new);
+		prev = new;
 		new = NULL;
 		i += token_gap;
 	}

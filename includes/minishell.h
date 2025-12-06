@@ -119,6 +119,7 @@ void			add_token(t_token **head, t_token *new_token);
 t_token			*tokenize_input(char *input);
 t_token_type	get_token_type(char *input);
 int				fill_word_token(t_token *token, char *input);
+int				fill_eof_token(t_token *new, char *input);
 
 /* Tokenizer utilities */
 int			    concatenate_tokens(t_token **token_list);
