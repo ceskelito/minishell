@@ -19,9 +19,11 @@ A minimal shell that partially reproduce the behavior of bash, completly wrote i
 - <<
 - |
 
-# Minishell Tokenizer & Parser - README for Executor
+## Debug Mode
+Using the prefix 'DEBUG:' before a command, the shell will print a representation
+of the tokens list and the AST on the stdin before execute the command.
 
-This document explains how the tokenizer and parser work, and how to use their output for the executor.
+# Technical Notes
 
 ## Architecture Overview
 
