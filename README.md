@@ -1,6 +1,23 @@
 # minishell
-A shell reproduction in C
+A minimal shell that partially reproduce the behavior of bash, completly wrote in C.
 
+
+# Features
+
+## Built-in functions
+- cd - Change Directory
+- pwd - Print Working Directory
+- echo - Print a message on the stdin
+    - with option -n
+- export - Set an environment variable
+- env - Print all the exported env variables
+
+## Redirections
+- >
+- <
+- >>
+- <<
+- |
 
 # Minishell Tokenizer & Parser - README for Executor
 
