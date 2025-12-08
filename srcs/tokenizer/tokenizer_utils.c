@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/08 17:24:09 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/08 17:24:12 by rodolhop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	add_token(t_token **head, t_token *new_token)
@@ -46,6 +58,4 @@ char	*get_operator_value(char *input, t_token_type type)
 		return (ezg_add(TOKEN, ft_substr(input, 0, 2)));
 	else
 		return (ezg_add(TOKEN, ft_substr(input, 0, 1)));
-	// return (ezg_add(TOKEN, ft_substr(input, 0, 1 + (type & DOUBLE_CHAR_TOKENS))));
-	
 }

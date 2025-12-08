@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_quotes.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/08 17:12:31 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/08 17:12:43 by rodolhop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*append_char_safe(char *str, char c)
@@ -21,15 +33,7 @@ static char	*handle_single_quote(char *input, int *i, char *result)
 			return (NULL);
 		(*i)++;
 	}
-	if (input[*i] != '\'')
-	{
-		printf("minishell: syntax error: unclosed single quote\n");
-		if (result)
-			free(result);
-		return (NULL);
-	}
-	(*i)++;
-	return (result);
+	return (if_nclsd_qts(input[*i], result, "'"));
 }
 
 static char	*handle_double_quote(char *input, int *i, char *result)
@@ -58,14 +62,18 @@ static char	*handle_double_quote(char *input, int *i, char *result)
 			(*i)++;
 		}
 	}
-	if (input[*i] != '\"')
+	return (if_nclsd_qts(input[*i], result, "\""));
+}
+
+static char	*if_nclsd_qts(char quote_char, char *result, const char *quote_type)
+{
+	if (quote_char != quote_type[0])
 	{
-		printf("minishell: syntax error: unclosed double quote\n");
+		printf("minishell: syntax error: unclosed %s\n", quote_type);
 		if (result)
 			free(result);
 		return (NULL);
 	}
-	(*i)++;
 	return (result);
 }
 
