@@ -18,23 +18,21 @@ bool	ft_hasspace(char *str)
 	return (false);
 }
 
-char	*word_get_result(char *input, int len, bool in_quote)
+char	*word_get_result(char *input, int start, int len, bool expand)
 {
 	char	*tmp;
 	char	*result;
 
-	if (len == 0)
+	if (len <= 0)
 		return (ft_strdup(""));
-	if (input[0] != '\'')
-	{
-		tmp = ft_substr(input, in_quote, len);
-		if (!tmp)
-			return (NULL);
-		result = string_expand_dollars(tmp);
-		free(tmp);
-		return (result);
-	}
-	return (ft_substr(input, in_quote, len));
+	if (!expand)
+		return (ft_substr(input, start, len));
+	tmp = ft_substr(input, start, len);
+	if (!tmp)
+		return (NULL);
+	result = string_expand_dollars(tmp);
+	free(tmp);
+	return (result);
 }
 
 void	eof_compute_gap(char *input, int *gap, char *quote)

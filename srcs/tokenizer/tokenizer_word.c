@@ -14,26 +14,34 @@
 #include "executor.h"
 #include <stdlib.h>
 
-static const int	g_unclosed_quotes = -1;
-static const bool	g_in_quotes = true;
-static const bool	g_out_quotes = false;
-
 /* helpers from tokenizer_word_utils.c */
 bool	ft_hasspace(char *str);
-char	*word_get_result(char *input, int len, bool in_quote);
+char	*word_get_result(char *input, int start, int len, bool expand);
 void	eof_compute_gap(char *input, int *gap, char *quote);
 t_token	*token_split_words(t_token *token, char *input, bool cat_to_next);
 
 static void	set_token_value(
-				t_token *token, char *input, int gap, int len, bool in_quote)
+				t_token *token, char *input, int gap, bool in_quote)
 {
 	char	*result;
 	bool	cat_to_next;
+	int		len;
+	int		start;
 
 	cat_to_next = false;
 	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
 		cat_to_next = true;
-	result = word_get_result(input, len, in_quote);
+	if (in_quote)
+	{
+		start = 1;
+		len = gap - 1;
+	}
+	else
+	{
+		start = 0;
+		len = gap;
+	}
+	result = word_get_result(input, start, len, (input[0] != '\''));
 	if (!result)
 	{
 		perror("minishell:");
@@ -53,37 +61,30 @@ static void	set_token_value(
 static int	process_word_surrounded(t_token *token, char *input)
 {
 	int		gap;
-	int		len;
 	char	quote;
 
 	gap = 1;
-	len = 0;
 	quote = input[0];
 	while (input[gap] && input[gap] != quote)
-	{
-		len++;
 		gap++;
-	}
 	if (input[gap] != quote)
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: unexpected EOF while looking for matching `%c\n",
 			quote);
 		print_error("syntax error", "unexpected end of file");
-		return (g_unclosed_quotes);
+		return (-1);
 	}
-	set_token_value(token, input, gap, len, g_in_quotes);
+	set_token_value(token, input, gap, true);
 	gap++;
 	return (gap);
 }
 
 int	process_word_nosurround(t_token *token, char *input)
 {
-	int		gap;
-	int		len;
+	int	gap;
 
 	gap = 0;
-	len = 0;
 	while (input[gap]
 		&& !(input[gap] == '\''
 			|| input[gap] == '"'
@@ -91,18 +92,15 @@ int	process_word_nosurround(t_token *token, char *input)
 			|| input[gap] == '|'
 			|| input[gap] == '<'
 			|| input[gap] == '>'))
-	{
-		len++;
 		gap++;
-	}
-	set_token_value(token, input, gap, len, g_out_quotes);
+	set_token_value(token, input, gap, false);
 	return (gap);
 }
 
 int	fill_word_token(t_token *token, char *input)
 {
-	int		gap;
-	int		spaces;
+	int	gap;
+	int	spaces;
 
 	spaces = 0;
 	while (ft_isspace(*input))
@@ -112,7 +110,6 @@ int	fill_word_token(t_token *token, char *input)
 	}
 	if (!input)
 		return (spaces);
-	gap = 0;
 	if (input[0] == '\'' || input[0] == '"')
 		gap = process_word_surrounded(token, input);
 	else
