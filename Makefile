@@ -16,8 +16,15 @@ CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror -g
 RM 			:= rm -f
 MKDIR		:= mkdir -p
-INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include
-LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
+READLINE_DIR := $(shell brew --prefix readline)
+
+INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include \
+			   -I$(READLINE_DIR)/include
+
+LIB_FLAGS	:= -Llibft -lft -Lezalloc -lezalloc \
+			   -L$(READLINE_DIR)/lib -lreadline
+
+
 			
 #────────────────────────#
 ## PROJECT FILES & DIRS ##

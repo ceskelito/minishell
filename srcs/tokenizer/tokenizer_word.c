@@ -23,7 +23,7 @@ static inline bool	isquote(char c)
 	return (c == '\'' || c == '"');	
 }
 
-static inline bool isspecial(char c)
+static inline bool is_special_char(char c)
 {
 	if (c == '|' || c == '<' || c == '>')
 		return (true);
@@ -150,7 +150,7 @@ int	process_word_nosurround(t_token *token, char *input)
 
 	gap = 0;
 	len = 0;
-	while (input[gap] && !(isquote(input[gap]) || ft_isspace(input[gap]) || isspecial(input[gap])))
+	while (input[gap] && !(isquote(input[gap]) || ft_isspace(input[gap]) || is_special_char(input[gap])))
 	{
 		len++;
 		gap++;

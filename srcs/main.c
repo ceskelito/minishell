@@ -1,3 +1,6 @@
+#include <stdio.h>              
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "executor.h"
 #include "ezgalloc.h"
 #include "ft_lib.h"

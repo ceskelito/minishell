@@ -13,6 +13,8 @@
 #include "executor.h"
 #include "ezgalloc.h"
 #include "minishell.h"
+#include <string.h>
+#include <errno.h>
 
 void	echo(char *const args[])
 {
