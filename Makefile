@@ -51,7 +51,8 @@ FILES += ft_strjoin_char		\
 		tokenizer_dollar		\
 		tokenizer_quotes		\
 		tokenizer_utils			\
-		tokenizer_word
+		tokenizer_word          \
+		tokenizer_word_utils
 
 ## PARSER
 FILES += parser			\
