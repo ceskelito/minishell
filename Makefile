@@ -55,12 +55,13 @@ FILES += ft_strjoin_char		\
 		tokenizer_word_utils
 
 ## PARSER
-FILES += parser			\
-		parser_cleanup	\
-		parser_debug	\
-		parser_redirs	\
-		shell_init 
-
+FILES += parser					\
+         parser_cmd_utils		\
+         parser_cmd_handlers	\
+         parser_redirs			\
+         parser_cleanup			\
+         parser_debug			\
+         shell_init
 ## UTILS
 FILES += array				\
 		cleanup				\

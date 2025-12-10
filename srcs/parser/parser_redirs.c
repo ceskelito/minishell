@@ -1,27 +1,28 @@
-#include "ezgalloc.h"
-#include "ft_lib.h"
 #include "minishell.h"
+#include "ezgalloc.h"
 #include <unistd.h>
 
 int	is_redir_token(t_token_type type)
 {
-	return (type & (IN | OUT));
+	return (type & (IN | OUT | APPEND | HEREDOC));
 }
 
-bool is_redirection_valid(t_token **token)
+bool	is_redirection_valid(t_token **token)
 {
 	if (!*token)
 		return (false);
 	if (!(*token)->next)
 	{
-		ft_dprintf(STDERR_FILENO,"minishell: syntax error near unexpected token `%s'",
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `%s`\n",
 			"newline");
 		return (false);
 	}
 	if ((*token)->next->type != WORD)
 	{
-		ft_dprintf(STDERR_FILENO,"minishell: syntax error near unexpected token `%s'",
-			(*token)->value);
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `%s`\n",
+			(*token)->next->value);
 		return (false);
 	}
 	return (true);
@@ -31,13 +32,14 @@ t_redir	*create_redir(int type, char *file)
 {
 	t_redir	*redir;
 
-	redir = ezg_alloc(COMMAND, sizeof(t_redir));
+	redir = ezg_calloc(COMMAND, 1, sizeof(t_redir));
 	if (!redir)
 		return (NULL);
-	redir->type = type; 
+	redir->type = type;
 	redir->file = ezg_add(COMMAND, ft_strdup(file));
 	if (!redir->file)
 		return (NULL);
+	redir->pipe_fd = -1;
 	redir->next = NULL;
 	return (redir);
 }

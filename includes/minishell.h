@@ -137,12 +137,20 @@ int				process_word_token(char *input, int *i, t_token **tokens);
 t_cmd			*parse_tokens(t_token *tokens);
 t_redir			*create_redir(int type, char *file);
 void			add_redir(t_cmd *cmd, t_redir *redir);
-//int				add_arg(char **args, char *arg); NOT USED
+
 
 /* Parser utilities */
 int				is_redir_token(t_token_type type);
 int				parse_redirection(t_cmd *cmd, t_token **token);
-// int				cmd_count_args(char **args); NOT USED
+int				token_count_args(t_token *token);
+int				set_cmd_args(t_cmd *cmd, t_token *token);
+int				go_next_cmd(t_cmd **cmd);
+void			add_pipe_redir(t_cmd *cmd, t_token_type type);
+
+/* Parser command handlers */
+int				handle_word_token(t_cmd *cmd, t_token **token);
+int				handle_redir_token(t_cmd *cmd, t_token **token);
+int				handle_pipe_token(t_cmd **cmd, t_token *token);
 
 /* Parser cleanup */
 void			free_cmds(t_cmd *cmds);
