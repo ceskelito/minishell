@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/06 20:02:21 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:08:15 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,6 @@ int	fill_eof_token(t_token *token, char *input)
 		exit_shell(NULL);
 	}
 	ft_strlcat(token->value, input, gap + 1);
-	token->expand_dollar = false;
 	token->type = WORD;
 	token->cat_to_next = false;
 	return (gap);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 17:01:11 by rodolhop          #+#    #+#             */
-/*   Updated: 2025/12/08 17:01:15 by rodolhop         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:08:01 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ t_token	*new_token(void)
 	t_token	*new;
 
 	new = ezg_calloc(TOKEN, sizeof(t_token), 1);
-	new->expand_dollar = true;
 	new->cat_to_next = false;
 	return (new);
 }

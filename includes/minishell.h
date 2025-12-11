@@ -57,7 +57,6 @@ typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
-	bool			expand_dollar;
 	bool			cat_to_next;
 	bool			collapse_spaces;
 	struct s_token	*next;
