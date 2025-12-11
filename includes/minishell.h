@@ -85,7 +85,6 @@ typedef struct s_cmd
 /* Main shell structure */
 typedef struct s_shell
 {
-	//t_env			*env_list;
 	t_cmd			*cmd_list;
 	t_token			*tokens;
 	char			**env_array;
