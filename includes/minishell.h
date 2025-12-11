@@ -197,6 +197,10 @@ void	clean_array(char ***s);
 
 /* === Environment Variables Managing === */
 
+/* ========================================================================== */
+/*                              ENVIRONMENT                                   */
+/* ========================================================================== */
+
 /**
  * ft_getenv - Retrieve the value of an environment variable.
  *
