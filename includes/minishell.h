@@ -156,19 +156,12 @@ bool			is_builtin(char *cmd);
 int				count_cmds(t_cmd *cmd_list);
 
 /* Error handling */
-void			ft_error(char *str, int n);
-int				syntax_error(char *token);
 int				print_error(char *msg, char *err);
 
 /* Memory utilities */
-void			ft_free_array(char **array);
-void			free_shell(void *shell);
 char			*ft_strjoin_three(char *s1, char *s2, char *s3);
 
 /* String utilities (if not in libft) */
-int				ft_isalnum(int c);
-char			*ft_substr(char const *s, unsigned int start, size_t len);
-void			ft_putendl_fd(char *s, int fd);
 char			**dup_array(char *group, char **srcs);
 char			**expand_array(char *group, char **array, int nmemb, int increment);
 

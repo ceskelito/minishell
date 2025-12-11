@@ -53,8 +53,7 @@ PARSER =	parser					\
 			parser_cmd_handlers		\
 			parser_redirs			\
 			parser_cleanup			\
-			parser_debug			\
-			shell_init
+			parser_debug
 
 UTILS = 	array					\
 			cleanup					\
