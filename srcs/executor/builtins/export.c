@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:50:13 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/27 16:17:58 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:27:11 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "minishell.h"
 
 static char	*ft_strdup_prevchr(char *entry, char delimiter)

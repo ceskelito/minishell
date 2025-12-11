@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:49 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/13 17:41:11 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:26:36 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "minishell.h"
 
 static int	setup_pipe(t_redir *first, t_redir *second)

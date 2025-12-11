@@ -1,6 +1,4 @@
 #include "minishell.h"
-#include "executor.h"
-#include <stdlib.h>
 
 static char	*append_char_safe(char *str, char c)
 {

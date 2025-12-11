@@ -4,13 +4,14 @@
 # include "libft.h"
 # include "ezgalloc.h" 
 
-#include <stdbool.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <sys/types.h>
 # include <signal.h>
 # include <dirent.h>
 # include <termios.h>
@@ -144,6 +145,31 @@ void			cleanup_parsing(t_shell *shell);
 /* Debug functions */
 void			print_tokens(t_token *tokens);
 void			print_cmd_list(t_cmd *cmd_list);
+
+/* ========================================================================== */
+/*                               EXECUTOR                                     */
+/* ========================================================================== */
+
+/* Main Function*/
+void	executor(t_shell *shell);
+
+/* Builtins */
+void	env(void);
+void	echo(char *const args[]) ;
+void	cd(char *const args[]) ;
+void	pwd(void);
+void	exit_shell(char *const args[]) ;
+void	export(char *const args[]) ;
+void	unset(char *const args[]) ;
+
+/* Redirections */
+int		apply_redirs(t_redir *r);
+void	setup_heredocs(t_cmd *cmd_list);
+int		open_pipeline_fds(t_cmd *cmd_list);
+void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse);
+
+/* Other */
+bool	resolve_command_location(t_cmd *cmd);
 
 /* ========================================================================== */
 /*                              MAIN & UTILS                                  */

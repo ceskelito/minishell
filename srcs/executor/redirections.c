@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 14:16:30 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/20 16:14:35 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:26:43 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "minishell.h"
 
 void	close_pipe_fds(t_cmd *cmd, int redir_type, int cmd_to_parse)

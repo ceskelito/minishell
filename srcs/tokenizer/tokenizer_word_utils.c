@@ -1,6 +1,4 @@
 #include "minishell.h"
-#include "executor.h"
-#include <stdlib.h>
 
 t_token	*new_token(void);
 

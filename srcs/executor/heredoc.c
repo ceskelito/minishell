@@ -6,13 +6,11 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/06 14:42:40 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:26:31 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "minishell.h"
-#include <stdlib.h>
 
 // Need to expand variables
 // Need to manage cases with EOF in quotes

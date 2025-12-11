@@ -6,13 +6,11 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:08:15 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:27:32 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include <stdlib.h>
 
 /* helpers from tokenizer_word_utils.c */
 bool	ft_hasspace(char *str);
