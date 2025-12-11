@@ -36,12 +36,6 @@
 # define BLUE	"\33[34m"
 # define DEFAULT "\33[39m"
 
-/*
- * Global variable to handle signals
- * As per subject: Just one global variable to store signal number
-*/
-extern int	g_sig_status;
-
 /* Token types */
 typedef enum e_token_type
 {

@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:46:36 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 10:47:11 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:22:23 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	handle_sigint(int signal)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_sig_status = SIGINT;
 	}
 }
 

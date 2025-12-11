@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:10:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 12:21:12 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:22:27 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 #include <stdio.h>
 #include <stdio.h>
 #include <unistd.h>
-
-int			g_sig_status = 0;
 
 static int	is_debug_command(char *input)
 {
@@ -63,7 +61,7 @@ static void	process_command(char *input, t_shell *shell)
 
 void	set_signal(int signum, void (*handler)(int));	//signals.c
 void	handle_sigint(int signal);						// signals.c
-void	readline_on_buff(char **buff); 					// get_prompt.c
+void	readline_on_buff(char **buff);					// get_prompt.c
 
 int	main(void)
 {
