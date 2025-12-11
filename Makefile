@@ -107,7 +107,7 @@ LIBRARIES 	= $(LIBFT) $(LIBEZ)
 #──────────────#
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
+	@$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
 	@echo "Compiling $<"
 
 all: $(NAME) last_print
