@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:10:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 11:07:57 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 11:20:40 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	process_command(char *input, t_shell *shell)
 void	create_groups(void) __attribute__((constructor));
 void	set_signal(int signum, void (*handler)(int));
 void	handle_sigint(int signal);
-char	*get_prompt(char **ptr /*optional*/);
+char	*get_prompt(char **ptr);
 
 int	main(void)
 {
@@ -79,7 +79,6 @@ int	main(void)
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (readline(get_prompt(&input)), ezg_add(EXECUTING, input))
 	{
-		ezg_add(EXECUTING, input);
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
 		{
