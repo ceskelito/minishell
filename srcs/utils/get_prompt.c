@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:57:44 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 11:07:11 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:16:07 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*prompt_getcwd(char *home_symbol)
 	return (directory);
 }
 
-char	*get_prompt(char **ptr /*optional*/ )
+static char	*get_prompt(void)
 {
 	char	*working_directory;
 	char	*user;
@@ -58,7 +58,13 @@ char	*get_prompt(char **ptr /*optional*/ )
 		working_directory, DEFAULT, '$', ' ');
 	free(working_directory);
 	ezg_add(EXECUTING, prompt);
-	if (ptr)
-		*ptr = prompt;
 	return (prompt);
+}
+
+void readline_on_buff(char **buff)
+{
+	if (!buff)
+		return;
+	*buff = readline(get_prompt());
+	ezg_add(EXECUTING, *buff);
 }

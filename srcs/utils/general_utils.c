@@ -6,20 +6,11 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 20:06:21 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 10:55:12 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:17:41 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	create_groups(void)
-{
-	ezg_group_create(TOKEN);
-	ezg_group_create(GLOBAL);
-	ezg_group_create(COMMAND);
-	ezg_group_create(EXECUTING);
-	ezg_group_create(ENV);
-}
 
 int	count_cmds(t_cmd *cmd_list)
 {

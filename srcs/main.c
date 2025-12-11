@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:10:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 11:31:18 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:21:12 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,9 @@ static void	process_command(char *input, t_shell *shell)
 	executor(shell);
 }
 
-void	create_groups(void) __attribute__((constructor));
-void	set_signal(int signum, void (*handler)(int));
-void	handle_sigint(int signal);
-char	*get_prompt(char **ptr);
+void	set_signal(int signum, void (*handler)(int));	//signals.c
+void	handle_sigint(int signal);						// signals.c
+void	readline_on_buff(char **buff); 					// get_prompt.c
 
 int	main(void)
 {
@@ -72,13 +71,12 @@ int	main(void)
 	char	*input;
 	char	*cwd;
 
+	init_shell(&shell);
 	set_signal(SIGINT, handle_sigint);
 	set_signal(SIGQUIT, SIG_IGN);
-	init_shell(&shell);
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
-	//while (readline(get_prompt(&input)), ezg_add(EXECUTING, input))
-	while (readline(get_prompt(&input)), input)
+	while (readline_on_buff(&input), input)
 	{
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
@@ -93,6 +91,5 @@ int	main(void)
 		add_history(input);
 		process_command(input, &shell);
 	}
-	
 	exit_shell(NULL);
 }
