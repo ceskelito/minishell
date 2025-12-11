@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 12:35:23 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:02:35 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:05:14 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	init_shell(t_shell *shell)
 	shell->tokens = NULL;
 	shell->line = NULL;
 	shell->exit_status = 0;
-	shell->interactive = 1;
 	shell->std_out = dup(STDOUT_FILENO);
 	shell->std_in = dup(STDIN_FILENO);
 }

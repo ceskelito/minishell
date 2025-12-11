@@ -90,7 +90,6 @@ typedef struct s_shell
 	char			**env_array;
 	char			*line;
 	int				exit_status;
-	int				interactive;
 	int				std_out;
 	int				std_in;
 }	t_shell;
