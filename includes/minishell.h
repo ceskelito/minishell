@@ -82,18 +82,10 @@ typedef struct s_cmd
 	int				pipe_output;
 }	t_cmd;
 
-/* Shell environment structure */
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
 /* Main shell structure */
 typedef struct s_shell
 {
-	t_env			*env_list;
+	//t_env			*env_list;
 	t_cmd			*cmd_list;
 	t_token			*tokens;
 	char			**env_array;

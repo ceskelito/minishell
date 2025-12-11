@@ -26,7 +26,6 @@ void	cleanup_shell(t_shell *shell)
 		free_cmds(shell->cmd_list);
 	if (shell->line)
 		free(shell->line);
-	shell->env_list = NULL;
 	shell->tokens = NULL;
 	shell->cmd_list = NULL;
 	shell->line = NULL;

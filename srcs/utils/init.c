@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 12:35:23 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 12:19:46 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:02:35 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void	create_ezg_groups(void)
 void	init_shell(t_shell *shell)
 {
 	create_ezg_groups();
-	shell->env_list = NULL;
 	shell->cmd_list = NULL;
 	shell->tokens = NULL;
 	shell->line = NULL;
