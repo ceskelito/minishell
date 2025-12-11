@@ -12,7 +12,6 @@ endef
 #──────────────────#
 
 NAME 		:= minishell
-# CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror -g
 RM 			:= rm -f
 MKDIR		:= mkdir -p
@@ -108,7 +107,7 @@ LIBRARIES 	= $(LIBFT) $(LIBEZ)
 #──────────────#
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS) -o $@
 	@echo "Compiling $<"
 
 all: $(NAME) last_print
