@@ -88,7 +88,6 @@ typedef struct s_shell
 	t_cmd			*cmd_list;
 	t_token			*tokens;
 	char			**env_array;
-	char			*line;
 	int				exit_status;
 	int				std_out;
 	int				std_in;
