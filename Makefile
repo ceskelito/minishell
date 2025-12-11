@@ -30,50 +30,51 @@ LIB_FLAGS	:= -Llibft -lft -Lezalloc -lezalloc \
 ## PROJECT FILES & DIRS ##
 #────────────────────────#
 
-## MAIN
-FILES = main
+EXECUTOR = echo-cd-pwd-exit			\
+			env-unset				\
+			export					\
+			executor				\
+			heredoc					\
+			pipe					\
+			redirections			\
+			resolve_command_location
 
-## EXECUTOR
-FILES += echo-cd-pwd-exit	\
-		env-unset		\
-		export			\
-		executor		\
-		heredoc			\
-		pipe			\
-		redirections	\
-		resolve_command_location
+TOKENIZER = ft_strjoin_char			\
+			tokenizer				\
+			tokenizer_concatenate	\
+			tokenizer_debug			\
+			tokenizer_dollar		\
+			tokenizer_quotes		\
+			tokenizer_utils			\
+			tokenizer_word          \
+			tokenizer_word_utils
 
-## TOKENIZER
-FILES += ft_strjoin_char		\
-		tokenizer				\
-		tokenizer_concatenate	\
-		tokenizer_debug			\
-		tokenizer_dollar		\
-		tokenizer_quotes		\
-		tokenizer_utils			\
-		tokenizer_word          \
-		tokenizer_word_utils
+PARSER =	parser					\
+			parser_cmd_utils		\
+			parser_cmd_handlers		\
+			parser_redirs			\
+			parser_cleanup			\
+			parser_debug			\
+			shell_init
 
-## PARSER
-FILES += parser					\
-         parser_cmd_utils		\
-         parser_cmd_handlers	\
-         parser_redirs			\
-         parser_cleanup			\
-         parser_debug			\
-         shell_init
-## UTILS
-FILES += array				\
-		cleanup				\
-		environment 		\
-		environment 		\
-		environment_handler \
-		exit_status 		\
-		general_utils 		\
-		init 				\
-		split_in_chunks 	\
-		string_expand_dollars
+UTILS = 	array					\
+			cleanup					\
+			exit_status 			\
+			general_utils 			\
+			get_prompt				\
+			init 					\
+			signals					\
+			split_in_chunks 		\
+			string_expand_dollars
 
+ENVIRON = 	environment 			\
+			environment_handler
+
+FILES = main 			\
+		$(TOKENIZER) 	\
+		$(PARSER) 		\
+		$(EXECUTOR) 	\
+		$(UTILS)
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -83,7 +84,8 @@ vpath %.c	$(SRCS_DIR) \
 			:$(SRCS_DIR)/parser \
 			:$(SRCS_DIR)/executor \
 			:$(SRCS_DIR)/executor/builtins \
-			:$(SRCS_DIR)/utils
+			:$(SRCS_DIR)/utils \
+			:$(SRCS_DIR)/environment
 
 SRCS := $(addsuffix .c, $(FILES))
 OBJS := $(addsuffix .o, $(addprefix $(OBJS_DIR)/, $(FILES)))
