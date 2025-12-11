@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:10:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 11:20:40 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 11:31:18 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	main(void)
 	init_shell(&shell);
 	printf("Welcome to minishell!\n");
 	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
-	while (readline(get_prompt(&input)), ezg_add(EXECUTING, input))
+	//while (readline(get_prompt(&input)), ezg_add(EXECUTING, input))
+	while (readline(get_prompt(&input)), input)
 	{
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
@@ -92,5 +93,6 @@ int	main(void)
 		add_history(input);
 		process_command(input, &shell);
 	}
+	
 	exit_shell(NULL);
 }

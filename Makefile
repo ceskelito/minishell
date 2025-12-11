@@ -12,7 +12,7 @@ endef
 #──────────────────#
 
 NAME 		:= minishell
-CC 			:= gcc
+# CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror -g
 RM 			:= rm -f
 MKDIR		:= mkdir -p
@@ -30,7 +30,7 @@ LIB_FLAGS	:= -Llibft -lft -Lezalloc -lezalloc \
 ## PROJECT FILES & DIRS ##
 #────────────────────────#
 
-EXECUTOR = echo-cd-pwd-exit			\
+EXECUTOR = 	echo-cd-pwd-exit		\
 			env-unset				\
 			export					\
 			executor				\
@@ -148,6 +148,10 @@ last_print:
 	@echo "        ▛▘▛▌▛▛▌▛▌▌▐ █▌▛▌              ";
 	@echo "        ▙▖▙▌▌▌▌▙▌▌▐▖▙▖▙▌              ";
 	@echo "               ▌                      ";
+
+run-test:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp  ./$(NAME)
+
 
 # last_print:
 # 	@echo "███╗   ███╗    ██╗    ███╗   ██╗    ██╗    ███████╗    ██╗  ██╗    ███████╗    ██╗         ██╗             ";
