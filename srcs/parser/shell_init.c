@@ -11,7 +11,6 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->cmd_list = NULL;
 	shell->tokens = NULL;
 	shell->env_array = envp;
-	shell->line = NULL;
 	shell->exit_status = 0;
 	shell->std_out = dup(STDOUT_FILENO);
 	shell->std_in = dup(STDIN_FILENO);
@@ -23,9 +22,6 @@ void	cleanup_shell(t_shell *shell)
 		// free_tokens(shell->tokens); TO REMOVE (use ezg_* functions instead)
 	if (shell->cmd_list)
 		free_cmds(shell->cmd_list);
-	if (shell->line)
-		free(shell->line);
 	shell->tokens = NULL;
 	shell->cmd_list = NULL;
-	shell->line = NULL;
 }
