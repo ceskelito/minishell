@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/27 16:21:20 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 13:07:13 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 		set_signal(SIGINT, handle_sigint);
 		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (apply_redirs(cmd->redirs) != 0)
-			exit(errno);
+			return(ezg_cleanup(), exit(errno));
 		location_was_given = resolve_command_location(cmd);
 		if (cmd->location)
 			exec_cmd(cmd->location, cmd->args, ft_getenv_array());
@@ -39,7 +39,7 @@ static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 			print_error(cmd->args[0], strerror(errno));
 		else
 			print_error(cmd->args[0], "command not found");
-		exit(127);
+		return(ezg_cleanup(), exit(127));
 	}
 	else if (*pid > 0)
 		close_pipe_fds(cmd, PIPE | HEREDOC, 1);
@@ -99,7 +99,8 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	pid_t	*pid;
 
 	num_cmds = count_cmds(cmd);
-	pid = malloc(sizeof(pid_t) * num_cmds);
+	ezg_group_create("pid");
+	pid = ezg_alloc("pid", sizeof(pid_t) * num_cmds);
 	i = 0;
 	set_signal(SIGINT, SIG_IGN);
 	while (cmd)
@@ -115,7 +116,7 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	while (i < num_cmds)
 		waitpid(pid[i++], exit_code, 0);
 	set_signal(SIGINT, handle_sigint);
-	free(pid);
+	ezg_group_release("pid");
 }
 
 void	executor(t_shell *shell)

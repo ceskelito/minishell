@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:10:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 12:22:27 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:52:18 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ static void	process_command(char *input, t_shell *shell)
 	if (debug_mode)
 		print_debug_info(shell);
 	executor(shell);
+	ezg_group_release(TOKEN);
+	ezg_group_release(COMMAND);
+	shell->tokens = NULL;
+	shell->cmd_list = NULL;
 }
 
 void	set_signal(int signum, void (*handler)(int));	//signals.c
