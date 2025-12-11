@@ -74,7 +74,8 @@ FILES = main 			\
 		$(TOKENIZER) 	\
 		$(PARSER) 		\
 		$(EXECUTOR) 	\
-		$(UTILS)
+		$(UTILS)		\
+		$(ENVIRON)
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
