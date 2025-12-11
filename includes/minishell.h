@@ -150,11 +150,8 @@ void			print_cmd_list(t_cmd *cmd_list);
 /* ========================================================================== */
 
 void			init_shell(t_shell *shell);
-int				process_line(t_shell *shell);
-void			shell_loop(t_shell *shell);
-void			cleanup_shell(t_shell *shell);
 void			set_exit_status(int value);
-int				get_exit_status();
+int				get_exit_status(void);
 bool			is_builtin(char *cmd);
 int				count_cmds(t_cmd *cmd_list);
 
