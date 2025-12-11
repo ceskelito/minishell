@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:57:44 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 12:16:07 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:25:50 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ static char	*get_prompt(void)
 	return (prompt);
 }
 
-void readline_on_buff(char **buff)
+void	readline_on_buff(char **buff)
 {
 	if (!buff)
-		return;
+		return ;
 	*buff = readline(get_prompt());
 	ezg_add(EXECUTING, *buff);
 }
