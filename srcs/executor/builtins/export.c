@@ -24,23 +24,25 @@ static char	*ft_strdup_prevchr(char *entry, char delimiter)
 	return (key);
 }
 
-static bool	is_entry_valid(char *entry)
+static bool	is_entry_valid(char *entry, int *had_error)
 {
 	int	i;
 
-	if (!ft_isalpha(entry[0]))
+	if (!ft_isalpha(entry[0]) && entry[0] != '_')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: export: `%s': not a valid identifier\n", entry);
+		*had_error = 1;
 		return (false);
 	}
 	i = 0;
 	while (entry[i] && entry[i] != '=')
 	{
-		if (!ft_isalnum(entry[i]))
+		if (!ft_isalnum(entry[i]) && entry[i] != '_')
 		{
 			ft_dprintf(STDERR_FILENO,
-				"minishell: export: `%c': not a valid identifier\n", entry);
+				"minishell: export: `%s': not a valid identifier\n", entry);
+			*had_error = 1;
 			return (false);
 		}
 		i++;
@@ -103,24 +105,28 @@ void	print_export(void)
 void	export(char *const args[])
 {
 	int		i;
+	int		exit_code;
 	char	*key;
 	char	*value;
 	char	*entry;
 
+	exit_code = 0;
 	if (!args || !args[1])
 	{
 		print_export();
+		set_exit_status(0);
 		return ;
 	}
 	i = 0;
 	while (i++, args[i])
 	{
 		entry = args[i];
-		if (!is_entry_valid(entry))
+		if (!is_entry_valid(entry, &exit_code))
 			continue ;
 		key = ft_strdup_prevchr(entry, '=');
 		value = ft_strchr(entry, '=') + 1;
 		ft_setenv(key, value);
 		free(key);
 	}
+	set_exit_status(exit_code);
 }

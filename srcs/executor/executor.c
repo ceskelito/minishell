@@ -19,10 +19,20 @@
 void	set_signal(int signum, void (*handler)(int));
 void	handle_sigint(int signal);
 
+static int	get_exit_code_from_status(int status)
+{
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (status);
+}
+
 static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 	int (*exec_cmd)(const char *, char *const[], char *const[]))
 {
 	bool	location_was_given;
+	int		exit_code;
 
 	*pid = fork();
 	if (*pid == 0)
@@ -30,30 +40,33 @@ static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 		set_signal(SIGINT, handle_sigint);
 		close_pipe_fds(cmd->next, PIPE | HEREDOC, -1);
 		if (apply_redirs(cmd->redirs) != 0)
-			return(ezg_cleanup(), exit(errno));
+			return (ezg_cleanup(), exit(1));
 		location_was_given = resolve_command_location(cmd);
 		if (cmd->location)
 			exec_cmd(cmd->location, cmd->args, ft_getenv_array());
+		exit_code = 127;
 		if (location_was_given)
+		{
 			print_error(cmd->args[0], strerror(errno));
+			if (errno == EACCES || errno == EISDIR)
+				exit_code = 126;
+		}
 		else
 			print_error(cmd->args[0], "command not found");
-		return(ezg_cleanup(), exit(127));
+		return (ezg_cleanup(), exit(exit_code));
 	}
 	else if (*pid > 0)
 		close_pipe_fds(cmd, PIPE | HEREDOC, 1);
 	else
 	{
 		perror("minishell");
-		set_exit_status(errno);
+		set_exit_status(1);
 	}
 }
 
 static int	execute_builtin(const char *pathname, char *const argv[],
 		char *const envp[])
 {
-	int	exit_value;
-
 	(void)envp;
 	if (!ft_strcmp(argv[0], "echo"))
 		echo(argv);
@@ -69,25 +82,19 @@ static int	execute_builtin(const char *pathname, char *const argv[],
 		export(argv);
 	else if (!ft_strcmp(argv[0], "unset"))
 		unset(argv);
-	else
-		exit_value = 1;
-	exit_value = 0;
 	if (ft_strcmp(pathname, "child") == 0)
-		exit(exit_value);
-	return (exit_value);
+		exit(get_exit_status());
+	return (get_exit_status());
 }
 
 static void	execute_in_parent(t_shell *shell, t_cmd *cmd)
 {
-	int	exit_code;
-
 	if (apply_redirs(cmd->redirs) == 0)
-		exit_code = execute_builtin("parent", cmd->args, NULL);
+		execute_builtin("parent", cmd->args, NULL);
 	else
-		exit_code = errno;
+		set_exit_status(1);
 	dup2(shell->std_in, STDIN_FILENO);
 	dup2(shell->std_out, STDOUT_FILENO);
-	set_exit_status(exit_code);
 	ezg_group_release(EXECUTING);
 }
 
@@ -95,6 +102,7 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 {
 	int		num_cmds;
 	int		i;
+	int		status;
 	pid_t	*pid;
 
 	num_cmds = count_cmds(cmd);
@@ -113,7 +121,8 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	}
 	i = 0;
 	while (i < num_cmds)
-		waitpid(pid[i++], exit_code, 0);
+		waitpid(pid[i++], &status, 0);
+	*exit_code = get_exit_code_from_status(status);
 	set_signal(SIGINT, handle_sigint);
 	ezg_group_release("pid");
 }

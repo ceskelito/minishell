@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/12 16:59:02 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:09:40 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	echo(char *const args[])
 	}
 	if (set_exit_status(0), !flag_n)
 		ft_printf("\n");
+	set_exit_status(0);
 }
 
 void	pwd(void)
