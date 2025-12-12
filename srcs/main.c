@@ -43,8 +43,20 @@ static void	process_command(char *input, t_shell *shell)
 	else
 		cmd = input;
 	shell->tokens = tokenize_input(cmd);
+	if (!shell->tokens)
+	{
+		set_exit_status(2);
+		return ;
+	}
 	concatenate_tokens(&(shell->tokens));
 	shell->cmd_list = parse_tokens(shell->tokens);
+	if (!shell->cmd_list)
+	{
+		set_exit_status(2);
+		ezg_group_release(TOKEN);
+		shell->tokens = NULL;
+		return ;
+	}
 	if (debug_mode)
 		print_debug_info(shell);
 	executor(shell);
@@ -75,7 +87,7 @@ int	main(void)
 		if (!cwd)
 		{
 			perror("minishell");
-			set_exit_status(errno);
+			set_exit_status(1);
 			break ;
 		}
 		if (ft_strcmp(cwd, ft_getenv("PWD")) != 0)

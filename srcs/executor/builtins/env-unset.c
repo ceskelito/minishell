@@ -21,6 +21,7 @@ void	unset(char *const args[])
 	{
 		ft_unsetenv(args[i]);
 	}
+	set_exit_status(0);
 }
 
 void	env(void)
@@ -35,4 +36,5 @@ void	env(void)
 		ft_printf("%s\n", env_array[i]);
 		i++;
 	}
+	set_exit_status(0);
 }
