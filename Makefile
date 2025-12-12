@@ -12,6 +12,7 @@ endef
 #──────────────────#
 
 NAME 		:= minishell
+CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror -g
 RM 			:= rm -f
 MKDIR		:= mkdir -p
