@@ -43,7 +43,7 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 	input = readline("> ");
 	if (!input)
 	{
-		print_error("warning", "heredoc terminated by EOF\n");
+		print_error("warning", "heredoc terminated by EOF");
 		return (false);
 	}
 	ezg_add(EXECUTING, input);
@@ -54,7 +54,7 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 	if (input == NULL)
 	{
 		perror("minishell");
-		set_exit_status(errno);
+		set_exit_status(1);
 		exit_shell(NULL);
 	}
 	ft_dprintf(fd, "%s\n", input);
