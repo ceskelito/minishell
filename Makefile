@@ -37,7 +37,8 @@ EXECUTOR = 	echo-cd-pwd-exit		\
 			heredoc					\
 			pipe					\
 			redirections			\
-			resolve_command_location
+			resolve_command_location\
+			helpers
 
 TOKENIZER = ft_strjoin_char			\
 			tokenizer				\
