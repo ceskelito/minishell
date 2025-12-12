@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:27:40 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:23:12 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,10 @@
 
 void	set_signal(int signum, void (*handler)(int));
 void	handle_sigint(int signal);
-
-static int	get_exit_code_from_status(int status)
-{
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (status);
-}
+int		get_exit_code_from_status(int status);
+void	try_execute_command(t_cmd *cmd, bool location_was_given,
+			int *exit_code,
+			int (*exec_cmd)(const char *, char *const[], char *const[]));
 
 static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 	int (*exec_cmd)(const char *, char *const[], char *const[]))
@@ -42,17 +37,7 @@ static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 		if (apply_redirs(cmd->redirs) != 0)
 			return (ezg_cleanup(), exit(1));
 		location_was_given = resolve_command_location(cmd);
-		if (cmd->location)
-			exec_cmd(cmd->location, cmd->args, ft_getenv_array());
-		exit_code = 127;
-		if (location_was_given)
-		{
-			print_error(cmd->args[0], strerror(errno));
-			if (errno == EACCES || errno == EISDIR)
-				exit_code = 126;
-		}
-		else
-			print_error(cmd->args[0], "command not found");
+		try_execute_command(cmd, location_was_given, &exit_code, exec_cmd);
 		return (ezg_cleanup(), exit(exit_code));
 	}
 	else if (*pid > 0)
