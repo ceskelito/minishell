@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenizer_word.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:27:32 by rceschel         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 /* helpers from tokenizer_word_utils.c */
@@ -17,6 +5,15 @@ bool	ft_hasspace(char *str);
 char	*word_get_result(char *input, int start, int len, bool expand);
 void	eof_compute_gap(char *input, int *gap, char *quote);
 t_token	*token_split_words(t_token *token, char *input, bool cat_to_next);
+
+/*
+** ✅ FIX: Проверка оператора после токена
+** Добавлена для Tests 130, 131
+*/
+static bool	is_operator_char(char c)
+{
+	return (c == '|' || c == '<' || c == '>');
+}
 
 static void	set_token_value(
 				t_token *token, char *input, int gap, bool in_quote)
@@ -27,8 +24,14 @@ static void	set_token_value(
 	int		start;
 
 	cat_to_next = false;
-	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
+	
+	// ✅ ИСПРАВЛЕНО: Проверяем не только пробел, но и операторы!
+	// БЫЛО: if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
+	if (input[gap + in_quote] 
+		&& !ft_isspace(input[gap + in_quote])
+		&& !is_operator_char(input[gap + in_quote]))
 		cat_to_next = true;
+	
 	if (in_quote)
 	{
 		start = 1;

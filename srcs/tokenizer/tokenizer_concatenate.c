@@ -15,6 +15,9 @@
 /*
 ** This function will not free any memory, because the tokens are saved
 ** in the TOKEN garbage list of libezalloc.
+** 
+** ✅ FIX BUG #2: Убрана проверка curr->type != curr->next->type
+** которая блокировала конкатенацию WORD токенов
 */
 static int	token_cat_to_next(t_token *curr)
 {
@@ -22,9 +25,11 @@ static int	token_cat_to_next(t_token *curr)
 	char	*new_value;
 	size_t	len;
 
-	if (!curr || !curr->next || !curr->cat_to_next
-		|| curr->type != curr->next->type)
+	// ✅ ИСПРАВЛЕНО: Убрана лишняя проверка типов!
+	// Старая версия: if (!curr || !curr->next || !curr->cat_to_next || curr->type != curr->next->type)
+	if (!curr || !curr->next || !curr->cat_to_next)
 		return (-1);
+		
 	next = curr->next;
 	len = ft_strlen(curr->value) + ft_strlen(next->value) + 1;
 	new_value = ezg_calloc(TOKEN, len, sizeof(char));
