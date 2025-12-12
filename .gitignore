@@ -21,3 +21,6 @@ minishell
 *.nfs*
 *.DS*
 minishell_tester/
+
+# CodeQL temporary files
+_codeql_detected_source_root
