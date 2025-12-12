@@ -20,3 +20,4 @@ minishell
 # Trash
 *.nfs*
 *.DS*
+minishell_tester/
