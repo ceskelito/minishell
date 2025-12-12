@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:27:01 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:41:13 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	cd(char *const args[])
 void	exit_shell(char *const args[])
 {
 	int	i;
+	int	exit_value;
 
 	ft_printf("exit\n");
 	if (!args || !args[1])
@@ -120,6 +121,7 @@ void	exit_shell(char *const args[])
 		}
 		i++;
 	}
+	exit_value = (unsigned char)ft_atoi(args[1]);
 	ezg_cleanup();
-	exit((unsigned char)ft_atoi(args[1]));
+	exit(exit_value);
 }
