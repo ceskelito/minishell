@@ -89,6 +89,7 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	int		i;
 	int		status;
 	pid_t	*pid;
+	bool	received_sigint;
 
 	num_cmds = count_cmds(cmd);
 	ezg_group_create("pid");
@@ -105,9 +106,16 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 		cmd = cmd->next;
 	}
 	i = 0;
+	received_sigint = false;
 	while (i < num_cmds)
+	{
 		waitpid(pid[i++], &status, 0);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			received_sigint = true;
+	}
 	*exit_code = get_exit_code_from_status(status);
+	if (received_sigint)
+		write(STDOUT_FILENO, "\n", 1);
 	set_signal(SIGINT, handle_sigint);
 	ezg_group_release("pid");
 }
