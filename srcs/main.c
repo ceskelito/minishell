@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:10:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:26:20 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:35:28 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ int	main(void)
 	init_shell(&shell);
 	set_signal(SIGINT, handle_sigint);
 	set_signal(SIGQUIT, SIG_IGN);
-	printf("Welcome to minishell!\n");
-	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
+	// printf("Welcome to minishell!\n");
+	// printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (readline_on_buff(&input), input)
 	{
 		cwd = getcwd(NULL, 0);
