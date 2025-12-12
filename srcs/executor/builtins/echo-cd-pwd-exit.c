@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/12 16:41:13 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:59:02 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,8 @@ void	echo(char *const args[])
 			ft_printf(" ");
 		i++;
 	}
-	if (!flag_n)
+	if (set_exit_status(0), !flag_n)
 		ft_printf("\n");
-	set_exit_status(0);
 }
 
 void	pwd(void)
@@ -77,21 +76,14 @@ void	cd(char *const args[])
 	{
 		dir = ft_getenv("HOME");
 		if (!dir)
-		{
-			print_error("cd", "HOME not set");
-			set_exit_status(1);
-			return ;
-		}
+			return (print_error("cd", "HOME not set"), set_exit_status(1));
 	}
 	else
 		dir = args[1];
 	if (strcmp(dir, "") != 0 && chdir(dir) != 0)
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir,
-			strerror(errno));
-		set_exit_status(1);
-		return ;
-	}
+		return (ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir,
+				strerror(errno)),
+			set_exit_status(1));
 	set_exit_status(0);
 }
 
@@ -102,10 +94,7 @@ void	exit_shell(char *const args[])
 
 	ft_printf("exit\n");
 	if (!args || !args[1])
-	{
-		ezg_cleanup();
-		exit(get_exit_status());
-	}
+		return (ezg_cleanup(), exit(get_exit_status()));
 	if (args[2])
 		return (print_error("exit", "too many arguments"), set_exit_status(1));
 	i = 0;
