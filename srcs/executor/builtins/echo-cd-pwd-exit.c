@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:41 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:27:01 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:41:13 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	echo(char *const args[])
 	}
 	if (!flag_n)
 		ft_printf("\n");
+	set_exit_status(0);
 }
 
 void	pwd(void)
@@ -47,9 +48,15 @@ void	pwd(void)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
+	{
 		perror("minishell: pwd");
+		set_exit_status(1);
+	}
 	else
+	{
 		ft_printf("%s\n", cwd);
+		set_exit_status(0);
+	}
 }
 
 void	cd(char *const args[])
@@ -62,7 +69,8 @@ void	cd(char *const args[])
 		count++;
 	if (count > 2)
 	{
-		print_error("cd", "too many arguments\n");
+		print_error("cd", "too many arguments");
+		set_exit_status(1);
 		return ;
 	}
 	if (count == 1)
@@ -70,20 +78,27 @@ void	cd(char *const args[])
 		dir = ft_getenv("HOME");
 		if (!dir)
 		{
-			print_error("cd", "HOME not set\n");
+			print_error("cd", "HOME not set");
+			set_exit_status(1);
 			return ;
 		}
 	}
 	else
 		dir = args[1];
 	if (strcmp(dir, "") != 0 && chdir(dir) != 0)
+	{
 		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir,
 			strerror(errno));
+		set_exit_status(1);
+		return ;
+	}
+	set_exit_status(0);
 }
 
 void	exit_shell(char *const args[])
 {
 	int	i;
+	int	exit_value;
 
 	ft_printf("exit\n");
 	if (!args || !args[1])
@@ -102,10 +117,11 @@ void	exit_shell(char *const args[])
 			ft_dprintf(STDERR_FILENO,
 				"minishell: exit: %s: numeric argument required\n", args[1]);
 			ezg_cleanup();
-			exit(255);
+			exit(2);
 		}
 		i++;
 	}
+	exit_value = (unsigned char)ft_atoi(args[1]);
 	ezg_cleanup();
-	exit(ft_atoi(args[1]) % 256);
+	exit(exit_value);
 }
