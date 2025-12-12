@@ -12,41 +12,20 @@
 
 #include "minishell.h"
 
-static int	is_debug_command(char *input)
-{
-	return (ft_strncmp(input, "DEBUG:", 6) == 0);
-}
 
-static char	*extract_command(char *input)
-{
-	if (is_debug_command(input))
-		return (input + 6);
-	return (input);
-}
 
-static void	print_debug_info(t_shell *shell)
-{
-	printf("\n=== DEBUGGING INFO ===\n");
-	print_tokens(shell->tokens);
-	print_cmd_list(shell->cmd_list);
-	printf("======================\n\n");
-}
 
 static void	process_command(char *input, t_shell *shell)
 {
 	char	*cmd;
-	int		debug_mode;
 
-	debug_mode = is_debug_command(input);
-	if (debug_mode)
-		cmd = extract_command(input);
-	else
-		cmd = input;
+
+
+	cmd = input;
 	shell->tokens = tokenize_input(cmd);
 	concatenate_tokens(&(shell->tokens));
 	shell->cmd_list = parse_tokens(shell->tokens);
-	if (debug_mode)
-		print_debug_info(shell);
+
 	executor(shell);
 	ezg_group_release(TOKEN);
 	ezg_group_release(COMMAND);
@@ -67,8 +46,7 @@ int	main(void)
 	init_shell(&shell);
 	set_signal(SIGINT, handle_sigint);
 	set_signal(SIGQUIT, SIG_IGN);
-	printf("Welcome to minishell!\n");
-	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
+	
 	while (readline_on_buff(&input), input)
 	{
 		cwd = getcwd(NULL, 0);

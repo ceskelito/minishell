@@ -152,9 +152,7 @@ void				free_redirs(t_redir *redirs);
 void				free_single_cmd(t_cmd *cmd);
 void				cleanup_parsing(t_shell *shell);
 
-/* Debug functions */
-void				print_tokens(t_token *tokens);
-void				print_cmd_list(t_cmd *cmd_list);
+
 
 /* ========================================================================== */
 /*                               EXECUTOR                                     */
