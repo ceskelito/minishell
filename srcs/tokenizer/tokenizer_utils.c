@@ -29,24 +29,51 @@ void	add_token(t_token **head, t_token *new_token)
 
 t_token_type	get_token_type(char *input)
 {
+	// ✅ Проверка на || (не поддерживается в mandatory)
 	if (input[0] == '|' && input[1] == '|')
-		return (OR);
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `||'\n");
+		return (0);  
+	}
+	
+	
 	if (input[0] == '|')
 		return (PIPE);
+	
+
 	if (input[0] == '<' && input[1] == '<')
 		return (HEREDOC | IN);
 	if (input[0] == '<')
 		return (IN);
+	
+	
 	if (input[0] == '>' && input[1] == '>')
 		return (APPEND | OUT);
 	if (input[0] == '>')
 		return (OUT);
+	
+
 	if (input[0] == '&' && input[1] == '&')
-		return (AND);
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `&&'\n");
+		return (0);  
+	}
+	
 	if (input[0] == '(')
-		return (P_OPEN);
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `('\n");
+		return (0);  
+	}
 	if (input[0] == ')')
-		return (P_CLOSE);
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `)'\n");
+		return (0); 
+	}
+	
 	return (WORD);
 }
 

@@ -17,7 +17,13 @@ static int	fill_operator_token(t_token *token, char *input)
 {
 	if (!token)
 		return (-1);
+
 	token->type = get_token_type(input);
+	if (token->type == 0)
+	{
+    	set_exit_status(2);
+    	return (-1);
+	}
 	token->value = get_operator_value(input, token->type);
 	return (ft_strlen(token->value));
 }
