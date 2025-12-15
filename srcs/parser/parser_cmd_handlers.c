@@ -20,11 +20,45 @@ int	handle_redir_token(t_cmd *cmd, t_token **token)
 	return (0);
 }
 
-// ✅ FIX: Улучшенная проверка pipe
+
+
+static bool	has_stdout_redir(t_cmd *cmd)
+{
+	t_redir	*redir;
+
+	redir = cmd->redirs;
+	while (redir)
+	{
+		// Проверяем есть ли файловый редирект на stdout
+		if ((redir->type & OUT) && !(redir->type & PIPE))
+			return (true);
+		if ((redir->type & APPEND) && !(redir->type & PIPE))
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
+}
+
+static bool	has_stdin_redir(t_cmd *cmd)
+{
+	t_redir	*redir;
+
+	redir = cmd->redirs;
+	while (redir)
+	{
+		// Проверяем есть ли файловый редирект на stdin
+		if ((redir->type & IN) && !(redir->type & PIPE))
+			return (true);
+		if ((redir->type & HEREDOC) && !(redir->type & PIPE))
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
+}
+
 int	handle_pipe_token(t_cmd **cmd, t_token *token)
 {
-	// ✅ ИСПРАВЛЕНО: Проверяем только наличие следующего токена
-	// После pipe может быть редирект, затем команда
+	// Проверяем наличие следующего токена
 	if (!token->next)
 	{
 		ft_dprintf(STDERR_FILENO,
@@ -32,7 +66,7 @@ int	handle_pipe_token(t_cmd **cmd, t_token *token)
 		return (-1);
 	}
 	
-	// ✅ Можно добавить проверку на двойной pipe: | |
+	// Проверка на двойной pipe: | |
 	if (token->next->type & PIPE)
 	{
 		ft_dprintf(STDERR_FILENO,
@@ -41,9 +75,17 @@ int	handle_pipe_token(t_cmd **cmd, t_token *token)
 	}
 	
 	(*cmd)->pipe_output = true;
-	add_pipe_redir(*cmd, OUT);
+	
+	// ✅ НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа!
+	if (!has_stdout_redir(*cmd))
+		add_pipe_redir(*cmd, OUT);
+	
 	if (go_next_cmd(cmd) < 0)
 		return (-1);
-	add_pipe_redir(*cmd, IN);
+	
+	// ✅ НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа!
+	if (!has_stdin_redir(*cmd))
+		add_pipe_redir(*cmd, IN);
+	
 	return (0);
 }
