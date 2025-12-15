@@ -6,22 +6,12 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:14 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/12 17:23:12 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/15 11:51:27 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-#ifndef O_CLOEXEC
-# define O_CLOEXEC 0
-#endif
-
-void	set_signal(int signum, void (*handler)(int));
-void	handle_sigint(int signal);
-int		get_exit_code_from_status(int status);
-void	try_execute_command(t_cmd *cmd, bool location_was_given,
-			int *exit_code,
-			int (*exec_cmd)(const char *, char *const[], char *const[]));
+#include "helpers.h"
 
 static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 	int (*exec_cmd)(const char *, char *const[], char *const[]))
@@ -37,7 +27,7 @@ static void	execute_in_child(t_cmd *cmd, pid_t *pid,
 		if (apply_redirs(cmd->redirs) != 0)
 			return (ezg_cleanup(), exit(1));
 		location_was_given = resolve_command_location(cmd);
-		try_execute_command(cmd, location_was_given, &exit_code, exec_cmd);
+		exit_code = try_execute_command(cmd, location_was_given, exec_cmd);
 		return (ezg_cleanup(), exit(exit_code));
 	}
 	else if (*pid > 0)
@@ -83,6 +73,8 @@ static void	execute_in_parent(t_shell *shell, t_cmd *cmd)
 	ezg_group_release(EXECUTING);
 }
 
+// I'm afraid about put more instructions into a void return...
+// but the norme push everybody to do this kind of orrible things
 static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 {
 	int		num_cmds;
@@ -91,8 +83,8 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 	pid_t	*pid;
 	bool	received_sigint;
 
-	num_cmds = count_cmds(cmd);
 	ezg_group_create("pid");
+	num_cmds = count_cmds(cmd);
 	pid = ezg_alloc("pid", sizeof(pid_t) * num_cmds);
 	i = 0;
 	set_signal(SIGINT, SIG_IGN);
@@ -105,19 +97,11 @@ static void	execute_pipeline(t_cmd *cmd, int *exit_code)
 		ezg_group_release(EXECUTING);
 		cmd = cmd->next;
 	}
-	i = 0;
-	received_sigint = false;
-	while (i < num_cmds)
-	{
-		waitpid(pid[i++], &status, 0);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			received_sigint = true;
-	}
+	received_sigint = wait_childrens(pid, &status, num_cmds);
 	*exit_code = get_exit_code_from_status(status);
 	if (received_sigint)
 		write(STDOUT_FILENO, "\n", 1);
-	set_signal(SIGINT, handle_sigint);
-	ezg_group_release("pid");
+	return (ezg_group_release("pid"), set_signal(SIGINT, handle_sigint));
 }
 
 void	executor(t_shell *shell)
