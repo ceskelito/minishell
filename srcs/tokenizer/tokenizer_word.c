@@ -46,7 +46,7 @@ static void	set_token_value(
 	if (!result)
 	{
 		perror("minishell:");
-		set_exit_status(1);
+		set_exit_status(errno);
 		exit_shell(NULL);
 	}
 	ezg_add(TOKEN, result);
@@ -139,7 +139,7 @@ int	fill_eof_token(t_token *token, char *input)
 	if (!token->value)
 	{
 		perror("minishell:");
-		set_exit_status(1);
+		set_exit_status(errno);
 		exit_shell(NULL);
 	}
 	ft_strlcat(token->value, input, gap + 1);
