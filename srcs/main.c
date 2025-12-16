@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 10:10:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/12/11 16:26:20 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:35:28 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,20 @@ static void	process_command(char *input, t_shell *shell)
 	else
 		cmd = input;
 	shell->tokens = tokenize_input(cmd);
+	if (!shell->tokens)
+	{
+		set_exit_status(2);
+		return ;
+	}
 	concatenate_tokens(&(shell->tokens));
 	shell->cmd_list = parse_tokens(shell->tokens);
+	if (!shell->cmd_list)
+	{
+		set_exit_status(2);
+		ezg_group_release(TOKEN);
+		shell->tokens = NULL;
+		return ;
+	}
 	if (debug_mode)
 		print_debug_info(shell);
 	executor(shell);
@@ -67,15 +79,15 @@ int	main(void)
 	init_shell(&shell);
 	set_signal(SIGINT, handle_sigint);
 	set_signal(SIGQUIT, SIG_IGN);
-	printf("Welcome to minishell!\n");
-	printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
+	// printf("Welcome to minishell!\n");
+	// printf("Type 'DEBUG: command' to see tokenization and parsing.\n\n");
 	while (readline_on_buff(&input), input)
 	{
 		cwd = getcwd(NULL, 0);
 		if (!cwd)
 		{
 			perror("minishell");
-			set_exit_status(errno);
+			set_exit_status(1);
 			break ;
 		}
 		if (ft_strcmp(cwd, ft_getenv("PWD")) != 0)

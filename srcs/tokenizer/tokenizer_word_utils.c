@@ -62,7 +62,7 @@ t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
 	if (!split)
 	{
 		perror("minishell");
-		set_exit_status(errno);
+		set_exit_status(1);
 		exit_shell(NULL);
 	}
 	curr = token;

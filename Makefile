@@ -12,10 +12,11 @@ endef
 #──────────────────#
 
 NAME 		:= minishell
+CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror -g
 RM 			:= rm -f
 MKDIR		:= mkdir -p
-READLINE_DIR := $(shell brew --prefix readline)
+READLINE_DIR := $(shell brew --prefix readline 2>/dev/null || echo "/usr")
 
 INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include \
 			   -I$(READLINE_DIR)/include
@@ -36,7 +37,8 @@ EXECUTOR = 	echo-cd-pwd-exit		\
 			heredoc					\
 			pipe					\
 			redirections			\
-			resolve_command_location
+			resolve_command_location\
+			helpers
 
 TOKENIZER = ft_strjoin_char			\
 			tokenizer				\

@@ -6,12 +6,10 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 12:34:24 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/25 12:51:30 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:57:24 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ezgalloc.h"
-#include "ft_lib.h"
 #include "minishell.h"
 
 char	**ft_split_in_chunks(char *str, char delimiter);
@@ -49,7 +47,7 @@ static void	expand_chunk(char **splitted, int i)
 	}
 }
 
-static int	calculate_total_len(char **splitted)
+static int	expand_all_chunks(char **splitted)
 {
 	int	i;
 	int	new_len;
@@ -76,7 +74,7 @@ char	*string_expand_dollars(char *str)
 	if (!ft_strchr(str, '$'))
 		return (ft_strdup(str));
 	splitted = ft_split_in_chunks(str, '$');
-	new_len = calculate_total_len(splitted);
+	new_len = expand_all_chunks(splitted);
 	new = ft_calloc(new_len + 1, sizeof(char));
 	i = 0;
 	while (splitted[i])
