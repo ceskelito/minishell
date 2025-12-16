@@ -5,8 +5,11 @@ int	handle_word_token(t_cmd *cmd, t_token **token)
 {
 	if (set_cmd_args(cmd, *token) < 0)
 		return (-1);
+	
+	// ✅ Пропускаем все WORD токены
 	while ((*token)->next && ((*token)->next->type & WORD))
 		*token = (*token)->next;
+	
 	return (0);
 }
 
@@ -17,18 +20,72 @@ int	handle_redir_token(t_cmd *cmd, t_token **token)
 	return (0);
 }
 
+
+
+static bool	has_stdout_redir(t_cmd *cmd)
+{
+	t_redir	*redir;
+
+	redir = cmd->redirs;
+	while (redir)
+	{
+		// Проверяем есть ли файловый редирект на stdout
+		if ((redir->type & OUT) && !(redir->type & PIPE))
+			return (true);
+		if ((redir->type & APPEND) && !(redir->type & PIPE))
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
+}
+
+static bool	has_stdin_redir(t_cmd *cmd)
+{
+	t_redir	*redir;
+
+	redir = cmd->redirs;
+	while (redir)
+	{
+		// Проверяем есть ли файловый редирект на stdin
+		if ((redir->type & IN) && !(redir->type & PIPE))
+			return (true);
+		if ((redir->type & HEREDOC) && !(redir->type & PIPE))
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
+}
+
 int	handle_pipe_token(t_cmd **cmd, t_token *token)
 {
-	if (!token->next || !(token->next->type & WORD))
+	// Проверяем наличие следующего токена
+	if (!token->next)
 	{
 		ft_dprintf(STDERR_FILENO,
-			"minishell: syntax error: unexpected end of pipe\n");
+			"minishell: syntax error near unexpected token `newline'\n");
 		return (-1);
 	}
+	
+	// Проверка на двойной pipe: | |
+	if (token->next->type & PIPE)
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `|'\n");
+		return (-1);
+	}
+	
 	(*cmd)->pipe_output = true;
-	add_pipe_redir(*cmd, OUT);
+	
+	// ✅ НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа!
+	if (!has_stdout_redir(*cmd))
+		add_pipe_redir(*cmd, OUT);
+	
 	if (go_next_cmd(cmd) < 0)
 		return (-1);
-	add_pipe_redir(*cmd, IN);
+	
+	// ✅ НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа!
+	if (!has_stdin_redir(*cmd))
+		add_pipe_redir(*cmd, IN);
+	
 	return (0);
 }

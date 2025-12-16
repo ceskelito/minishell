@@ -35,7 +35,10 @@ static char	*handle_single_quote(char *input, int *i, char *result)
 			return (NULL);
 		(*i)++;
 	}
-	return (if_nclsd_qts(input[*i], result, "'"));
+	result = if_nclsd_qts(input[*i], result, "'");
+	if (result)
+		(*i)++;  // ✅ FIX BUG #1: Пропускаем закрывающую кавычку
+	return (result);
 }
 
 static char	*handle_double_quote(char *input, int *i, char *result)
@@ -64,7 +67,10 @@ static char	*handle_double_quote(char *input, int *i, char *result)
 			(*i)++;
 		}
 	}
-	return (if_nclsd_qts(input[*i], result, "\""));
+	result = if_nclsd_qts(input[*i], result, "\"");
+	if (result)
+		(*i)++;  // ✅ FIX BUG #1: Пропускаем закрывающую кавычку
+	return (result);
 }
 
 char	*process_quotes(char *input, int *i, char *result)

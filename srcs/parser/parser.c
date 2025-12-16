@@ -1,14 +1,15 @@
 #include "ezgalloc.h"
 #include "minishell.h"
 
-#include "minishell.h"
-#include "ezgalloc.h"
-
-/* --- declarations from helper files --- */
 int		handle_word_token(t_cmd *curr_cmd, t_token **curr_token);
 int		handle_redir_token(t_cmd *curr_cmd, t_token **curr_token);
 int		handle_pipe_token(t_cmd **curr_cmd, t_token *curr_token);
 int		go_next_cmd(t_cmd **curr_cmd);
+
+static bool	cmd_has_content(t_cmd *cmd)
+{
+	return (cmd->args != NULL || cmd->redirs != NULL);
+}
 
 static int	process_tokens(t_cmd **curr_cmd, t_token *curr_token)
 {
@@ -26,6 +27,12 @@ static int	process_tokens(t_cmd **curr_cmd, t_token *curr_token)
 		}
 		else if (curr_token->type & PIPE)
 		{
+			if (!cmd_has_content(*curr_cmd))
+			{
+				ft_dprintf(STDERR_FILENO,
+					"minishell: syntax error near unexpected token `|'\n");
+				return (-1);
+			}
 			if (handle_pipe_token(curr_cmd, curr_token) < 0)
 				return (-1);
 		}
