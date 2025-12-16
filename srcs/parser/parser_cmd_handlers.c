@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_cmd_handlers.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 19:32:28 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/16 19:32:33 by rodolhop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "ezgalloc.h"
 
@@ -56,9 +68,12 @@ static bool	has_stdin_redir(t_cmd *cmd)
 	return (false);
 }
 
+	// Проверяем наличие следующего токена if (!token->next)
+	// Проверка на двойной pipe: | | if (token->next->type & PIPE)
+	// НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа! if (!has_stdout_redir(*cmd))add_pipe_redir(*cmd, OUT);
+
 int	handle_pipe_token(t_cmd **cmd, t_token *token)
 {
-	// Проверяем наличие следующего токена
 	if (!token->next)
 	{
 		ft_dprintf(STDERR_FILENO,
@@ -66,24 +81,17 @@ int	handle_pipe_token(t_cmd **cmd, t_token *token)
 		return (-1);
 	}
 	
-	// Проверка на двойной pipe: | |
 	if (token->next->type & PIPE)
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `|'\n");
 		return (-1);
 	}
-	
 	(*cmd)->pipe_output = true;
-	
-	// ✅ НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа!
 	if (!has_stdout_redir(*cmd))
 		add_pipe_redir(*cmd, OUT);
-	
 	if (go_next_cmd(cmd) < 0)
 		return (-1);
-	
-	// ✅ НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа!
 	if (!has_stdin_redir(*cmd))
 		add_pipe_redir(*cmd, IN);
 	
