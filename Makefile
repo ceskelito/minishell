@@ -79,6 +79,7 @@ ENVIRON = 	environment 			\
 			environment_handler
 
 FILES = main 			\
+		main_utils      \
 		$(TOKENIZER) 	\
 		$(PARSER) 		\
 		$(EXECUTOR) 	\
