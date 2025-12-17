@@ -104,6 +104,15 @@ typedef struct s_shell
 	int				std_in;
 }					t_shell;
 
+typedef struct s_token_params
+{
+	int		start;
+	int		len;
+	bool	cat_to_next;
+}	t_token_params;
+
+
+
 /* ========================================================================== */
 /*                              TOKENIZER                                     */
 /* ========================================================================== */
@@ -123,6 +132,12 @@ char				*process_quotes(char *input, int *i, char *result);
 char				*ft_strjoin_char(char *s1, char c);
 char				*get_operator_value(char *input, t_token_type type);
 int					process_word_token(char *input, int *i, t_token **tokens);
+int					process_word_surrounded(t_token *token, char *input);
+char				*handle_double_quote(char *input, int *i, char *result);
+char				*append_char_safe(char *str, char c);
+char				*if_nclsd_qts(char quote_char, char *result, const char *type);
+char				*handle_single_quote(char *input, int *i, char *result);
+
 
 /* ========================================================================== */
 /*                                PARSER                                      */

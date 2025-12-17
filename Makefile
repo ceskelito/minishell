@@ -46,8 +46,10 @@ TOKENIZER = ft_strjoin_char			\
 			tokenizer_debug			\
 			tokenizer_dollar		\
 			tokenizer_quotes		\
+			tokenizer_quotes2.      \
 			tokenizer_utils			\
 			tokenizer_word          \
+			tokenizer_word2         \
 			tokenizer_word_utils
 
 PARSER =	parser					\
@@ -55,7 +57,9 @@ PARSER =	parser					\
 			parser_cmd_handlers		\
 			parser_redirs			\
 			parser_cleanup			\
-			parser_debug
+			parser_debug            \
+			parser_cmd_args 	    \
+			parser_process
 
 UTILS = 	array					\
 			cleanup					\

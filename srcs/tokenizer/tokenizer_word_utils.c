@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_word_utils.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 19:31:54 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/16 19:31:56 by rodolhop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_token	*new_token(void);
@@ -52,19 +64,11 @@ void	eof_compute_gap(char *input, int *gap, char *quote)
 	}
 }
 
-t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
+static void	fill_split_tokens(char **split, t_token *token, bool cat_to_next)
 {
-	int		i;
-	char	**split;
 	t_token	*curr;
+	int		i;
 
-	split = ft_split_func(input, ft_isspace);
-	if (!split)
-	{
-		perror("minishell");
-		set_exit_status(1);
-		exit_shell(NULL);
-	}
 	curr = token;
 	i = 0;
 	while (split[i])
@@ -80,6 +84,20 @@ t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
 		i++;
 	}
 	curr->cat_to_next = cat_to_next;
+}
+
+t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
+{
+	char	**split;
+
+	split = ft_split_func(input, ft_isspace);
+	if (!split)
+	{
+		perror("minishell");
+		set_exit_status(1);
+		exit_shell(NULL);
+	}
+	fill_split_tokens(split, token, cat_to_next);
 	free(split);
 	return (token);
 }

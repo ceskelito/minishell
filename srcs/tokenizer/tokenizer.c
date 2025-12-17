@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/08 17:01:11 by rodolhop          #+#    #+#             */
-/*   Updated: 2025/12/11 16:08:01 by rceschel         ###   ########.fr       */
+/*   Created: 2025/12/16 19:31:54 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/16 19:31:56 by rodolhop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ static int	fill_operator_token(t_token *token, char *input)
 {
 	if (!token)
 		return (-1);
-
 	token->type = get_token_type(input);
 	if (token->type == 0)
 	{
-    	set_exit_status(2);
-    	return (-1);
+		set_exit_status(2);
+		return (-1);
 	}
 	token->value = get_operator_value(input, token->type);
 	return (ft_strlen(token->value));

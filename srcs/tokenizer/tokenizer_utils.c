@@ -27,61 +27,66 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
-t_token_type	get_token_type(char *input)
+static t_token_type	check_double_operators(char *input)
 {
-	// ✅ Проверка на || (не поддерживается в mandatory)
 	if (input[0] == '|' && input[1] == '|')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `||'\n");
-		return (0);  
+		return (0);
 	}
-	
-	
-	if (input[0] == '|')
-		return (PIPE);
-	
-
-	if (input[0] == '<' && input[1] == '<')
-		return (HEREDOC | IN);
-	if (input[0] == '<')
-		return (IN);
-	
-	
-	if (input[0] == '>' && input[1] == '>')
-		return (APPEND | OUT);
-	if (input[0] == '>')
-		return (OUT);
-	
-
 	if (input[0] == '&' && input[1] == '&')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `&&'\n");
-		return (0);  
+		return (0);
 	}
-	
-	if (input[0] == '(')
+	if (input[0] == '<' && input[1] == '<')
+		return (HEREDOC | IN);
+	if (input[0] == '>' && input[1] == '>')
+		return (APPEND | OUT);
+	return (-1);
+}
+
+static t_token_type	check_single_operators(char c)
+{
+	if (c == '|')
+		return (PIPE);
+	if (c == '<')
+		return (IN);
+	if (c == '>')
+		return (OUT);
+	if (c == '(')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `('\n");
-		return (0);  
+		return (0);
 	}
-	if (input[0] == ')')
+	if (c == ')')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `)'\n");
-		return (0); 
+		return (0);
 	}
-	
+	return (-1);
+}
+
+t_token_type	get_token_type(char *input)
+{
+	t_token_type	type;
+
+	type = check_double_operators(input);
+	if (type != -1)
+		return (type);
+	type = check_single_operators(input[0]);
+	if (type != -1)
+		return (type);
 	return (WORD);
 }
 
-// enum {DOUBLE_CHAR_TOKENS = (OR | AND | HEREDOC | APPEND)};
-
 char	*get_operator_value(char *input, t_token_type type)
 {
-	if (type & (OR | AND | HEREDOC | APPEND))
+	if (type & (HEREDOC | APPEND))
 		return (ezg_add(TOKEN, ft_substr(input, 0, 2)));
 	else
 		return (ezg_add(TOKEN, ft_substr(input, 0, 1)));
