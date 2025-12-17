@@ -22,7 +22,7 @@ static bool	is_operator_char(char c)
 	return (c == '|' || c == '<' || c == '>');
 }
 
-void	set_value_params(t_token_params *p, char *input, int gap, bool q)
+static void	set_value_params(t_token_params *p, char *input, int gap, bool q)
 {
 	if (q)
 	{
@@ -40,7 +40,7 @@ void	set_value_params(t_token_params *p, char *input, int gap, bool q)
 		p->cat_to_next = true;
 }
 
-static void	set_token_value(t_token *token, char *input, int gap, bool q)
+void	set_token_value(t_token *token, char *input, int gap, bool q)
 {
 	char			*result;
 	t_token_params	p;

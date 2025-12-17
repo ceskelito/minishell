@@ -137,6 +137,7 @@ char				*handle_double_quote(char *input, int *i, char *result);
 char				*append_char_safe(char *str, char c);
 char				*if_nclsd_qts(char quote_char, char *result, const char *type);
 char				*handle_single_quote(char *input, int *i, char *result);
+void				set_token_value(t_token *token, char *input, int gap, bool q);
 
 
 /* ========================================================================== */

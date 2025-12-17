@@ -27,60 +27,64 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
-static t_token_type	check_double_operators(char *input)
+static int	check_double_operators(char *input, t_token_type *result)
 {
 	if (input[0] == '|' && input[1] == '|')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `||'\n");
-		return (0);
+		*result = 0;
+		return (1);
 	}
 	if (input[0] == '&' && input[1] == '&')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `&&'\n");
-		return (0);
+		*result = 0;
+		return (1);
 	}
 	if (input[0] == '<' && input[1] == '<')
-		return (HEREDOC | IN);
-	if (input[0] == '>' && input[1] == '>')
-		return (APPEND | OUT);
-	return (-1);
+		*result = (HEREDOC | IN);
+	else if (input[0] == '>' && input[1] == '>')
+		*result = (APPEND | OUT);
+	else
+		return (0);
+	return (1);
 }
 
-static t_token_type	check_single_operators(char c)
+static int	check_single_operators(char c, t_token_type *result)
 {
 	if (c == '|')
-		return (PIPE);
-	if (c == '<')
-		return (IN);
-	if (c == '>')
-		return (OUT);
-	if (c == '(')
+		*result = PIPE;
+	else if (c == '<')
+		*result = IN;
+	else if (c == '>')
+		*result = OUT;
+	else if (c == '(')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `('\n");
-		return (0);
+		*result = 0;
 	}
-	if (c == ')')
+	else if (c == ')')
 	{
 		ft_dprintf(STDERR_FILENO,
 			"minishell: syntax error near unexpected token `)'\n");
-		return (0);
+		*result = 0;
 	}
-	return (-1);
+	else
+		return (0);
+	return (1);
 }
 
 t_token_type	get_token_type(char *input)
 {
-	t_token_type	type;
+	t_token_type	result;
 
-	type = check_double_operators(input);
-	if (type != -1)
-		return (type);
-	type = check_single_operators(input[0]);
-	if (type != -1)
-		return (type);
+	if (check_double_operators(input, &result))
+		return (result);
+	if (check_single_operators(input[0], &result))
+		return (result);
 	return (WORD);
 }
 
