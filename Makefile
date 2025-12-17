@@ -57,9 +57,15 @@ PARSER =	parser					\
 			parser_cmd_handlers		\
 			parser_redirs			\
 			parser_cleanup			\
+<<<<<<< HEAD
 			parser_debug            \
 			parser_cmd_args 	    \
 			parser_process
+=======
+			parser_debug			\
+			parser_process			\
+			parser_cmd_args
+>>>>>>> 345e2a4f6ba949f7899a04a2e9bd309bd8dba091
 
 UTILS = 	array					\
 			cleanup					\
