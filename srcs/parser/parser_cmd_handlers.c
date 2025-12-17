@@ -13,15 +13,14 @@
 #include "minishell.h"
 #include "ezgalloc.h"
 
+// Skip all WORD tokens
+
 int	handle_word_token(t_cmd *cmd, t_token **token)
 {
 	if (set_cmd_args(cmd, *token) < 0)
 		return (-1);
-	
-	// ✅ Пропускаем все WORD токены
 	while ((*token)->next && ((*token)->next->type & WORD))
 		*token = (*token)->next;
-	
 	return (0);
 }
 
@@ -32,8 +31,7 @@ int	handle_redir_token(t_cmd *cmd, t_token **token)
 	return (0);
 }
 
-
-
+// Check if there is a file redirect to stdout
 static bool	has_stdout_redir(t_cmd *cmd)
 {
 	t_redir	*redir;
@@ -41,7 +39,6 @@ static bool	has_stdout_redir(t_cmd *cmd)
 	redir = cmd->redirs;
 	while (redir)
 	{
-		// Проверяем есть ли файловый редирект на stdout
 		if ((redir->type & OUT) && !(redir->type & PIPE))
 			return (true);
 		if ((redir->type & APPEND) && !(redir->type & PIPE))
@@ -58,7 +55,6 @@ static bool	has_stdin_redir(t_cmd *cmd)
 	redir = cmd->redirs;
 	while (redir)
 	{
-		// Проверяем есть ли файловый редирект на stdin
 		if ((redir->type & IN) && !(redir->type & PIPE))
 			return (true);
 		if ((redir->type & HEREDOC) && !(redir->type & PIPE))
@@ -68,10 +64,6 @@ static bool	has_stdin_redir(t_cmd *cmd)
 	return (false);
 }
 
-	// Проверяем наличие следующего токена if (!token->next)
-	// Проверка на двойной pipe: | | if (token->next->type & PIPE)
-	// НОВОЕ: Добавляем PIPE редирект только если НЕТ файлового редиректа! if (!has_stdout_redir(*cmd))add_pipe_redir(*cmd, OUT);
-
 int	handle_pipe_token(t_cmd **cmd, t_token *token)
 {
 	if (!token->next)
@@ -80,7 +72,6 @@ int	handle_pipe_token(t_cmd **cmd, t_token *token)
 			"minishell: syntax error near unexpected token `newline'\n");
 		return (-1);
 	}
-	
 	if (token->next->type & PIPE)
 	{
 		ft_dprintf(STDERR_FILENO,
@@ -94,6 +85,5 @@ int	handle_pipe_token(t_cmd **cmd, t_token *token)
 		return (-1);
 	if (!has_stdin_redir(*cmd))
 		add_pipe_redir(*cmd, IN);
-	
 	return (0);
 }
