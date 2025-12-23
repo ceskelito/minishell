@@ -4,13 +4,15 @@ A minimal shell that partially reproduce the behavior of bash, completly wrote i
 
 # Features
 
-## Built-in functions
-- **cd** - Change Directory
-- **pwd** - Print Working Directory
+## Built-in functions (with no options)
 - **echo** - Print a message on the stdin
     - with option -n
+- **cd** - Change Directory
+- **pwd** - Print Working Directory
 - **export** - Set an environment variable
+- **unset** - Unset an environment variable
 - **env** - Print all the exported env variables
+- **exit** - Exit the shell
 
 ## Redirections
 - **\>**  Redirect output
@@ -204,14 +206,32 @@ Command 2:
   pipe_output: 0
 ```
 
-## Current Implementation Status
+## Memory Management
+In questo progetto per la gestione della memoria ci siamo affidati alla mia libreria [`ezalloc`](https://github.com/ceskelito/ezalloc) - creata per l'occasione.
+Una spiegazione più approfondita del suo scopo e funzionamento può essere trovata nella repository originale.
+In breve:
+Grazie alla libreria `ezalloc`, ogni allocazione viene assegnata ad un `gruppo` identificato da una stringa. I gruppi sono liste di strutture contenenti le varie allocazioni, e vengono gestiti in maniera centralizzata da una funzione handler che grazie a due variabili statiche è in grado di mantenere traccia delle allocazioni per tutto il programma. Una volta che un gruppo non serve più può essere liberato in blocco chiamando `ezg_release_group("groupname")` senza necessità di liberare prima di abbandonare lo scope in cui si alloca.
 
-**Working Stable:**
-- Basic tokenization of all operators
-- Pipes and redirections 
-- Quote handling
-- Correct AST for executor
-- Syntax error handling without crashes
+Inoltre alla fine del programma verrà chiamato `ezg_cleanup()`, che libererà tutta la memoria salvata nelle sue liste e le liste stesse, compresi i nomi di queste ultime (che ricordiamo essere delle stringhe).
+
+Nelle sezioni più semplici del programma si possono trovare allocazioni classiche, e spesso verranno liberate anch'esse in automatico grazie all'attributo `cleanup` per il compilatore gcc.
+
+## Environment Management
+Similiarmente a quanto ho imparato nella produzione della mia libreria ezalloc, anche le variabili di ambiente sono state gestite in maniera centralizzata tramite un handler e alcune funzioni di interfaccia.
+
+All'inizializzazione della shell viene copiata la variabile esterna environ in un array di stringhe statico interno alla funzione handler.
+
+Per approfondimenti, il file [environment_handler.c](srcs/environment/environment_handler.c) è ben documentato.
+
+## Exit Status tracking
+Ovviamente una funzione handler con variabile statica e due funzioni di interfaccia:
+```c
+static int	handle_exit_status(int operation, int new_value);
+
+int 	get_exit_status(void);
+void 	set_exit_status(int status);
+```
+Se non si fosse capito, non possiamo usare variabili globali...
 
 ## Testing the Parser Output
 
