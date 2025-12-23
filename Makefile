@@ -16,55 +16,75 @@ CC 			:= gcc
 CFLAGS 		:= -Wall -Wextra -Werror -g
 RM 			:= rm -f
 MKDIR		:= mkdir -p
-INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include
-LIB_FLAGS	:= -Llibft -lft -lreadline -Lezalloc -lezalloc
+READLINE_DIR := $(shell brew --prefix readline 2>/dev/null || echo "/usr")
+
+INC_FLAGS 	:= -Iincludes -Ilibft/headers -Iezalloc/include \
+			   -I$(READLINE_DIR)/include
+
+LIB_FLAGS	:= -Llibft -lft -Lezalloc -lezalloc \
+			   -L$(READLINE_DIR)/lib -lreadline
+
+
 			
 #────────────────────────#
 ## PROJECT FILES & DIRS ##
 #────────────────────────#
 
-## MAIN
-FILES = main
+EXECUTOR = 	echo-cd-pwd-exit		\
+			env-unset				\
+			export					\
+			executor				\
+			heredoc					\
+			pipe					\
+			redirections			\
+			resolve_command_location\
+			helpers
 
-## EXECUTOR
-FILES += echo-cd-pwd-exit	\
-		env-unset		\
-		export			\
-		executor		\
-		heredoc			\
-		pipe			\
-		redirections	\
-		resolve_command_location
+TOKENIZER = ft_strjoin_char			\
+			tokenizer				\
+			tokenizer_concatenate	\
+			tokenizer_debug			\
+			tokenizer_dollar		\
+			tokenizer_quotes		\
+			tokenizer_quotes2       \
+			tokenizer_utils			\
+			tokenizer_word          \
+			tokenizer_word2         \
+			tokenizer_word_utils
 
-## TOKENIZER
-FILES += ft_strjoin_char		\
-		tokenizer				\
-		tokenizer_concatenate	\
-		tokenizer_debug			\
-		tokenizer_dollar		\
-		tokenizer_quotes		\
-		tokenizer_utils			\
-		tokenizer_word
+PARSER =	parser					\
+			parser_cmd_utils		\
+			parser_cmd_handlers		\
+			parser_redirs			\
+			parser_cleanup			\
+			parser_debug            \
+			parser_cmd_args 	    \
+			parser_process          \
+			parser_debug			\
+			parser_process			\
+			parser_cmd_args
 
-## PARSER
-FILES += parser			\
-		parser_cleanup	\
-		parser_debug	\
-		parser_redirs	\
-		shell_init 
 
-## UTILS
-FILES += array				\
-		cleanup				\
-		environment 		\
-		environment 		\
-		environment_handler \
-		exit_status 		\
-		general_utils 		\
-		init 				\
-		split_in_chunks 	\
-		string_expand_dollars
+UTILS = 	array					\
+			cleanup					\
+			exit_status 			\
+			general_utils 			\
+			get_prompt				\
+			init 					\
+			signals					\
+			split_in_chunks 		\
+			string_expand_dollars
 
+ENVIRON = 	environment 			\
+			environment_handler
+
+FILES = main 			\
+		main_utils      \
+		$(TOKENIZER) 	\
+		$(PARSER) 		\
+		$(EXECUTOR) 	\
+		$(UTILS)		\
+		$(ENVIRON)
 
 SRCS_DIR := srcs
 OBJS_DIR := objs
@@ -74,7 +94,8 @@ vpath %.c	$(SRCS_DIR) \
 			:$(SRCS_DIR)/parser \
 			:$(SRCS_DIR)/executor \
 			:$(SRCS_DIR)/executor/builtins \
-			:$(SRCS_DIR)/utils
+			:$(SRCS_DIR)/utils \
+			:$(SRCS_DIR)/environment
 
 SRCS := $(addsuffix .c, $(FILES))
 OBJS := $(addsuffix .o, $(addprefix $(OBJS_DIR)/, $(FILES)))
@@ -136,6 +157,10 @@ last_print:
 	@echo "        ▛▘▛▌▛▛▌▛▌▌▐ █▌▛▌              ";
 	@echo "        ▙▖▙▌▌▌▌▙▌▌▐▖▙▖▙▌              ";
 	@echo "               ▌                      ";
+
+run-test:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp  ./$(NAME)
+
 
 # last_print:
 # 	@echo "███╗   ███╗    ██╗    ███╗   ██╗    ██╗    ███████╗    ██╗  ██╗    ███████╗    ██╗         ██╗             ";

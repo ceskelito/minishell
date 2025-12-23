@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   env-unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:23:22 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/27 11:50:42 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:27:06 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "minishell.h"
 
 void	unset(char *const args[])
@@ -22,6 +21,7 @@ void	unset(char *const args[])
 	{
 		ft_unsetenv(args[i]);
 	}
+	set_exit_status(0);
 }
 
 void	env(void)
@@ -36,4 +36,5 @@ void	env(void)
 		ft_printf("%s\n", env_array[i]);
 		i++;
 	}
+	set_exit_status(0);
 }

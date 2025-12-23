@@ -6,25 +6,31 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:47 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/26 16:14:24 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:26:31 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "minishell.h"
-#include <stdlib.h>
 
 // Need to expand variables
 // Need to manage cases with EOF in quotes
 
-static bool	is_in_quote(char *str)
+static bool	process_eof_quotes(char **delimiter)
 {
+	char	*str;
+
+	str = *delimiter;
 	if (!str)
 		return (false);
 	if (ft_strcmp(str, "") == 0)
 		return (true);
 	if (str[0] == '\'' || str[0] == '"')
+	{
+		str = ft_substr(*delimiter, 1, ft_strlen(*delimiter) - 2);
+		ezg_add(EXECUTING, str);
+		*delimiter = str;
 		return (true);
+	}
 	return (false);
 }
 
@@ -33,11 +39,11 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 	char	*input;
 	bool	expand;
 
-	expand = !is_in_quote(delimiter);
+	expand = !process_eof_quotes(&delimiter);
 	input = readline("> ");
 	if (!input)
 	{
-		print_error("warning", "heredoc terminated by EOF\n");
+		print_error("warning", "heredoc terminated by EOF");
 		return (false);
 	}
 	ezg_add(EXECUTING, input);
@@ -48,7 +54,7 @@ static bool	get_heredoc_line(char *delimiter, int fd)
 	if (input == NULL)
 	{
 		perror("minishell");
-		set_exit_status(errno);
+		set_exit_status(1);
 		exit_shell(NULL);
 	}
 	ft_dprintf(fd, "%s\n", input);

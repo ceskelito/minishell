@@ -6,13 +6,11 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:42:52 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/21 12:28:30 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:26:49 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "minishell.h"
-#include <dirent.h>
 
 /**
  * search_in_dir - Search for a command inside a specific directory

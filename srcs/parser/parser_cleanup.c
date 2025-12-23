@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_cleanup.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 19:32:28 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/16 19:32:33 by rodolhop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_cmd_args(char **args)
@@ -57,7 +69,6 @@ void	cleanup_parsing(t_shell *shell)
 {
 	if (shell->tokens)
 	{
-		// free_tokens(shell->tokens); TO REMOVE (use ezg_* functions instead)
 		shell->tokens = NULL;
 	}
 	if (shell->cmd_list)

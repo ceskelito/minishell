@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/08 17:24:09 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/08 17:24:12 by rodolhop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	add_token(t_token **head, t_token *new_token)
@@ -15,37 +27,71 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
-t_token_type	get_token_type(char *input)
+static int	check_double_operators(char *input, t_token_type *result)
 {
 	if (input[0] == '|' && input[1] == '|')
-		return (OR);
-	if (input[0] == '|')
-		return (PIPE);
-	if (input[0] == '<' && input[1] == '<')
-		return (HEREDOC | IN);
-	if (input[0] == '<')
-		return (IN);
-	if (input[0] == '>' && input[1] == '>')
-		return (APPEND | OUT);
-	if (input[0] == '>')
-		return (OUT);
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `||'\n");
+		*result = 0;
+		return (1);
+	}
 	if (input[0] == '&' && input[1] == '&')
-		return (AND);
-	if (input[0] == '(')
-		return (P_OPEN);
-	if (input[0] == ')')
-		return (P_CLOSE);
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `&&'\n");
+		*result = 0;
+		return (1);
+	}
+	if (input[0] == '<' && input[1] == '<')
+		*result = (HEREDOC | IN);
+	else if (input[0] == '>' && input[1] == '>')
+		*result = (APPEND | OUT);
+	else
+		return (0);
+	return (1);
+}
+
+static int	check_single_operators(char c, t_token_type *result)
+{
+	if (c == '|')
+		*result = PIPE;
+	else if (c == '<')
+		*result = IN;
+	else if (c == '>')
+		*result = OUT;
+	else if (c == '(')
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `('\n");
+		*result = 0;
+	}
+	else if (c == ')')
+	{
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `)'\n");
+		*result = 0;
+	}
+	else
+		return (0);
+	return (1);
+}
+
+t_token_type	get_token_type(char *input)
+{
+	t_token_type	result;
+
+	if (check_double_operators(input, &result))
+		return (result);
+	if (check_single_operators(input[0], &result))
+		return (result);
 	return (WORD);
 }
 
-// enum {DOUBLE_CHAR_TOKENS = (OR | AND | HEREDOC | APPEND)};
-
 char	*get_operator_value(char *input, t_token_type type)
 {
-	if (type & (OR | AND | HEREDOC | APPEND))
+	if (type & (HEREDOC | APPEND))
 		return (ezg_add(TOKEN, ft_substr(input, 0, 2)));
 	else
 		return (ezg_add(TOKEN, ft_substr(input, 0, 1)));
-	// return (ezg_add(TOKEN, ft_substr(input, 0, 1 + (type & DOUBLE_CHAR_TOKENS))));
-	
 }

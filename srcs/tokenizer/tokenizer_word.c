@@ -3,99 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_word.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 16:07:35 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/26 16:16:35 by rceschel         ###   ########.fr       */
+/*   Created: 2025/12/16 19:31:54 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/16 19:31:56 by rodolhop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
-#include <stdlib.h>
 
-static const int	UNCLOSED_QUOTES = -1;
-static const bool	IN_QUOTES = true;
-static const bool	OUT_QUOTES = false;
+bool	ft_hasspace(char *str);
+char	*word_get_result(char *input, int start, int len, bool expand);
+void	eof_compute_gap(char *input, int *gap, char *quote);
+t_token	*token_split_words(t_token *token, char *input, bool cat_to_next);
 
-static inline bool	isquote(char c)
+static bool	is_operator_char(char c)
 {
-	return (c == '\'' || c == '"');	
+	return (c == '|' || c == '<' || c == '>');
 }
 
-static inline bool isspecial(char c)
+static void	set_value_params(t_token_params *p, char *input, int gap, bool q)
 {
-	return (ft_strchr("|<>", c));
-}
-
-static inline bool ft_hasspace(char *str)
-{
-	int i;
-
-	i = 0;
-	while(str && str[i])
+	if (q)
 	{
-		if (ft_isspace(str[i]))
-			return (true);
-		i++;
+		p->start = 1;
+		p->len = gap - 1;
 	}
-	return (false);
-}
-
-t_token	*new_token();
-
-static t_token	*token_split_words(t_token *token, char *input, bool cat_to_next)
-{
-	int		i;
-	char	**split;
-	t_token	*curr;
-
-	split = ft_split_func(input, ft_isspace);
-	if (!split)
-	{
-		perror("minishell");
-		set_exit_status(errno);
-		exit_shell(NULL);
-	}
-	i = 0;
-	while (split[i])
-	{
-		if (i == 0)
-			curr = token;
-		else
-		{
-			curr->next = new_token();
-			curr = curr->next;
-		}
-		curr->type = WORD;
-		curr->value = split[i];
-		ezg_add(TOKEN, curr->value);
-		i++;
-	}
-	curr->cat_to_next = cat_to_next;
-	free(split);
-	return (token);
-}
-
-static void	set_token_value(t_token *token, char *input, int gap, int len, bool in_quote)
-{
-	char	*tmp;
-	char	*result;
-	bool	cat_to_next;
-
-	cat_to_next = false;
-	if (input[gap + in_quote] && !ft_isspace(input[gap + in_quote]))
-		cat_to_next = true;
-	if (len == 0)
-		result = ft_strdup("");
-	else if (input[0] != '\'')
-	{
-		tmp = ft_substr(input, in_quote, len);
-		result = string_expand_dollars(tmp);
-		free(tmp);
-	}	
 	else
-		result = ft_substr(input, in_quote, len);
+	{
+		p->start = 0;
+		p->len = gap;
+	}
+	p->cat_to_next = false;
+	if (input[gap + q] && !ft_isspace(input[gap + q])
+		&& !is_operator_char(input[gap + q]))
+		p->cat_to_next = true;
+}
+
+void	set_token_value(t_token *token, char *input, int gap, bool q)
+{
+	char			*result;
+	t_token_params	p;
+
+	set_value_params(&p, input, gap, q);
+	result = word_get_result(input, p.start, p.len, (input[0] != '\''));
 	if (!result)
 	{
 		perror("minishell:");
@@ -103,75 +54,42 @@ static void	set_token_value(t_token *token, char *input, int gap, int len, bool 
 		exit_shell(NULL);
 	}
 	ezg_add(TOKEN, result);
-	if (!in_quote && ft_hasspace(result))
-	{
-		token_split_words(token, result, cat_to_next);
-		//free(result);
-	}
+	if (!q && ft_hasspace(result))
+		token_split_words(token, result, p.cat_to_next);
 	else
 	{
-		token->cat_to_next = cat_to_next;
+		token->cat_to_next = p.cat_to_next;
 		token->value = result;
 	}
-	
-}
-
-static int	process_word_surrounded(t_token *token, char *input)
-{
-	int		gap;
-	int		len;
-	char	quote;
-
-	gap = 1;
-	len = 0;
-	quote = input[0];
-	while (input[gap] && input[gap] != quote)
-	{
-		len++;
-		gap++;
-	}
-	if (input[gap] != quote)
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: unexpected EOF while looking for matching `%c\n", quote);
-		print_error("syntax error", "unexpected end of file");
-		return (UNCLOSED_QUOTES);
-	}
-	set_token_value(token, input, gap, len, IN_QUOTES);
-	gap++;
-	return (gap);
 }
 
 int	process_word_nosurround(t_token *token, char *input)
 {
-	int		gap;
-	int		len;
+	int	gap;
 
 	gap = 0;
-	len = 0;
-	while (input[gap] && !( isquote(input[gap]) || ft_isspace(input[gap]) || isspecial(input[gap]) ))
-	{
-		len++;
+	while (input[gap] && !(input[gap] == '\'' || input[gap] == '"'
+			|| ft_isspace(input[gap]) || input[gap] == '|'
+			|| input[gap] == '<' || input[gap] == '>'))
 		gap++;
-	}
-	set_token_value(token, input, gap, len, OUT_QUOTES);
+	set_token_value(token, input, gap, false);
 	return (gap);
 }
 
 int	fill_word_token(t_token *token, char *input)
 {
-	int		gap;
-	int		spaces;
+	int	gap;
+	int	spaces;
 
 	spaces = 0;
 	while (ft_isspace(*input))
-	{	
+	{
 		spaces++;
 		input++;
 	}
 	if (!input)
 		return (spaces);
-	gap = 0;
-	if (isquote(input[0]))
+	if (input[0] == '\'' || input[0] == '"')
 		gap = process_word_surrounded(token, input);
 	else
 		gap = process_word_nosurround(token, input);

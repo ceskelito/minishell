@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 12:52:38 by rceschel          #+#    #+#             */
-/*   Updated: 2025/11/25 12:52:46 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:58:21 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,13 @@ void	fill_chunks(char **splitted, char *str)
 	while (str[i])
 	{
 		len = get_chunk_len(str, i);
-		splitted[n++] = ft_substr(str, i, len);
-		if (!splitted[n - 1])
-			splitted[n - 1] = ft_strdup("");
+		splitted[n] = ft_substr(str, i, len);
+		splitted[n + 1] = NULL;
+		if (!splitted[n])
+			splitted[n] = ft_strdup("");
+		n++;
 		i += len;
 	}
-	splitted[n] = NULL;
 }
 
 char	**ft_split_in_chunks(char *str, char delimiter)
@@ -81,7 +82,7 @@ char	**ft_split_in_chunks(char *str, char delimiter)
 	}
 	else
 	{
-		splitted = ft_calloc(delimiter_count * 2 + 1, sizeof(char *));
+		splitted = ft_calloc(delimiter_count * 2 + 2, sizeof(char *));
 		fill_chunks(splitted, str);
 	}
 	return (splitted);

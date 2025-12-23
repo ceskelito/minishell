@@ -1,120 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodolhop <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 19:31:54 by rodolhop          #+#    #+#             */
+/*   Updated: 2025/12/16 19:31:56 by rodolhop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ezgalloc.h"
 #include "minishell.h"
 
-/* Set @curr_cmd to his next. */
-static int go_next_cmd(t_cmd **curr_cmd) {
-	(*curr_cmd)->next = ezg_calloc(COMMAND, sizeof(t_cmd), 1);
-	;
-	if (!(*curr_cmd)->next)
-		return (-1);
-	(*curr_cmd) = (*curr_cmd)->next;
-	return (0);
-}
+int	process_tokens(t_cmd **curr_cmd, t_token *curr_token);
 
-/*
- token_count_args - Count consecutive argument tokens.
-
- @token: Pointer to the first token to analyze.
-
- Count consecutive WORD tokens starting from the given token.
- Used to determine the number of arguments for the next command.
-
- Return: The number of consecutive WORD tokens.
- */
-static int token_count_args(t_token *token) {
-	t_token *tmp;
-	int argc;
-
-	argc = 0;
-	tmp = token;
-	while (tmp && tmp->type & WORD) {
-		tmp = tmp->next;
-		argc++;
-	}
-	return (argc);
-}
-
-/*
- set_cmd_args - Initialize the argument list of a command.
-
- @cmd:   Pointer to the command structure to populate.
- @token: Linked list of tokens representing the command arguments.
-
- Allocate and fill the cmd->arg array duplicating each token value
- of the provided token list.
- The caller is responsible for advancing or
- skipping the used tokens outside of this function.
-
- Return: The number of arguments set on success, or -1 on allocation failure.
- */
-static int set_cmd_args(t_cmd *cmd, t_token *token) {
-	int i;
-	int args_count;
-
-	args_count = token_count_args(token);
-	cmd->args = ezg_calloc(COMMAND, sizeof(char *), args_count + 1);
-	if (!cmd->args)
-		return (-1);
-	i = 0;
-	while (i < args_count) {
-		cmd->args[i] = ft_strdup(token->value);
-		if (!cmd->args[i])
-			return (-1);
-		ezg_add(COMMAND, cmd->args[i]);
-		token = token->next;
-		i++;
-	}
-	cmd->args[i] = NULL;
-	return (args_count);
-}
-
-static void add_pipe_redir(t_cmd *cmd, t_token_type type) {
-	t_redir *redir;
-
-	redir = ezg_calloc(GLOBAL, sizeof(t_redir), 1);
-	if (!redir)
-		return;
-	redir->file = NULL;
-	redir->pipe_fd = -1;
-	redir->type = PIPE | type;
-	add_redir(cmd, redir);
-}
-
-t_cmd *parse_tokens(t_token *tokens) {
-	t_cmd *cmd_head;
-	t_cmd *curr_cmd;
-	t_token *curr_token;
+t_cmd	*parse_tokens(t_token *tokens)
+{
+	t_cmd	*cmd_head;
+	t_cmd	*curr_cmd;
 
 	if (!tokens)
 		return (NULL);
-	cmd_head = ezg_calloc(COMMAND, sizeof(t_cmd), 1);
+	cmd_head = ezg_calloc(COMMAND, 1, sizeof(t_cmd));
 	if (!cmd_head)
 		return (NULL);
 	curr_cmd = cmd_head;
-	curr_token = tokens;
-	while (curr_token) {
-		if (curr_token->type & WORD) {
-			if (set_cmd_args(curr_cmd, curr_token) == -1)
-				return (NULL);
-			while (curr_token->next && curr_token->next->type & WORD)
-				curr_token = curr_token->next;
-		} else if (is_redir_token(curr_token->type)) {
-			if (parse_redirection(curr_cmd, &curr_token) != 0)
-				return (NULL);
-		} else if (curr_token->type & PIPE) {
-			if (!curr_token->next || !(curr_token->next->type & WORD)) {
-				ft_dprintf(STDERR_FILENO,
-						   "minishell: syntax error: unexpected end of pipe\n");
-				return (NULL);
-			}
-
-			curr_cmd->pipe_output = true;
-			add_pipe_redir(curr_cmd, OUT);
-			if (go_next_cmd(&curr_cmd) != 0)
-				return (NULL);
-			add_pipe_redir(curr_cmd, IN);
-		}
-		curr_token = curr_token->next;
-	}
+	if (process_tokens(&curr_cmd, tokens) < 0)
+		return (NULL);
 	return (cmd_head);
 }
